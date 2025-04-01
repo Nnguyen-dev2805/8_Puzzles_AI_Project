@@ -1,5 +1,5 @@
 ﻿# 8_Puzzles_AI_Project
-Kho lưu trữ này chứa dự án 8-Puzzle Solver! Dự án này triển khai nhiều thuật toán AI khác nhau để giải bài toán 8-puzzle cổ điển. Ngoài ra, dự án còn hỗ trợ giao diện hiển thị cho người dùng dễ quan sát và đánh giá thuật toán
+Kho lưu trữ này chứa dự án 8-Puzzle Solver with AI Algorithm! Dự án này triển khai nhiều thuật toán AI khác nhau để giải bài toán 8-puzzle cổ điển. Ngoài ra, dự án còn hỗ trợ giao diện hiển thị cho người dùng dễ quan sát và đánh giá thuật toán
 ## Cách sử dụng
 1. Sao chép dự án bằng cách 
 
