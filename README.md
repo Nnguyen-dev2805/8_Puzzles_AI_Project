@@ -13,6 +13,7 @@ Kho lưu trữ này chứa dự án 8-Puzzle Solver with AI Algorithm! Dự án 
 ## Thuật toán
 ### Breadth-First Search (BFS)
 BFS khám phá tất cả các trạng thái có thể có theo từng cấp độ, đảm bảo tìm ra con đường ngắn nhất đến mục tiêu.
+![GIF mô tả](assets/gif_solve/BFS.gif)
 ### Depth-First Search (DFS)
 DFS khám phá các trạng thái bằng cách đi sâu vào một nhánh đến khi không thể tiếp tục, sau đó quay lại (backtrack) để thử nhánh khác, không đảm bảo tìm ra con đường ngắn nhất nhưng sử dụng ít bộ nhớ hơn.
 ### A*

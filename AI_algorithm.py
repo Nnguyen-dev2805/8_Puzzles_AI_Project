@@ -100,7 +100,7 @@ def manhattanDistance(state):
     state_str = getStringRepresentation(state)
     total_distance = 0
     for i in range(9):
-        if state_str[i] != 0:
+        if state_str[i] != '0':
             current_num = int(state_str[i])
             goal_x, goal_y = divmod(
                 current_num - 1, 3
@@ -517,7 +517,7 @@ def SimpleHillClimbing(inputState):
             time_shc = float(time.time() - start_time)
             return False
 
-        parent[child_int] = current_state
+        parent[best_child] = current_state
         current_state = best_child
         depth += 1
         
