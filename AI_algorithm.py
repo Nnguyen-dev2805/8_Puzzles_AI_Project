@@ -11,36 +11,49 @@ bfs_counter = 0
 ucs_counter = 0
 id_counter = 0  # iterative deepening
 bfs_best_counter = 0
+astar_counter = 0
+idastar_counter = 0
+shc_counter = 0
 
 dfs_path = []
 bfs_path = []
 ucs_path = []
 id_path = []
 bfs_best_path = []
+astar_path = []
+idastar_path = []
+shc_path = []
 
 dfs_cost = 0
 bfs_cost = 0
 ucs_cost = 0
 id_cost = 0
 bfs_best_cost = 0
+astar_cost = 0
+idastar_cost = 0
+shc_cost = 0
 
 dfs_depth = 0
 bfs_depth = 0
 ucs_depth = 0
 id_depth = 0
 bfs_best_depth = 0
+astar_depth = 0
+idastar_depth = 0
+shc_depth = 0
 
 time_bfs = 0
 time_dfs = 0
 time_ucs = 0
 time_id = 0
 time_bfs_best = 0
-
+time_astar = 0
+time_idastar = 0
+time_shc = 0
 
 # hàm chuyển số thành chuỗi
 def getStringRepresentation(x):
     return str(x).zfill(9)
-
 
 # hàm check trạng thái đích
 def goalTest(state):
@@ -95,7 +108,6 @@ def manhattanDistance(state):
             curr_x, curr_y = divmod(i, 3)
             total_distance += abs(goal_x - curr_x) + abs(goal_y - curr_y)
     return total_distance
-
 
 # BFS algorithm
 def BFS(inputState):
@@ -335,3 +347,177 @@ def BestFirstSearch(inputState):
     bfs_best_counter = cnt
     time_bfs_best = float(time.time() - start_time)
     return False
+
+# A* algorithm - là thuật toán kết hợp giữa UCS và BestFirstSearch
+# Đánh giá dựa trên hàm f(n) = g(n) + h(n)
+# Trong đó g(n) là chi phí từ trạng thái ban đầu đến trạng thái hiện tại
+# h(n) là heuristic ước lượng chi phí từ trạng thái n đến trạng thái đích 
+
+def AStar(inputState):
+    start_time = time.time()
+    pq = []
+    visited = {}
+    parent = {}
+    g_cost = {} # chi phí từ trạng thái ban đầu đến trạng thái hiện tại
+    integer_state = int(inputState)
+    g_cost[integer_state] = 0
+    h_cost = manhattanDistance(integer_state)
+    f_cost = h_cost
+    heapq.heappush(pq, (f_cost,0,integer_state))
+    cnt = 0
+
+    global astar_counter, astar_cost, astar_depth, astar_path, time_astar
+    astar_cost = astar_depth = 0
+
+    while pq:
+        cnt += 1
+        f_cost,curr_cost,state = heapq.heappop(pq)
+
+        # nếu trạng thái đã được thăm và trạng thái này có cost >= cost của hiện tại
+        if state in visited and curr_cost >= visited[state]:
+            continue
+
+        # cập nhật visited với chi phí thấp nhất
+        visited[state] = curr_cost
+        astar_depth = max(astar_depth,curr_cost)
+
+        if goalTest(state):
+            path = getPath(parent, int(inputState))
+            astar_counter = cnt
+            astar_path = path
+            astar_cost = len(path) - 1
+            time_astar = float(time.time() - start_time)
+            return True
+
+        children = getChildren(getStringRepresentation(state))
+        for child in children:
+            child_int = int(child)
+            new_g_cost = curr_cost + 1
+            h_cost = manhattanDistance(child_int)
+            new_f_cost = new_g_cost + h_cost 
+
+            # nếu trạng thái con chưa được thăm hoặc có chi phí thấp hơn
+            if child_int not in visited or new_g_cost < visited[child_int]:
+                heapq.heappush(pq, (new_f_cost, new_g_cost, child_int))
+                parent[child_int] = state
+                g_cost[child_int] = new_g_cost
+    astar_path = []
+    astar_cost = 0
+    astar_counter = cnt
+    time_astar = float(time.time() - start_time)
+    return False
+
+# thuật toán kết hợp giữa IDS và A*, sử dụng hàm heuristic để giới hạn độ sâu tìm kiếm
+def IDAStar(inputState):
+    start_time = time.time()
+    integer_state = int(inputState)
+    global idastar_counter, idastar_cost, idastar_depth, idastar_path, time_idastar
+    idastar_counter = 0
+    idastar_cost = 0
+    idastar_depth = 0
+    idastar_path = []
+
+    # hàm tìm kiếm với độ sau giới hạn f_cost 
+    def search(state,g_cost,f_limit,parent,visited):
+        nonlocal cnt,next_f_limit
+        cnt += 1
+        h_cost = manhattanDistance(state)
+        f_cost = h_cost + g_cost
+
+        # nếu f_cost vượt quá giới hạn, trả về False và giá trị f_cost nhỏ nhất vượt quá
+        if f_cost > f_limit:
+            next_f_limit = min(next_f_limit,f_cost)
+            return False,[]
+        
+        if goalTest(state):
+            return True,getPath(parent,int(inputState))
+        
+        children = getChildren(getStringRepresentation(state))
+        for child in children:
+            child_int = int(child)
+            if child_int not in visited:
+                visited.add(child_int)
+                parent[child_int] = state
+                found,path = search(child_int,g_cost+1,f_limit,parent,visited)
+                if found:
+                    return True, path
+        return False,[]
+    
+    cnt = 0
+    h_initial = manhattanDistance(integer_state)
+    f_limit = h_initial # giới hạn ban đầu là h(n) của trạng thái ban đầu
+    while True:
+        visited = set()
+        parent ={}
+        visited.add(integer_state)
+        next_f_limit = float('inf') # giá trị f_cost nhỏ nhất vượt qua f_limit
+        found,path = search(integer_state,0,f_limit,parent,visited)
+
+        if found:
+            idastar_counter = cnt
+            time_idastar = float(time.time() - start_time)
+            idastar_cost = len(path) - 1
+            idastar_depth = idastar_cost
+            idastar_path = path
+            return True
+        
+        if next_f_limit == float('inf'): # Không còn trạng thái nào để mở rộng
+            idastar_counter = cnt
+            idastar_path = []
+            idastar_cost = 0
+            idastar_depth = 0
+            time_idastar = float(time.time() - start_time)     
+            return False
+        f_limit = next_f_limit # cập nhật giới hạn
+
+def SimpleHillClimbing(inputState):
+    start_time = time.time()
+    integer_state = int(inputState)
+    global shc_counter, shc_cost, shc_depth, shc_path, time_shc
+    shc_counter = 0
+    shc_cost = 0
+    shc_depth = 0
+    shc_path = []
+
+    current_state = integer_state
+    parent = {}
+    visited = set()
+    depth = 0
+
+    while True:
+        shc_counter += 1
+        visited.add(current_state)
+
+        if goalTest(current_state):
+            path = getPath(parent,int(inputState))
+            shc_path = path 
+            shc_cost = len(path) - 1
+            shc_depth = depth
+            time_shc = float(time.time() - start_time)
+            return True
+        
+        children = getChildren(getStringRepresentation(current_state))
+        best_child = None
+        best_heristic = float('inf')
+
+        # tìm trạng thái con có heristic tốt nhất (nhỏ nhất)
+        for child in children:
+            child_int = int(child)
+            if child_int not in visited:
+                h_cost = manhattanDistance(child_int)
+                if h_cost < best_heristic:
+                    best_heristic = h_cost
+                    best_child = child_int
+        
+        if best_child is None:
+            shc_path = []
+            shc_cost = 0
+            shc_depth = depth
+            shc_counter = shc_counter
+            time_shc = float(time.time() - start_time)
+            return False
+
+        parent[child_int] = current_state
+        current_state = best_child
+        depth += 1
+        
