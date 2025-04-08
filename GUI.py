@@ -4,19 +4,24 @@ from tkinter import messagebox, simpledialog
 import random
 import pandas as pd
 from tkinter import filedialog
+import matplotlib.pyplot as plt
 
 import AI_algorithm
 
-# Khởi tạo các biến toàn cục
-algorithm = None
-initialState = None
-statepointer = cost = counter = depth = 0
-runtime = 0.0
-path = []
+from algorithms import bfs, dfs, ucs  # from algorithms.dfs import DFSAlgorithm
 
 
 class GUI:
     def __init__(self, master=None):
+        self.algorithm = None
+        self.initialState = None
+        self.statepointer = 0
+        self.cost = 0 # chi phí đi từ trạng thái ban đầu đến trạng thái đích
+        self.counter = 0 # số node đã duyệt qua
+        self.depth = 0 # quãng đường đi từ trạng thái ban đầu đến trạng thái đích
+        self.runtime = 0.0
+        self.path = []
+        self.runtime_data = {}
         self._job = None
         self.appFrame = ttk.Frame(master)
         self.appFrame.configure(height=800, width=1000)
@@ -95,15 +100,15 @@ class GUI:
 
         # nút shuffle (thay thế contributors)
         self.shufflebutton = ttk.Button(self.appFrame)
-        self.shufflebutton.configure(cursor="hand2", text="Shuffle")
-        self.shufflebutton.place(anchor="n",height= 40, width=150, x=910, y=680)
+        self.shufflebutton.configure(cursor="hand2", text="Tạo mới trạng thái")
+        self.shufflebutton.place(anchor="n", height=40, width=150, x=910, y=680)
         self.shufflebutton.bind("<ButtonPress>", self.shuffle)
 
         # solve button
         self.solvebutton = ttk.Button(self.appFrame)
         self.img_solveicon = tk.PhotoImage(file="assets/solve-icon.png")
         self.solvebutton.configure(
-            cursor="hand2", text="Solve", image=self.img_solveicon, compound="top"
+            cursor="hand2", text="Giải", image=self.img_solveicon, compound="top"
         )
         self.solvebutton.place(anchor="s", height=150, width=150, x=910, y=300)
         self.solvebutton.bind("<ButtonPress>", self.solve)
@@ -123,7 +128,10 @@ class GUI:
                 "Best first search",
                 "A*",
                 "IDA*",
-                "Simple Hill Climbing"
+                "Simple Hill Climbing",
+                "Stochastic Hill Climbing",
+                "Simulated Annealing",
+                "Beam Search",
             ),
         )
         self.algorithmbox.place(anchor="center", height=30, width=150, x=910, y=330)
@@ -147,9 +155,17 @@ class GUI:
 
         # nút in đường dẫn path xuất file excel
         self.exportFilebutton = ttk.Button(self.appFrame)
-        self.exportFilebutton.configure(cursor="hand2", text="Xuất file toàn bộ đường dẫn")
-        self.exportFilebutton.place(anchor="n",height= 40, width=180, x=500, y=580)
+        self.exportFilebutton.configure(
+            cursor="hand2", text="Xuất file toàn bộ đường dẫn"
+        )
+        self.exportFilebutton.place(anchor="n", height=40, width=180, x=500, y=580)
         self.exportFilebutton.bind("<ButtonPress>", self.exportFile)
+
+        # nút vẽ biểu đồ so sánh runtime
+        self.runtimeChartButton = ttk.Button(self.appFrame)
+        self.runtimeChartButton.configure(cursor="hand2", text="Vẽ biểu đồ so sánh")
+        self.runtimeChartButton.place(anchor="n", height=40, width=180, x=500, y=530)
+        self.runtimeChartButton.bind("<ButtonPress>", self.drawRuntimeChart)
 
         # tạo các ô cho puzzle
         self.cell0 = ttk.Label(self.appFrame)
@@ -381,7 +397,6 @@ class GUI:
         )
         self.cell8_1.place(anchor="center", height=50, width=50, x=170, y=280)
 
-
         # tạo các ô cho puzzle để hiện trạng thái mục tiêu
 
         self.last_Label = ttk.Label(self.appFrame)
@@ -545,33 +560,30 @@ class GUI:
         self.appFrame.after(50, self.refreshGIF, ind)
 
     def prevSequence(self, event=None):
-        global statepointer
-        if statepointer > 0:
+        if self.statepointer > 0:
             self.stopFastForward()
-            statepointer -= 1
+            self.statepointer -= 1
             self.refreshFrame()
 
     def nextSequence(self, event=None):
-        global statepointer
-        if statepointer < len(path) - 1:
+        if self.statepointer < len(self.path) - 1:
             self.stopFastForward()
-            statepointer += 1
+            self.statepointer += 1
             self.refreshFrame()
 
     def solve(self, event=None):
-        global algorithm, initialState
         self.gif_loading.place(x=800, y=300, anchor="s")
         if self.readyToSolve():
             msg = (
                 "Thuật toán: "
-                + str(algorithm)
+                + str(self.algorithm)
                 + "\nTrạng thái ban đầu = "
-                + str(initialState)
+                + str(self.initialState)
             )
             messagebox.showinfo("Xác nhận dữ liệu", msg)
             self.resetGrid()
             self.solveState()
-            if len(path) == 0:
+            if len(self.path) == 0:
                 messagebox.showinfo(
                     "Không thể giải", "Trạng thái ban đầu không thể giải!"
                 )
@@ -581,14 +593,13 @@ class GUI:
         else:
             solvingerror = (
                 "Không thể giải.\n"
-                "Thuật toán sử dụng: " + str(algorithm) + "\n"
-                "Trạng thái ban đầu   : " + str(initialState)
+                "Thuật toán sử dụng: " + str(self.algorithm) + "\n"
+                "Trạng thái ban đầu   : " + str(self.initialState)
             )
             messagebox.showerror("Không thể giải!", solvingerror)
         self.gif_loading.place_forget()
 
     def enterInitialState(self, event=None):
-        global initialState, statepointer
         inputState = simpledialog.askstring(
             "Nhập trạng thái ban đầu", "Vui lòng nhập trạng thái ban đầu!"
         )
@@ -597,97 +608,108 @@ class GUI:
                 # kiểm tra số nghịch thế
                 inversions = self.countInversions(inputState)
                 if inversions % 2 != 0:  # Nnu số nghịch thế là lẻ, không giải được
-                    messagebox.showerror("Lỗi đầu vào", "Trạng thái ban đầu không thể giải được (số nghịch thế là lẻ)!")
+                    messagebox.showerror(
+                        "Lỗi đầu vào",
+                        "Trạng thái ban đầu không thể giải được (số nghịch thế là lẻ)!",
+                    )
                     return
-                initialState = inputState
+                if (
+                    inputState != self.initialState
+                ):  # Only reset runtime_data if the state changes
+                    self.initialState = inputState
+                    self.runtime_data = {}  # Reset runtime data
                 self.reset()
-                self.displayStateOnGrid(initialState)
-                self.updateInitialStateGrid(initialState)
+                self.displayStateOnGrid(self.initialState)
+                self.updateInitialStateGrid(self.initialState)
             else:
                 messagebox.showerror("Lỗi đầu vào", "Trạng thái ban đầu không hợp lệ!")
 
     def selectAlgorithm(self, event=None):
-        global algorithm
         try:
             choice = self.algorithmbox.get()
             self.reset()
-            algorithm = choice
+            self.algorithm = choice
+            # self.runtime_data = {}
         except:
             pass
+
     def exportFile(self, event=None):
-        global path, algorithm, initialState
         if not self.solved():
-            messagebox.showwarning("Cảnh báo", "Chưa có đường dẫn để xuất! Vui lòng nhấn Solve trước.")
-            return
-        
-        # hỏi người dùng chọn nơi lưu file và tên file
-        file_name = filedialog.asksaveasfilename(
-            defaultextension=".xlsx",  # đuôi mặc định là .xlsx
-            filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")],  # các loại file hỗ trợ
-            initialfile=f"{algorithm}_path",  # tên file mặc định
-            title="Chọn nơi lưu file Excel"
-        )
-        if not file_name:  # nếu người dùng hủy
+            messagebox.showwarning(
+                "Cảnh báo", "Chưa có đường dẫn để xuất! Vui lòng nhấn Solve trước."
+            )
             return
 
-        # chuẩn bị dữ liệu cho sheet "Đường dẫn"
+        file_name = filedialog.asksaveasfilename(
+            defaultextension=".xlsx",
+            filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")],
+            initialfile=f"{self.algorithm}_path",
+            title="Chọn nơi lưu file Excel",
+        )
+        if not file_name:
+            return
+
         data = []
-        for i, state in enumerate(path):
+        for i, state in enumerate(self.path):
             state_str = AI_algorithm.getStringRepresentation(state)
             matrix = [
-                [self.adjustDigit(state_str[0]), self.adjustDigit(state_str[1]), self.adjustDigit(state_str[2])],
-                [self.adjustDigit(state_str[3]), self.adjustDigit(state_str[4]), self.adjustDigit(state_str[5])],
-                [self.adjustDigit(state_str[6]), self.adjustDigit(state_str[7]), self.adjustDigit(state_str[8])]
+                [
+                    self.adjustDigit(state_str[0]),
+                    self.adjustDigit(state_str[1]),
+                    self.adjustDigit(state_str[2]),
+                ],
+                [
+                    self.adjustDigit(state_str[3]),
+                    self.adjustDigit(state_str[4]),
+                    self.adjustDigit(state_str[5]),
+                ],
+                [
+                    self.adjustDigit(state_str[6]),
+                    self.adjustDigit(state_str[7]),
+                    self.adjustDigit(state_str[8]),
+                ],
             ]
-            # thêm tiêu đề bước
-            data.append({
-                "Bước": f"Ma trận bước {i}",
-                "Cột 1": "",
-                "Cột 2": "",
-                "Cột 3": ""
-            })
-            # thêm 3 hàng của ma trận
-            data.append({
-                "Bước": "",
-                "Cột 1": matrix[0][0],
-                "Cột 2": matrix[0][1],
-                "Cột 3": matrix[0][2]
-            })
-            data.append({
-                "Bước": "",
-                "Cột 1": matrix[1][0],
-                "Cột 2": matrix[1][1],
-                "Cột 3": matrix[1][2]
-            })
-            data.append({
-                "Bước": "",
-                "Cột 1": matrix[2][0],
-                "Cột 2": matrix[2][1],
-                "Cột 3": matrix[2][2]
-            })
-            # thêm dòng trống để phân tách
-            data.append({
-                "Bước": "",
-                "Cột 1": "",
-                "Cột 2": "",
-                "Cột 3": ""
-            })
+            data.append(
+                {"Bước": f"Ma trận bước {i}", "Cột 1": "", "Cột 2": "", "Cột 3": ""}
+            )
+            data.append(
+                {
+                    "Bước": "",
+                    "Cột 1": matrix[0][0],
+                    "Cột 2": matrix[0][1],
+                    "Cột 3": matrix[0][2],
+                }
+            )
+            data.append(
+                {
+                    "Bước": "",
+                    "Cột 1": matrix[1][0],
+                    "Cột 2": matrix[1][1],
+                    "Cột 3": matrix[1][2],
+                }
+            )
+            data.append(
+                {
+                    "Bước": "",
+                    "Cột 1": matrix[2][0],
+                    "Cột 2": matrix[2][1],
+                    "Cột 3": matrix[2][2],
+                }
+            )
+            data.append({"Bước": "", "Cột 1": "", "Cột 2": "", "Cột 3": ""})
 
-        # tạo DataFrame từ dữ liệu
         df = pd.DataFrame(data)
 
-        # thêm thông tin phân tích vào sheet thứ hai
         analysis_data = {
-            "Thuật toán": [str(algorithm)],
-            "Trạng thái ban đầu": [str(initialState)],
-            "Số trạng thái đã duyệt qua": [counter],
-            "Độ sâu": [depth],
-            "Chi phí": [cost],
-            "Thời gian chạy (s)": [runtime]
+            "Thuật toán": [str(self.algorithm)],
+            "Trạng thái ban đầu": [str(self.initialState)],
+            "Số trạng thái đã duyệt qua": [self.counter],
+            "Độ sâu": [self.depth],
+            "Chi phí": [self.cost],
+            "Thời gian chạy (s)": [self.runtime],
         }
         analysis_df = pd.DataFrame(analysis_data)
 
-        # ghi vào file Excel
         try:
             with pd.ExcelWriter(file_name, engine="openpyxl") as writer:
                 df.to_excel(writer, sheet_name="Đường dẫn", index=False)
@@ -697,29 +719,27 @@ class GUI:
             messagebox.showerror("Lỗi", f"Không thể xuất file: {str(e)}")
 
     def fastForward(self, event=None):
-        global statepointer, cost
         self.stopFastForward()
-        if statepointer < cost:
+        if self.statepointer < self.cost:
             self.stopbutton.configure(state="enabled")
-            statepointer += 1
+            self.statepointer += 1
             self.refreshFrame()
             ms = 100
-            if 100 < cost <= 1000:
+            if 100 < self.cost <= 1000:
                 ms = 20
-            if cost > 1000:
+            if self.cost > 1000:
                 ms = 1
             self._job = self.stepCount.after(ms, self.fastForward)
         else:
             self.stopFastForward()
 
     def fastBackward(self, event=None):
-        global statepointer
         self.stopFastForward()
-        if statepointer > 0:
+        if self.statepointer > 0:
             self.stopbutton.configure(state="enabled")
-            statepointer -= 1
+            self.statepointer -= 1
             ms = 50
-            if cost > 1000:
+            if self.cost > 1000:
                 ms = 1
             self._job = self.stepCount.after(ms, self.fastBackward)
         else:
@@ -733,26 +753,26 @@ class GUI:
             self._job = None
 
     def resetStepCounter(self, event=None):
-        global statepointer
-        if statepointer > 0:
+        if self.statepointer > 0:
             self.stopFastForward()
-            statepointer = 0
+            self.statepointer = 0
             self.refreshFrame()
 
     def shuffle(self, event=None):
-        global initialState, statepointer
         while True:
             puzzle = list("012345678")
             random.shuffle(puzzle)
-            initialState = "".join(puzzle)
+            self.initialState = "".join(puzzle)
             # Kiểm tra số nghịch thế
-            inversions = self.countInversions(initialState)
+            inversions = self.countInversions(self.initialState)
             if inversions % 2 == 0:  # nếu số nghịch thế là chẵn, trạng thái giải được
                 break
         self.reset()
-        self.displayStateOnGrid(initialState)
-        self.updateInitialStateGrid(initialState)
-        messagebox.showinfo("Shuffled", f"Trạng thái ban đầu: {initialState}")
+        self.displayStateOnGrid(self.initialState)
+        self.updateInitialStateGrid(self.initialState)
+        messagebox.showinfo(
+            "Trạng thái mới", f"Trạng thái ban đầu: {self.initialState}"
+        )
 
     def displayStateOnGrid(self, state):
         if not self.validateState(state):
@@ -766,7 +786,7 @@ class GUI:
         self.cell6.configure(text=self.adjustDigit(state[6]))
         self.cell7.configure(text=self.adjustDigit(state[7]))
         self.cell8.configure(text=self.adjustDigit(state[8]))
-    
+
     def updateInitialStateGrid(self, state):
         self.cell0_1.configure(text=self.adjustDigit(state[0]))
         self.cell1_1.configure(text=self.adjustDigit(state[1]))
@@ -792,9 +812,35 @@ class GUI:
         self.mainLabel.configure(foreground="#ff0000")
         self.analysisbox.configure(background="#333333", foreground="#ffffff")
         self.stepCount.configure(background="#333333", foreground="#ffffff")
-        for cell in [self.cell0, self.cell1, self.cell2, self.cell3, self.cell4, self.cell5, self.cell6, self.cell7, self.cell8,
-                     self.cell0_1, self.cell1_1, self.cell2_1, self.cell3_1, self.cell4_1, self.cell5_1, self.cell6_1, self.cell7_1, self.cell8_1,
-                     self.cell0_2, self.cell1_2, self.cell2_2, self.cell3_2, self.cell4_2, self.cell5_2, self.cell6_2, self.cell7_2, self.cell8_2]:
+        for cell in [
+            self.cell0,
+            self.cell1,
+            self.cell2,
+            self.cell3,
+            self.cell4,
+            self.cell5,
+            self.cell6,
+            self.cell7,
+            self.cell8,
+            self.cell0_1,
+            self.cell1_1,
+            self.cell2_1,
+            self.cell3_1,
+            self.cell4_1,
+            self.cell5_1,
+            self.cell6_1,
+            self.cell7_1,
+            self.cell8_1,
+            self.cell0_2,
+            self.cell1_2,
+            self.cell2_2,
+            self.cell3_2,
+            self.cell4_2,
+            self.cell5_2,
+            self.cell6_2,
+            self.cell7_2,
+            self.cell8_2,
+        ]:
             cell.configure(background="#444444", foreground="#ffffff")
 
     def applyLightMode(self):
@@ -802,9 +848,35 @@ class GUI:
         self.mainLabel.configure(foreground="#003e3e")
         self.analysisbox.configure(background="#d6d6d6", foreground="#000000")
         self.stepCount.configure(background="#d6d6d6", foreground="#000000")
-        for cell in [self.cell0, self.cell1, self.cell2, self.cell3, self.cell4, self.cell5, self.cell6, self.cell7, self.cell8,
-                     self.cell0_1, self.cell1_1, self.cell2_1, self.cell3_1, self.cell4_1, self.cell5_1, self.cell6_1, self.cell7_1, self.cell8_1,
-                     self.cell0_2, self.cell1_2, self.cell2_2, self.cell3_2, self.cell4_2, self.cell5_2, self.cell6_2, self.cell7_2, self.cell8_2]:
+        for cell in [
+            self.cell0,
+            self.cell1,
+            self.cell2,
+            self.cell3,
+            self.cell4,
+            self.cell5,
+            self.cell6,
+            self.cell7,
+            self.cell8,
+            self.cell0_1,
+            self.cell1_1,
+            self.cell2_1,
+            self.cell3_1,
+            self.cell4_1,
+            self.cell5_1,
+            self.cell6_1,
+            self.cell7_1,
+            self.cell8_1,
+            self.cell0_2,
+            self.cell1_2,
+            self.cell2_2,
+            self.cell3_2,
+            self.cell4_2,
+            self.cell5_2,
+            self.cell6_2,
+            self.cell7_2,
+            self.cell8_2,
+        ]:
             cell.configure(background="#5aadad", foreground="#000000")
 
     # ------------- Các hàm hỗ trợ -----------------
@@ -827,13 +899,12 @@ class GUI:
         return digit
 
     def refreshFrame(self):
-        global cost, statepointer, path
-        if cost > 0:
-            state = AI_algorithm.getStringRepresentation(path[statepointer])
+        if self.cost > 0:
+            state = AI_algorithm.getStringRepresentation(self.path[self.statepointer])
             self.displayStateOnGrid(state)
             self.stepCount.configure(text=self.getStepCountString())
             self.displaySearchAnalysis()
-        if statepointer == 0:
+        if self.statepointer == 0:
             self.resetbutton.configure(state="disabled")
             self.backbutton.configure(state="disabled")
             self.fastbackwardbutton.configure(state="disabled")
@@ -841,17 +912,15 @@ class GUI:
             self.resetbutton.configure(state="enabled")
             self.backbutton.configure(state="enabled")
             self.fastbackwardbutton.configure(state="enabled")
-        if cost == 0 or statepointer == cost:
+        if self.cost == 0 or self.statepointer == self.cost:
             self.fastforwardbutton.configure(state="disabled")
             self.nextbutton.configure(state="disabled")
         else:
             self.fastforwardbutton.configure(state="enabled")
             self.nextbutton.configure(state="enabled")
 
-    @staticmethod
-    def getStepCountString():
-        global statepointer, cost
-        return str(statepointer) + "/" + str(cost)
+    def getStepCountString(self):
+        return str(self.statepointer) + "/" + str(self.cost)
 
     @staticmethod
     def countInversions(state):
@@ -866,13 +935,12 @@ class GUI:
         return inversions
 
     def displaySearchAnalysis(self, force_display=False):
-        global algorithm, initialState, counter, depth, cost, runtime
         if self.solved() or force_display is True:
             analytics = (
                 "Phân tích của thuật toán:\n"
-                + str(algorithm)
+                + str(self.algorithm)
                 + "\nTrạng thái ban đầu:\n"
-                + str(initialState)
+                + str(self.initialState)
             )
             if force_display:
                 analytics += "\n< Không thể giải >"
@@ -880,97 +948,181 @@ class GUI:
                 "\n-------------------------------"
                 "\n"
                 + "Số trạng thái đã duyệt qua: \n"
-                + str(counter)
+                + str(self.counter)
                 + "\n"
                 + "Độ sâu: \n"
-                + str(depth)
+                + str(self.depth)
                 + "\n"
                 + "Chi phí: \n"
-                + str(cost)
+                + str(self.cost)
                 + "\n"
                 + "Thời gian chạy: \n"
-                + str(runtime)
+                + str(self.runtime)
                 + " s"
             )
         else:
             analytics = ""
         self.analysisbox.configure(text=analytics)
 
-    @staticmethod
-    def solved():
-        global path
-        return len(path) > 0
+    def solved(self):
+        return len(self.path) > 0
 
-    @staticmethod
-    def readyToSolve():
-        global initialState, algorithm
-        return initialState is not None and algorithm is not None
+    def readyToSolve(self):
+        return self.initialState is not None and self.algorithm is not None
 
     def resetGrid(self):
-        global statepointer
-        statepointer = 0
+        self.statepointer = 0
         self.refreshFrame()
         self.stepCount.configure(text=self.getStepCountString())
 
     def solveState(self):
-        global path, cost, counter, depth, runtime, algorithm, initialState
-        if str(algorithm) == "BFS":
-            AI_algorithm.BFS(initialState)
-            path, cost, counter, depth, runtime = (
-                AI_algorithm.bfs_path,
-                AI_algorithm.bfs_cost,
-                AI_algorithm.bfs_counter,
-                AI_algorithm.bfs_depth,
-                AI_algorithm.time_bfs,
-            )
-        elif str(algorithm) == "DFS":
-            AI_algorithm.DFS(initialState)
-            path, cost, counter, depth, runtime = (
-                AI_algorithm.dfs_path,
-                AI_algorithm.dfs_cost,
-                AI_algorithm.dfs_counter,
-                AI_algorithm.dfs_depth,
-                AI_algorithm.time_dfs,
-            )
-        elif str(algorithm) == "Uniform Cost Search":
-            AI_algorithm.UCS(initialState)
-            path, cost, counter, depth, runtime = (
-                AI_algorithm.ucs_path,
-                AI_algorithm.ucs_cost,
-                AI_algorithm.ucs_counter,
-                AI_algorithm.ucs_depth,
-                AI_algorithm.time_ucs,
-            )
-        elif str(algorithm) == "Iterative Deepening":
-            AI_algorithm.IDS(initialState)
-            path, cost, counter, depth, runtime = (
+        if self.algorithm == "BFS":
+            self.solveBFS()
+
+        elif str(self.algorithm) == "DFS":
+            self.solveDFS()
+        elif str(self.algorithm) == "Uniform Cost Search":
+            self.solveUCS()
+        elif str(self.algorithm) == "Iterative Deepening":
+            AI_algorithm.IDS(self.initialState)
+            self.path, self.cost, self.counter, self.depth, self.runtime = (
                 AI_algorithm.id_path,
                 AI_algorithm.id_cost,
-            AI_algorithm.time_astar,
-        )
-        elif str(algorithm) == "IDA*":
-            AI_algorithm.IDAStar(initialState)
-            path, cost, counter, depth, runtime = (
-            AI_algorithm.idastar_path,
-            AI_algorithm.idastar_cost,
-            AI_algorithm.idastar_counter,
-            AI_algorithm.idastar_depth,
-            AI_algorithm.time_idastar,
-        )
-        elif str(algorithm) == "Simple Hill Climbing":
-            AI_algorithm.SimpleHillClimbing(initialState)
-            path, cost, counter, depth, runtime = (
-            AI_algorithm.shc_path,
-            AI_algorithm.shc_cost,
-            AI_algorithm.shc_counter,
-            AI_algorithm.shc_depth,
-            AI_algorithm.time_shc,
-        )
+                AI_algorithm.id_counter,
+                AI_algorithm.id_depth,
+                AI_algorithm.time_id,
+            )
+        elif str(self.algorithm) == "IDA*":
+            AI_algorithm.IDAStar(self.initialState)
+            self.path, self.cost, self.counter, self.depth, self.runtime = (
+                AI_algorithm.idastar_path,
+                AI_algorithm.idastar_cost,
+                AI_algorithm.idastar_counter,
+                AI_algorithm.idastar_depth,
+                AI_algorithm.time_idastar,
+            )
+        elif str(self.algorithm) == "Simple Hill Climbing":
+            AI_algorithm.SimpleHillClimbing(self.initialState)
+            self.path, self.cost, self.counter, self.depth, self.runtime = (
+                AI_algorithm.shc_path,
+                AI_algorithm.shc_cost,
+                AI_algorithm.shc_counter,
+                AI_algorithm.shc_depth,
+                AI_algorithm.time_shc,
+            )
+        elif str(self.algorithm) == "Simulated Annealing":
+            AI_algorithm.SimulatedAnnealing(self.initialState)
+            self.path, self.cost, self.counter, self.depth, self.runtime = (
+                AI_algorithm.sa_path,
+                AI_algorithm.sa_cost,
+                AI_algorithm.sa_counter,
+                AI_algorithm.sa_depth,
+                AI_algorithm.time_sa,
+            )
+        elif str(self.algorithm) == "Beam Search":
+            AI_algorithm.BeamSearch(self.initialState)
+            self.path, self.cost, self.counter, self.depth, self.runtime = (
+                AI_algorithm.beam_path,
+                AI_algorithm.beam_cost,
+                AI_algorithm.beam_counter,
+                AI_algorithm.beam_depth,
+                AI_algorithm.time_beam,
+            )
+        if self.algorithm and self.initialState:
+            self.runtime_data[self.algorithm] = {
+                "runtime": self.runtime,
+                "cost": self.cost,
+                "counter": self.counter,
+                "depth": self.depth,
+            }
+        # if self.algorithm and self.initialState:
+        #     self.runtime_data[self.algorithm] = self.runtime
 
     def reset(self):
-        global path, cost, counter, runtime
-        path = []
-        cost = counter = 0
-        runtime = 0.0
+        self.path = []
+        self.cost = self.counter = 0
+        self.runtime = 0.0
         self.resetGrid()
         self.analysisbox.configure(text="")
+
+    # ----------------- Các thuật toán ------------------
+
+    def solveBFS(self):
+        bfs_solver = bfs.BFSAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = bfs_solver.BFS(
+            self.initialState
+        )
+
+    def solveDFS(self):
+        dfs_solver = dfs.DFSAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = dfs_solver.DFS(
+            self.initialState
+        )
+
+    def solveUCS(self):
+        ucs_solver = ucs.UCSAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = ucs_solver.UCS(
+            self.initialState
+        )
+
+    def drawRuntimeChart(self, event=None):
+        # if not self.runtime_data:
+        #     messagebox.showinfo("Thông báo", "Chưa có dữ liệu runtime để vẽ biểu đồ!")
+        #     return
+
+        # algorithms = list(self.runtime_data.keys())
+        # runtimes = list(self.runtime_data.values())
+
+        # plt.figure(figsize=(10, 6))
+        # plt.bar(algorithms, runtimes, color="skyblue")
+        # plt.xlabel("Thuật toán", fontsize=14)
+        # plt.ylabel("Thời gian chạy (s)", fontsize=14)
+        # plt.title("So sánh thời gian chạy giữa các thuật toán", fontsize=16)
+        # plt.xticks(rotation=45, ha="right")
+        # plt.tight_layout()
+        # plt.show()
+        if not self.runtime_data:
+            messagebox.showinfo("Thông báo", "Chưa có dữ liệu để vẽ biểu đồ!")
+            return
+
+        # Extract data for the charts
+        algorithms = list(self.runtime_data.keys())
+        runtimes = [data["runtime"] for data in self.runtime_data.values()]
+        costs = [data["cost"] for data in self.runtime_data.values()]
+        counters = [data["counter"] for data in self.runtime_data.values()]
+        depths = [data["depth"] for data in self.runtime_data.values()]
+
+        # Create subplots for runtime, cost, counter, and depth
+        fig, axs = plt.subplots(2, 2, figsize=(12, 10))
+
+        # Runtime chart
+        axs[0, 0].bar(algorithms, runtimes, color="skyblue")
+        axs[0, 0].set_title("Thời gian chạy (s)", fontsize=14)
+        axs[0, 0].set_xlabel("Thuật toán", fontsize=12)
+        axs[0, 0].set_ylabel("Thời gian (s)", fontsize=12)
+        axs[0, 0].tick_params(axis="x", rotation=45)
+
+        # Cost chart
+        axs[0, 1].bar(algorithms, costs, color="lightgreen")
+        axs[0, 1].set_title("Chi phí", fontsize=14)
+        axs[0, 1].set_xlabel("Thuật toán", fontsize=12)
+        axs[0, 1].set_ylabel("Chi phí", fontsize=12)
+        axs[0, 1].tick_params(axis="x", rotation=45)
+
+        # Counter chart
+        axs[1, 0].bar(algorithms, counters, color="salmon")
+        axs[1, 0].set_title("Số trạng thái đã duyệt qua", fontsize=14)
+        axs[1, 0].set_xlabel("Thuật toán", fontsize=12)
+        axs[1, 0].set_ylabel("Số trạng thái", fontsize=12)
+        axs[1, 0].tick_params(axis="x", rotation=45)
+
+        # Depth chart
+        axs[1, 1].bar(algorithms, depths, color="gold")
+        axs[1, 1].set_title("Độ sâu", fontsize=14)
+        axs[1, 1].set_xlabel("Thuật toán", fontsize=12)
+        axs[1, 1].set_ylabel("Độ sâu", fontsize=12)
+        axs[1, 1].tick_params(axis="x", rotation=45)
+
+        # Adjust layout and show the plot
+        plt.tight_layout()
+        plt.show()

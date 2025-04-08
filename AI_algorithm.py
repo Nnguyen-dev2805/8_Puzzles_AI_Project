@@ -1,6 +1,7 @@
 import heapq
 import math
 import time
+import random
 
 # moves
 dx = [-1, 1, 0, 0]
@@ -14,6 +15,8 @@ bfs_best_counter = 0
 astar_counter = 0
 idastar_counter = 0
 shc_counter = 0
+sa_counter = 0
+beam_counter = 0
 
 dfs_path = []
 bfs_path = []
@@ -23,6 +26,8 @@ bfs_best_path = []
 astar_path = []
 idastar_path = []
 shc_path = []
+sa_path = []
+beam_path = []
 
 dfs_cost = 0
 bfs_cost = 0
@@ -32,6 +37,8 @@ bfs_best_cost = 0
 astar_cost = 0
 idastar_cost = 0
 shc_cost = 0
+sa_cost = 0
+beam_cost = 0
 
 dfs_depth = 0
 bfs_depth = 0
@@ -41,6 +48,8 @@ bfs_best_depth = 0
 astar_depth = 0
 idastar_depth = 0
 shc_depth = 0
+sa_depth = 0
+beam_depth = 0
 
 time_bfs = 0
 time_dfs = 0
@@ -50,6 +59,8 @@ time_bfs_best = 0
 time_astar = 0
 time_idastar = 0
 time_shc = 0
+time_sa = 0
+time_beam = 0
 
 # hàm chuyển số thành chuỗi
 def getStringRepresentation(x):
@@ -498,7 +509,7 @@ def SimpleHillClimbing(inputState):
         
         children = getChildren(getStringRepresentation(current_state))
         best_child = None
-        best_heristic = float('inf')
+        best_heristic = manhattanDistance(current_state)
 
         # tìm trạng thái con có heristic tốt nhất (nhỏ nhất)
         for child in children:
@@ -520,4 +531,143 @@ def SimpleHillClimbing(inputState):
         parent[best_child] = current_state
         current_state = best_child
         depth += 1
+
+# Simulated Annealing algorithm 
+# dựa trên thuật toán SimpleHillClimbing và quá trình làm nguội, chấp nhân trạng thái xấu hơn với xác xuất giảm dần
+def SimulatedAnnealing(inputState):
+    start_time = time.time()
+    integer_state = int(inputState)
+    global sa_counter, sa_cost, sa_depth, sa_path, time_sa
+    sa_counter = 0
+    sa_cost = 0
+    sa_depth = 0
+    sa_path = []
+
+    current_state = integer_state
+    best_state = current_state
+    parent ={}
+    visited = set()
+    temperature = 1000.0 # nhiệt độ ban đầu
+    cooling_rate = 0.995 # tỷ lệ làm nguội
+    min_temperature = 0.01 # nhiệt độ tối thiểu
+
+    current_heuristic = manhattanDistance(current_state)
+    best_heuristic = current_heuristic
+
+    while temperature > min_temperature:
+        sa_counter += 1
+        visited.add(current_state)
+
+        if goalTest(current_state):
+            path = getPath(parent, int(inputState))
+            sa_path = path
+            sa_cost = len(path) - 1
+            sa_depth = sa_cost  # Độ sâu bằng chi phí
+            time_sa = float(time.time() - start_time)
+            return True
         
+        children = [int(child) for child in getChildren(getStringRepresentation(current_state)) if int(child) not in visited]
+        if not children:
+            break
+
+        next_state = int(random.choice(children))
+        next_heuristic = manhattanDistance(next_state)
+        delta_e = next_heuristic - current_heuristic # sự thay đổi heuristic
+
+        # delta_e < 0: trạng thái random tốt hơn trạng thái hiện tại
+        # current_heuristic = vế sau là chấp nhận với xác suất Boltzman
+        if delta_e < 0 or random.random() < math.exp(-delta_e/temperature):
+            parent[next_state] = current_state
+            current_state = next_state
+            current_heuristic = next_heuristic
+            sa_depth += 1
+
+        if current_heuristic < best_heuristic:
+            best_state = current_state
+            best_heuristic = current_heuristic
+
+        temperature *= cooling_rate
+
+    # nếu không tìm thấy đích, trả về trạng thái tốt nhất đạt được
+    if best_state != integer_state:
+        current_state = best_state
+        if goalTest(current_state):
+            path = getPath(parent, int(inputState))
+            sa_path = path
+            sa_cost = len(path) - 1
+            sa_depth = sa_cost
+            time_sa = float(time.time() - start_time)
+            return True
+
+    sa_path = []
+    sa_cost = 0
+    sa_depth = sa_depth
+    time_sa = float(time.time() - start_time)
+    return False 
+
+# Beam Search là một thuật toán tìm kiếm heuristic mở rộng bằng BFS bằng cách giới hạn số lượng 
+# trạng thái mở rộng tại mỗi bước
+def BeamSearch(inputState,beam_width = 2):
+    start_time = time.time()
+    integer_state = int(inputState)
+    global beam_counter, beam_cost, beam_depth, beam_path, time_beam
+    beam_counter = 0
+    beam_cost = 0
+    beam_depth = 0
+    beam_path = []
+
+    pq = [(manhattanDistance(integer_state),0,integer_state)] # (heuristic,depth,state)
+    visited = set()
+    parent = {}
+    parent_depth = {integer_state:0}
+
+    while pq:
+        beam_counter += 1
+
+        # lấy danh sách trong beam hiện tại
+        current_beam = []
+        for _ in range(min(len(pq),beam_width)):
+            if pq:
+                h_cost,depth,state = heapq.heappop(pq)
+                if state not in visited:
+                    current_beam.append((h_cost,depth,state))
+
+        # nếu không còn trạng thái nào trong beam
+        if not current_beam:
+            break
+        
+        for _ ,depth,state in current_beam:
+            if state in visited:
+                continue
+            visited.add(state)
+            beam_depth = max(depth,beam_depth)
+
+            if goalTest(state):
+                path = getPath(parent, int(inputState))
+                beam_path = path
+                beam_cost = len(path) - 1
+                beam_depth = beam_cost
+                time_beam = float(time.time() - start_time)
+                return True
+            
+            # lấy danh sách trạng thái con
+            children = getChildren(getStringRepresentation(state))
+            next_beam = []
+            for child in children:
+                child_int = int(child)
+                if child_int not in visited:
+                    h_cost = manhattanDistance(child_int)
+                    next_beam.append((h_cost,depth + 1,child_int))
+                    parent[child_int] = state
+                    parent_depth [child_int]= depth + 1
+
+            # chỉ giữ lại beam_with của trạng thái tốt nhất 
+            next_beam.sort()
+            for h_cost, new_depth, child_int in next_beam[:beam_width]:
+                heapq.heappush(pq, (h_cost, new_depth, child_int))
+
+    beam_path = []
+    beam_cost = 0
+    time_beam = float(time.time() - start_time)
+    return False
+       
