@@ -84,8 +84,8 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - Thêm giới hạn độ sâu (Depth-Limited Search) để tránh tràn ngăn xếp.
   - Sử dụng Iterative Deepening DFS (như IDS) để kết hợp ưu điểm của BFS và DFS.
 - **Độ phức tạp**:
-  - **Thời gian**: \( O(b^m) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), và \( m \) là độ sâu tối đa của cây tìm kiếm (có thể lên đến \( 9! = 362,880 \) nếu không cắt tỉa).
-  - **Bộ nhớ**: \( O(bm) \), vì DFS chỉ lưu trữ các trạng thái trên nhánh hiện tại.
+  - **Thời gian**: \( O(b^d) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), và \( d \) là độ sâu tối đa của cây tìm kiếm (có thể lên đến \( 9! = 362,880 \) nếu không cắt tỉa).
+  - **Bộ nhớ**: \( O(d) \), vì DFS chỉ lưu trữ các trạng thái trên nhánh hiện tại.
 - **Hình ảnh minh họa**: ![GIF mô tả DFS](assets/gif_solve/DFS.gif)
 - **Hình ảnh bổ sung**: ![DFS](https://upload.wikimedia.org/wikipedia/commons/7/7f/Depth-First-Search.gif)
 - **Liên kết**: [Wikipedia - Depth-first search](https://en.wikipedia.org/wiki/Depth-first_search)
@@ -106,8 +106,8 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - Sử dụng cấu trúc dữ liệu hiệu quả (như `heapq` trong Python) cho hàng đợi ưu tiên.
   - Có thể kết hợp với heuristic (biến thành A*) để giảm số trạng thái cần duyệt.
 - **Độ phức tạp**:
-  - **Thời gian**: \( O(b^{C*/\epsilon}) \), trong đó \( b \) là nhánh trung bình, \( C* \) là chi phí của đường đi tối ưu, và \( \epsilon \) là chi phí nhỏ nhất của một bước (\( \epsilon = 1 \) trong 8-puzzle, nên tương đương \( O(b^d) \)).
-  - **Bộ nhớ**: \( O(b^{C*/\epsilon}) \), tương tự BFS.
+  - **Thời gian**: \( O(b^{C*/ε}) \), trong đó \( b \) là nhánh trung bình, \( C* \) là chi phí của đường đi tối ưu, và \( ε \) là chi phí nhỏ nhất của một bước (\( ε = 1 \) trong 8-puzzle, nên tương đương \( O(b^d) \)).
+  - **Bộ nhớ**: \( O(b^{C*/ε}) \), tương tự BFS.
 - **Hình ảnh minh họa**: ![GIF mô tả UCS](assets/gif_solve/UCS.gif)
 - **Hình ảnh bổ sung**: ![UCS](https://cs.stanford.edu/people/eroberts/courses/soco/projects/2003-04/intelligent-search/dijkstra.gif)
 - **Liên kết**: [GeeksforGeeks - Uniform Cost Search](https://www.geeksforgeeks.org/uniform-cost-search-ucs-in-ai/)
@@ -153,8 +153,8 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - Sử dụng heuristic tốt hơn, như kết hợp khoảng cách Manhattan với các yếu tố khác (ví dụ: số ô không đúng vị trí).
   - Có thể kết hợp với A* để đảm bảo tính tối ưu.
 - **Độ phức tạp**:
-  - **Thời gian**: \( O(b^m) \), trong đó \( b \) là nhánh trung bình, và \( m \) là độ sâu tối đa của cây tìm kiếm. Phụ thuộc vào chất lượng heuristic.
-  - **Bộ nhớ**: \( O(b^m) \), nhưng thường ít hơn BFS nếu heuristic hiệu quả.
+  - **Thời gian**: \( O(b^d) \), trong đó \( b \) là nhánh trung bình, và \( d \) là độ sâu tối đa của cây tìm kiếm. Phụ thuộc vào chất lượng heuristic.
+  - **Bộ nhớ**: \( O(b^d) \), nhưng thường ít hơn BFS nếu heuristic hiệu quả.
 - **Hình ảnh minh họa**: ![GIF mô tả GBFS](assets/gif_solve/GBFS.gif)
 - **Hình ảnh bổ sung**: ![Greedy Best-First Search](https://media.geeksforgeeks.org/wp-content/uploads/20240919162457/Greedy-best-First-Search-in-AI.png)
 - **Liên kết**: [GeeksforGeeks - Greedy Best-First Search](https://www.geeksforgeeks.org/greedy-best-first-search-algorithm/)
