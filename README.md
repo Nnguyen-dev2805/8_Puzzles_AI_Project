@@ -51,7 +51,17 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Hình ảnh minh họa**: ![GIF mô tả BFS](assets/gif_solve/BFS.gif)
 - **Liên kết**: wikipedia -> https://en.wikipedia.org/wiki/Breadth-first_search
 ### Depth-First Search (DFS)
-DFS khám phá các trạng thái bằng cách đi sâu vào một nhánh đến khi không thể tiếp tục, sau đó quay lại (backtrack) để thử nhánh khác, không đảm bảo tìm ra con đường ngắn nhất nhưng sử dụng ít bộ nhớ hơn.
+- **Mô tả**: DFS (Tìm kiếm theo chiều sâu) là một thuật toán tìm kiếm không thông tin, khám phá sâu nhất một nhánh trước khi quay lui và thử nhánh khác. Thuật toán này sử dụng ngăn xếp (stack) hoặc phương pháp đệ quy để quản lý các trạng thái cần mở rộng.
+- **Phân tích lý thuyết**:
+  - **Tính tối ưu**: DFS không đảm bảo tìm ra con đường ngắn nhất đến trạng thái mục tiêu trong không gian tìm kiếm không có trọng số, như bài toán 8-puzzle. Thay vào đó, nó có thể tìm một đường đi rất dài nếu nhánh đầu tiên không dẫn trực tiếp đến mục tiêu. Ví dụ, với trạng thái ban đầu `826514037`, DFS có thể tìm một đường đi dài hàng chục nghìn bước trước khi đạt `123456780`.
+  - **Hoạt động**: Bắt đầu từ trạng thái ban đầu, DFS đi sâu vào một nhánh bằng cách chọn một hành động (lên, xuống, trái, phải) và tiếp tục cho đến khi gặp trạng thái không thể mở rộng hoặc đạt mục tiêu. Nếu không thành công, nó quay lui và thử nhánh khác. Quá trình này tiếp diễn cho đến khi tìm thấy giải pháp hoặc đã thử hết các nhánh.
+  - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` để tránh lặp lại trạng thái, ngăn ngừa vòng lặp vô hạn. Tuy nhiên, nếu không giới hạn độ sâu, DFS có thể dẫn đến tràn ngăn xếp (stack overflow).
+  ![DFS](https://upload.wikimedia.org/wikipedia/commons/7/7f/Depth-First-Search.gif)
+- **Độ phức tạp**:
+  - **Thời gian**: \( O(b^m) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), và \( m \) là độ sâu tối đa của cây tìm kiếm (có thể bằng số trạng thái tối đa \( 9! = 362,880 \) nếu không cắt tỉa). Với 8-puzzle, \( m \) thường rất lớn nếu không có giới hạn độ sâu.
+  - **Bộ nhớ**: \( O(bm) \), vì DFS chỉ lưu trữ các trạng thái trên nhánh hiện tại trong ngăn xếp, ít tốn bộ nhớ hơn BFS. Tuy nhiên, nếu \( m \) không được giới hạn, bộ nhớ vẫn có thể bị vượt quá do đệ quy sâu.
+- **Hình ảnh minh họa**: ![GIF mô tả DFS](assets/gif_solve/DFS.gif)
+- **Liên kết**: wikipedia -> https://en.wikipedia.org/wiki/Depth-first_search
 ### Uniform Cost Search (UCS)
 UCS là phiên bản tổng quát của Breadth-First Search (BFS), nhưng thay vì mở rộng theo tầng, nó mở rộng node theo chi phí nhỏ nhất đến hiện tại
 Nó sử dụng hàng đợi ưu tiên dựa trên chi phí 
