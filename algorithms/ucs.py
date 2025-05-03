@@ -13,7 +13,6 @@ class UCSAlgorithm:
         self.time_taken = 0
 
     def UCS(self, inputState):
-        """Hàm UCS tìm kiếm theo chiều rộng tổng quát hơn BFS cho bài toán 8-puzzle"""
         start_time = time.time()
         pq = []
         visited = set()

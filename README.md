@@ -63,25 +63,28 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Hình ảnh minh họa**: ![GIF mô tả DFS](assets/gif_solve/DFS.gif)
 - **Liên kết**: wikipedia -> https://en.wikipedia.org/wiki/Depth-first_search
 ### Uniform Cost Search (UCS)
-UCS là phiên bản tổng quát của Breadth-First Search (BFS), nhưng thay vì mở rộng theo tầng, nó mở rộng node theo chi phí nhỏ nhất đến hiện tại
-Nó sử dụng hàng đợi ưu tiên dựa trên chi phí 
-Luôn chọn node có chi phí thấp nhất để mở rộng trước
-Độ phức tạp thời gian: O(b^d)
-Độ phức tạp không gian: O(b^d)
-Với b: số nhánh mở rộng  d: độ sâu
-Nguyên lý hoạt động:
-1. Đưa trạng thái bắt đầu vào hàng đợi ưu tiên với cost = 0
-2. Lặp:
-        Lấy node có chi phí thấp nhất ra
-        Nếu là goal -> trả kết quả
-        Nếu chưa, mở rộng các node con, cộng chi phí,thêm vào queue
-        Nếu node đã từng được duyệt với chi phí thấp hơn -> bỏ qua
+- **Mô tả**: UCS (Tìm kiếm chi phí đồng nhất) là một thuật toán tìm kiếm không thông tin, mở rộng trạng thái dựa trên chi phí thấp nhất từ trạng thái ban đầu đến trạng thái hiện tại. Thuật toán này sử dụng hàng đợi ưu tiên (priority queue) để luôn chọn trạng thái có tổng chi phí thấp nhất để mở rộng trước.
+- **Phân tích lý thuyết**:
+  - **Tính tối ưu**: UCS đảm bảo tìm ra con đường có chi phí thấp nhất đến trạng thái mục tiêu, ngay cả trong không gian tìm kiếm có trọng số (weighted graph). Trong bài toán 8-puzzle, nơi mỗi di chuyển có chi phí 1, UCS hoạt động tương tự BFS, đảm bảo tìm đường đi ngắn nhất về số bước.
+  - **Hoạt động**: Bắt đầu từ trạng thái ban đầu, UCS thêm tất cả trạng thái con vào hàng đợi ưu tiên, với chi phí là số bước từ trạng thái ban đầu. Nó luôn mở rộng trạng thái có chi phí thấp nhất trước. Ví dụ, với trạng thái ban đầu `826514037`, UCS sẽ tìm đường đi ngắn nhất đến `123456780`, tương tự BFS nhưng dựa trên chi phí.
+  - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` để tránh lặp lại trạng thái, nhưng cũng cần kiểm tra nếu một trạng thái được tìm thấy lại với chi phí thấp hơn (để cập nhật đường đi).
+  ![UCS](https://cs.stanford.edu/people/eroberts/courses/soco/projects/2003-04/intelligent-search/dijkstra.gif)
+- **Độ phức tạp**:
+  - **Thời gian**: \( O(b^{C*/\epsilon}) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), \( C* \) là chi phí của đường đi tối ưu, và \( \epsilon \) là chi phí nhỏ nhất của một bước (trong 8-puzzle, \( \epsilon = 1 \), nên \( C*/\epsilon \) tương đương với độ sâu tối ưu \( d \)). Do đó, độ phức tạp tương tự BFS: \( O(b^d) \).
+  - **Bộ nhớ**: \( O(b^{C*/\epsilon}) \), tương tự BFS, UCS phải lưu trữ tất cả các trạng thái trong hàng đợi ưu tiên, dẫn đến tốn nhiều bộ nhớ nếu không gian trạng thái lớn.
+- **Hình ảnh minh họa**: ![GIF mô tả DFS](assets/gif_solve/UCS.gif)
+- **Liên kết**: geeksforgeeks -> https://www.geeksforgeeks.org/uniform-cost-search-ucs-in-ai/
 ### Iterative Deepening Search(IDS)
-IDS là sự kết hợp giữa hai thuật toán DFS và BFS 
-Nguyên lý hoạt động:
-1. Lặp DFS nhiều lần, mỗi lần với giới hạn độ sâu tăng dần
-2. Bắt đầu với độ sâu 0,1,2,.. cho đến khi tìm được lời giải
-3. Mỗi vòng lặp là một DFS có giới hạn độ sâu
+- **Mô tả**: IDS (Tìm kiếm lặp sâu dần) là một thuật toán tìm kiếm không thông tin, kết hợp lợi ích của BFS và DFS. IDS thực hiện tìm kiếm theo chiều sâu (DFS) nhiều lần, mỗi lần với một giới hạn độ sâu tăng dần, cho đến khi tìm thấy trạng thái mục tiêu.
+- **Phân tích lý thuyết**:
+  - **Tính tối ưu**: IDS đảm bảo tìm ra con đường ngắn nhất đến trạng thái mục tiêu trong không gian tìm kiếm không có trọng số, tương tự BFS. Điều này xảy ra vì IDS lặp lại tìm kiếm với độ sâu tăng dần, đảm bảo tìm thấy trạng thái mục tiêu ở độ sâu nhỏ nhất.
+  - **Hoạt động**: IDS bắt đầu với giới hạn độ sâu 0, thực hiện DFS với giới hạn này. Nếu không tìm thấy mục tiêu, tăng giới hạn lên 1 và lặp lại. Quá trình tiếp tục cho đến khi tìm thấy trạng thái mục tiêu. Ví dụ, với trạng thái ban đầu `826514037`, IDS sẽ tìm đường đi ngắn nhất đến `123456780` sau một số lần lặp.
+  - **Quản lý vòng lặp**: Tương tự DFS, IDS sử dụng tập hợp `visited` để tránh lặp lại trạng thái trong mỗi lần lặp. Tuy nhiên, vì lặp lại nhiều lần, IDS có thể duyệt qua một số trạng thái nhiều lần.
+- **Độ phức tạp**:
+  - **Thời gian**: \( O(b^d) \), tương tự BFS, nhưng IDS có thể chậm hơn một chút do lặp lại nhiều lần. Tổng số trạng thái được duyệt qua là tổng của các lần lặp: \( (b^0 + b^1 + b^2 + \dots + b^d) \), nhưng hằng số ẩn lớn hơn BFS.
+  - **Bộ nhớ**: \( O(bd) \), IDS chỉ lưu trữ các trạng thái trên nhánh hiện tại trong mỗi lần lặp, tương tự DFS, nên tiết kiệm bộ nhớ hơn BFS. Đây là lợi thế chính của IDS so với BFS.
+- **Hình ảnh minh họa**: ![GIF mô tả DFS](assets/gif_solve/DFS.gif)
+- **Liên kết**: geeksforgeeks -> https://www.geeksforgeeks.org/uniform-cost-search-ucs-in-ai/
 ### A*
 Một thuật toán tìm kiếm và duyệt đồ thị tìm đường đi ngắn nhất từ ​​một nút bắt đầu đến một nút đích bằng cách kết hợp chi phí để đến nút đó và chi phí ước tính từ nút đến đích (sử dụng phương pháp tìm kiếm).
 ### Iterative Deepening A*
