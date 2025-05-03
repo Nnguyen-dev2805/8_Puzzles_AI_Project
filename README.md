@@ -1,7 +1,29 @@
 ﻿# 8_Puzzles_AI_Project
-Kho lưu trữ này chứa dự án 8-Puzzle Solver with AI Algorithm! Dự án này triển khai nhiều thuật toán AI khác nhau để giải bài toán 8-puzzle cổ điển. Ngoài ra, dự án còn hỗ trợ giao diện hiển thị cho người dùng dễ quan sát và đánh giá thuật toán.
+Kho lưu trữ này chứa dự án 8-Puzzle Solver with AI Algorithms – một ứng dụng giúp giải bài toán 8-puzzle cổ điển bằng nhiều thuật toán Trí tuệ Nhân tạo (AI) khác nhau. Dự án không chỉ triển khai các thuật toán tìm kiếm (uninformed & informed) mà còn hỗ trợ giao diện đồ họa thân thiện, giúp người dùng dễ dàng theo dõi quá trình giải và so sánh hiệu quả của các thuật toán.
+## Mục lục
+- [Cách sử dụng](#cách-sử-dụng)
+- [Thuật toán](#thuật-toán)
+  - [Tìm kiếm không thông tin (Uninformed Search)](#tìm-kiếm-không-thông-tin-uninformed-search)
+    - [Breadth-First Search (BFS)](#breadth-first-search-bfs)
+    - [Depth-First Search (DFS)](#depth-first-search-dfs)
+    - [Uniform Cost Search (UCS)](#uniform-cost-search-ucs)
+    - [Iterative Deepening Search (IDS)](#iterative-deepening-search-ids)
+  - [Tìm kiếm có thông tin (Informed Search)](#tìm-kiếm-có-thông-tin-informed-search)
+    - [Greedy Best-First Search](#greedy-best-first-search)
+    - [A* Search](#a-search)
+    - [Iterative Deepening A* (IDA*)](#iterative-deepening-a-ida)
+    - [Beam Search](#beam-search)
+  - [Tìm kiếm cục bộ (Local Search)](#tìm-kiếm-cục-bộ-local-search)
+    - [Biến thể Hill Climbing](#biến-thể-hill-climbing)
+      - [Simple Hill Climbing](#simple-hill-climbing)
+      - [Stochastic Hill Climbing](#stochastic-hill-climbing)
+    - [Simulated Annealing](#simulated-annealing)
+  - [Tìm kiếm không xác định (Non-deterministic Search)](#tìm-kiếm-không-xác-định-non-deterministic-search)
+    - [AND-OR Search Algorithm](#and-or-search-algorithm)
+- [Tính năng giao diện (GUI Features)](#tính-năng-giao-diện-gui-features)
+- [Đóng góp](#đóng-góp)
 ## Cách sử dụng
-1. Sao chép dự án bằng cách 
+1. Tải dự án bằng cách 
 
         git clone https://github.com/Nnguyen-dev2805/8_Puzzles_AI_Project.git
 
@@ -11,9 +33,21 @@ Kho lưu trữ này chứa dự án 8-Puzzle Solver with AI Algorithm! Dự án 
 
         python main.py
 ## Thuật toán
-### Breadth-First Search (BFS)
-BFS khám phá tất cả các trạng thái có thể có theo từng cấp độ, đảm bảo tìm ra con đường ngắn nhất đến mục tiêu.
-![GIF mô tả](assets/gif_solve/BFS.gif)
+
+Dự án triển khai một loạt thuật toán AI đa dạng, được phân loại thành các nhóm sau:
+
+### Tìm kiếm không thông tin (Uninformed Search)
+
+#### Breadth-First Search (BFS)
+- **Mô tả**: BFS (Tìm kiếm theo chiều rộng) là một thuật toán tìm kiếm không thông tin, khám phá tất cả các trạng thái có thể có theo từng cấp độ độ sâu, từ trạng thái ban đầu đến trạng thái mục tiêu. Thuật toán này sử dụng hàng đợi (queue) để đảm bảo rằng các trạng thái được mở rộng theo thứ tự từ gần nhất đến xa nhất so với trạng thái ban đầu.
+- **Phân tích lý thuyết**:
+  - **Tính tối ưu**: BFS đảm bảo tìm ra con đường ngắn nhất đến trạng thái mục tiêu trong không gian tìm kiếm không có trọng số (unweighted graph), như bài toán 8-puzzle. Điều này xảy ra vì BFS khám phá tất cả các trạng thái ở độ sâu hiện tại trước khi đi sâu hơn.
+  - **Hoạt động**: Bắt đầu từ trạng thái ban đầu, BFS mở rộng tất cả các trạng thái con ở độ sâu 1, sau đó độ sâu 2, và tiếp tục cho đến khi tìm thấy trạng thái mục tiêu. Ví dụ, với trạng thái ban đầu `826514037`, BFS sẽ tìm đường đi ngắn nhất đến `123456780`.
+  - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` để tránh lặp lại trạng thái, ngăn ngừa vòng lặp vô hạn.
+- **Độ phức tạp**:
+  - **Thời gian**: \( O(b^d) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle: lên, xuống, trái, phải), và \( d \) là độ sâu của trạng thái mục tiêu. Với 8-puzzle, \( b \) thường là 2-3 (do một số di chuyển không hợp lệ), và \( d \) có thể lên đến 31 (độ sâu tối đa cho một số trạng thái).
+  - **Bộ nhớ**: \( O(b^d) \), vì BFS phải lưu trữ tất cả các trạng thái ở độ sâu hiện tại trong hàng đợi. Điều này có thể dẫn đến tốn nhiều bộ nhớ nếu \( d \) lớn.
+- **Hình ảnh minh họa**: ![GIF mô tả BFS](assets/gif_solve/BFS.gif)
 ### Depth-First Search (DFS)
 DFS khám phá các trạng thái bằng cách đi sâu vào một nhánh đến khi không thể tiếp tục, sau đó quay lại (backtrack) để thử nhánh khác, không đảm bảo tìm ra con đường ngắn nhất nhưng sử dụng ít bộ nhớ hơn.
 ### Uniform Cost Search (UCS)
@@ -30,6 +64,12 @@ Nguyên lý hoạt động:
         Nếu là goal -> trả kết quả
         Nếu chưa, mở rộng các node con, cộng chi phí,thêm vào queue
         Nếu node đã từng được duyệt với chi phí thấp hơn -> bỏ qua
+### Iterative Deepening Search(IDS)
+IDS là sự kết hợp giữa hai thuật toán DFS và BFS 
+Nguyên lý hoạt động:
+1. Lặp DFS nhiều lần, mỗi lần với giới hạn độ sâu tăng dần
+2. Bắt đầu với độ sâu 0,1,2,.. cho đến khi tìm được lời giải
+3. Mỗi vòng lặp là một DFS có giới hạn độ sâu
 ### A*
 Một thuật toán tìm kiếm và duyệt đồ thị tìm đường đi ngắn nhất từ ​​một nút bắt đầu đến một nút đích bằng cách kết hợp chi phí để đến nút đó và chi phí ước tính từ nút đến đích (sử dụng phương pháp tìm kiếm).
 ### Iterative Deepening A*

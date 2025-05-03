@@ -12,6 +12,7 @@ class AStarAlgorithm:
         self.time_taken = 0
 
     def AStar(self, inputState):
+        """Thuật toán A* sử dụng heuristic Manhattan Distance sự kết hợp giữa UCS và Greedy BFS cho bài toán 8-puzzle"""
         start_time = time.time()
         pq = []
         visited = {}
@@ -28,17 +29,17 @@ class AStarAlgorithm:
             counter += 1
             f_cost, curr_cost, state = heapq.heappop(pq)
 
-            if state in visited and curr_cost >= visited[state]:
+            if state in visited and curr_cost > visited[state]:
                 continue
 
             visited[state] = curr_cost
-            self.depth = max(self.depth, curr_cost)
 
             if goalTest(state):
                 path = getPath(parent, int(inputState))
                 self.counter = counter
                 self.path = path
-                self.cost = len(path) - 1
+                self.cost = g_cost[state]
+                self.depth = len(path) - 1
                 self.time_taken = float(time.time() - start_time)
                 return self.path, self.cost, self.counter, self.depth, self.time_taken
 
@@ -55,4 +56,4 @@ class AStarAlgorithm:
                     g_cost[child_int] = new_g_cost
 
         self.time_taken = float(time.time() - start_time)
-        return [], 0, counter, self.depth, self.time_taken
+        return None, 0, counter, self.depth, self.time_taken

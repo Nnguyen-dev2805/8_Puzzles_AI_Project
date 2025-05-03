@@ -12,13 +12,13 @@ class IDAStarAlgorithm:
         self.time_taken = 0
 
     def IDAStar(self, inputState):
+        """Thuật toán IDA* sử dụng heuristic Manhattan Distance kết hợp A* và IDS cho bài toán 8-puzzle"""
         start_time = time.time()
         integer_state = int(inputState)
         counter = 0
 
         def search(state, g_cost, f_limit, parent, visited):
             nonlocal counter, next_f_limit
-            counter += 1
             h_cost = manhattanDistance(state)
             f_cost = h_cost + g_cost
 
@@ -33,6 +33,7 @@ class IDAStarAlgorithm:
             for child in children:
                 child_int = int(child)
                 if child_int not in visited:
+                    counter += 1
                     visited.add(child_int)
                     parent[child_int] = state
                     found, path = search(child_int, g_cost + 1, f_limit, parent, visited)
@@ -53,7 +54,7 @@ class IDAStarAlgorithm:
                 self.counter = counter
                 self.path = path
                 self.cost = len(path) - 1
-                self.depth = self.cost
+                self.depth = len(path) - 1
                 self.time_taken = float(time.time() - start_time)
                 return self.path, self.cost, self.counter, self.depth, self.time_taken
             

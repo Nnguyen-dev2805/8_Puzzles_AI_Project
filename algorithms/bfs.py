@@ -1,5 +1,6 @@
 import time
 from algorithms.common import goalTest, getPath, getChildren, getStringRepresentation
+from collections import deque
 
 
 class BFSAlgorithm:
@@ -11,27 +12,26 @@ class BFSAlgorithm:
         self.time_taken = 0
 
     def BFS(self, inputState):
-        """Hàm BFS tìm kiếm theo chiều rộng cho bài toán 8-puzzle"""
         start_time = time.time()
-        queue = []
+        queue = deque()
         visited = set()
         parent = {}
         parent_cost = {}
         integer_state = int(inputState)
         queue.append(integer_state)
-        couter = 0
+        counter = 0
         parent_cost[integer_state] = 0
 
         while queue:
-            couter += 1
-            state = queue.pop(0)
+            counter += 1
+            state = queue.popleft()
 
             if state in visited:
                 continue
 
             if goalTest(state):
                 path = getPath(parent, int(inputState))
-                self.counter = couter
+                self.counter = counter
                 self.path = path
                 self.cost = len(path) - 1
                 self.depth = parent_cost[state]
@@ -48,4 +48,4 @@ class BFSAlgorithm:
                     parent[child_int] = state
                     parent_cost[child_int] = 1 + parent_cost[state]
         time_taken = float(time.time() - start_time)
-        return None, 0, couter, self.depth, time_taken
+        return [], 0, counter, self.depth, time_taken

@@ -5,29 +5,61 @@ import random
 import pandas as pd
 from tkinter import filedialog
 import matplotlib.pyplot as plt
+from PIL import Image, ImageTk
 
 import AI_algorithm
 
-from algorithms import bfs, dfs, ucs  # from algorithms.dfs import DFSAlgorithm
+from algorithms import (
+    bfs,
+    dfs,
+    ucs,
+    ids,
+    best_first_search,
+    astar,
+    idastar,
+    simple_hill_climbing,
+    stochastic_hill_climbing,
+    simulated_annealing,
+    beam_search,
+    genetic_search,
+    and_or_graph_search,
+    belief_state_search,
+    backtracking,
+)  
 
 
 class GUI:
     def __init__(self, master=None):
+        self.master = master
         self.algorithm = None
         self.initialState = None
         self.statepointer = 0
-        self.cost = 0 # chi phí đi từ trạng thái ban đầu đến trạng thái đích
-        self.counter = 0 # số node đã duyệt qua
-        self.depth = 0 # quãng đường đi từ trạng thái ban đầu đến trạng thái đích
+        self.cost = 0  
+        self.counter = 0  
+        self.depth = 0 
         self.runtime = 0.0
         self.path = []
         self.runtime_data = {}
         self._job = None
         self.appFrame = ttk.Frame(master)
-        self.appFrame.configure(height=800, width=1000)
+        self.appFrame.configure(height=800, width=1200)
         self.appFrame.pack(side="top")
         self.mainLabel = ttk.Label(self.appFrame)
 
+        screen_width = self.master.winfo_screenwidth()
+        screen_height = self.master.winfo_screenheight()
+
+
+        window_width = 1000
+        window_height = 800
+
+        # Tính toán vị trí để căn giữa
+        position_x = (screen_width - window_width) // 2
+        position_y = (screen_height - window_height) // 2
+
+        # Đặt vị trí cửa sổ
+        self.master.geometry(f"{window_width}x{window_height}+{position_x}+{position_y}")
+       
         self.mainLabel.configure(
             anchor="center",
             font="{Roboto} 36 {bold}",
@@ -132,10 +164,42 @@ class GUI:
                 "Stochastic Hill Climbing",
                 "Simulated Annealing",
                 "Beam Search",
+                "Genetic Search",
+                "AND OR Graph Search",
+                "Belief State Search"
             ),
         )
         self.algorithmbox.place(anchor="center", height=30, width=150, x=910, y=330)
         self.algorithmbox.bind("<<ComboboxSelected>>", self.selectAlgorithm)
+
+        # self.algorithm_tree = ttk.Treeview(self.appFrame)
+        # self.algorithm_tree.place(anchor="center", height=200, width=250, x=910, y=330)
+
+        # # Thêm các nhóm thuật toán
+        # self.algorithm_tree.insert("", "end", "uninformed", text="Uninformed Search")
+        # self.algorithm_tree.insert("uninformed", "end", "bfs", text="BFS")
+        # self.algorithm_tree.insert("uninformed", "end", "dfs", text="DFS")
+        # self.algorithm_tree.insert("uninformed", "end", "ucs", text="Uniform Cost Search")
+        # self.algorithm_tree.insert("uninformed", "end", "ids", text="Iterative Deepening")
+
+        # self.algorithm_tree.insert("", "end", "informed", text="Informed Search")
+        # self.algorithm_tree.insert("informed", "end", "best_first", text="Best First Search")
+        # self.algorithm_tree.insert("informed", "end", "astar", text="A*")
+        # self.algorithm_tree.insert("informed", "end", "idastar", text="IDA*")
+
+        # self.algorithm_tree.insert("", "end", "local", text="Local Search")
+        # self.algorithm_tree.insert("local", "end", "hill_climbing", text="Simple Hill Climbing")
+        # self.algorithm_tree.insert("local", "end", "stochastic", text="Stochastic Hill Climbing")
+        # self.algorithm_tree.insert("local", "end", "annealing", text="Simulated Annealing")
+        # self.algorithm_tree.insert("local", "end", "beam", text="Beam Search")
+
+        # self.algorithm_tree.insert("", "end", "non_deterministic", text="Non-deterministic Search")
+        # self.algorithm_tree.insert("non_deterministic", "end", "genetic", text="Genetic Search")
+        # self.algorithm_tree.insert("non_deterministic", "end", "and_or", text="AND OR Graph Search")
+        # self.algorithm_tree.insert("non_deterministic", "end", "belief", text="Belief State Search")
+
+        # # Xử lý sự kiện chọn thuật toán
+        # self.algorithm_tree.bind("<<TreeviewSelect>>", self.selectAlgorithmFromTree)
 
         # label chọn thuật toán
         self.algolabel = ttk.Label(self.appFrame)
@@ -166,6 +230,17 @@ class GUI:
         self.runtimeChartButton.configure(cursor="hand2", text="Vẽ biểu đồ so sánh")
         self.runtimeChartButton.place(anchor="n", height=40, width=180, x=500, y=530)
         self.runtimeChartButton.bind("<ButtonPress>", self.drawRuntimeChart)
+
+        # Thêm nút Backtracking vào giao diện chính
+        # self.backtracking_button = ttk.Button(self.appFrame)
+        # self.backtracking_button.configure(cursor="hand2", text="Backtracking")
+        # self.backtracking_button.place(anchor="n", height=40, width=150, x=910, y=400)
+        # self.backtracking_button.bind("<ButtonPress>", self.openBacktrackingWindow)
+
+        # self.selectImageButton = ttk.Button(self.appFrame)
+        # self.selectImageButton.configure(cursor="hand2", text="Chọn ảnh")
+        # self.selectImageButton.place(anchor="n", height=40, width=150, x=910, y=400)
+        # self.selectImageButton.bind("<ButtonPress>", self.selectImage)
 
         # tạo các ô cho puzzle
         self.cell0 = ttk.Label(self.appFrame)
@@ -564,6 +639,63 @@ class GUI:
             self.stopFastForward()
             self.statepointer -= 1
             self.refreshFrame()
+    
+    def selectAlgorithmFromTree(self, event=None):
+        selected_item = self.algorithm_tree.selection()[0]
+        algorithm = self.algorithm_tree.item(selected_item, "text")
+        if algorithm not in ["Uninformed Search", "Informed Search", "Local Search", "Non-deterministic Search"]:
+            self.algorithm = algorithm
+            self.reset()
+    def openBacktrackingWindow(self, event=None):
+        """Mở cửa sổ mới để thực hiện Backtracking."""
+        backtracking_window = tk.Toplevel(self.master)
+        backtracking_window.title("Backtracking - 8 Puzzle")
+        backtracking_window.geometry("600x600")
+        backtracking_window.resizable(False, False)
+
+        # Tạo giao diện cho bảng 8-puzzle
+        board_frame = ttk.Frame(backtracking_window)
+        board_frame.place(anchor="center", relx=0.5, rely=0.4)
+
+        cells = []
+        for i in range(3):
+            row = []
+            for j in range(3):
+                cell = tk.Label(
+                    board_frame,
+                    text="",
+                    font=("Arial", 24),
+                    background="#ffffff",
+                    relief="sunken",
+                    anchor="center",
+                    width=4,
+                    height=2,
+                )
+                cell.grid(row=i, column=j, padx=5, pady=5)
+                row.append(cell)
+            cells.append(row)
+
+        # Nút bắt đầu Backtracking
+        start_button = ttk.Button(
+            backtracking_window, text="Bắt đầu Backtracking", command=lambda: self.runBacktracking(cells)
+        )
+        start_button.place(anchor="center", relx=0.5, rely=0.8)
+    
+    def runBacktracking(self, cells):
+        """Thực hiện thuật toán Backtracking và cập nhật giao diện."""
+
+        def update_grid(board, status, cells):
+            """Cập nhật bảng 8-puzzle trên giao diện."""
+            for i in range(3):
+                for j in range(3):
+                    value = board[i * 3 + j]
+                    cells[i][j].configure(
+                        text=value if value is not None else "",
+                        background="#5aadad" if value is not None else "#ffffff",
+                    )
+                    
+        solver = backtracking.Backtracking8Puzzle(update_callback=lambda board, status: update_grid(board, status, cells))
+        solver.solve()
 
     def nextSequence(self, event=None):
         if self.statepointer < len(self.path) - 1:
@@ -768,6 +900,7 @@ class GUI:
             if inversions % 2 == 0:  # nếu số nghịch thế là chẵn, trạng thái giải được
                 break
         self.reset()
+        # self.displayImageOnGrid(self.initialState)
         self.displayStateOnGrid(self.initialState)
         self.updateInitialStateGrid(self.initialState)
         messagebox.showinfo(
@@ -981,53 +1114,42 @@ class GUI:
 
         elif str(self.algorithm) == "DFS":
             self.solveDFS()
+
         elif str(self.algorithm) == "Uniform Cost Search":
             self.solveUCS()
+
         elif str(self.algorithm) == "Iterative Deepening":
-            AI_algorithm.IDS(self.initialState)
-            self.path, self.cost, self.counter, self.depth, self.runtime = (
-                AI_algorithm.id_path,
-                AI_algorithm.id_cost,
-                AI_algorithm.id_counter,
-                AI_algorithm.id_depth,
-                AI_algorithm.time_id,
-            )
+            self.solveIDS()
+
+        elif str(self.algorithm) == "Best first search":
+            self.solveBestFirstSearch()
+        
+        elif str(self.algorithm) == "A*":
+            self.solveAStar()
+
         elif str(self.algorithm) == "IDA*":
-            AI_algorithm.IDAStar(self.initialState)
-            self.path, self.cost, self.counter, self.depth, self.runtime = (
-                AI_algorithm.idastar_path,
-                AI_algorithm.idastar_cost,
-                AI_algorithm.idastar_counter,
-                AI_algorithm.idastar_depth,
-                AI_algorithm.time_idastar,
-            )
+            self.solveIDAStar()
+
         elif str(self.algorithm) == "Simple Hill Climbing":
-            AI_algorithm.SimpleHillClimbing(self.initialState)
-            self.path, self.cost, self.counter, self.depth, self.runtime = (
-                AI_algorithm.shc_path,
-                AI_algorithm.shc_cost,
-                AI_algorithm.shc_counter,
-                AI_algorithm.shc_depth,
-                AI_algorithm.time_shc,
-            )
+            self.solveSimpleHillClimbing()
+        
+        elif str(self.algorithm) == "Stochastic Hill Climbing":
+            self.solveStochasticHillClimbing()
+
         elif str(self.algorithm) == "Simulated Annealing":
-            AI_algorithm.SimulatedAnnealing(self.initialState)
-            self.path, self.cost, self.counter, self.depth, self.runtime = (
-                AI_algorithm.sa_path,
-                AI_algorithm.sa_cost,
-                AI_algorithm.sa_counter,
-                AI_algorithm.sa_depth,
-                AI_algorithm.time_sa,
-            )
+            self.solveSimulatedAnnealing()
+
         elif str(self.algorithm) == "Beam Search":
-            AI_algorithm.BeamSearch(self.initialState)
-            self.path, self.cost, self.counter, self.depth, self.runtime = (
-                AI_algorithm.beam_path,
-                AI_algorithm.beam_cost,
-                AI_algorithm.beam_counter,
-                AI_algorithm.beam_depth,
-                AI_algorithm.time_beam,
-            )
+            self.solveBeamSearch()
+        elif str(self.algorithm) == "Genetic Search":
+            self.solveGeneticSearch()
+
+        elif str(self.algorithm) == "AND OR Graph Search":
+            self.solveAndOrGraphSearch()
+        
+        elif str(self.algorithm) == "Belief State Search":
+            self.solveBeliefStateSearch()
+
         if self.algorithm and self.initialState:
             self.runtime_data[self.algorithm] = {
                 "runtime": self.runtime,
@@ -1035,8 +1157,6 @@ class GUI:
                 "counter": self.counter,
                 "depth": self.depth,
             }
-        # if self.algorithm and self.initialState:
-        #     self.runtime_data[self.algorithm] = self.runtime
 
     def reset(self):
         self.path = []
@@ -1065,22 +1185,76 @@ class GUI:
             self.initialState
         )
 
+    def solveIDS(self):
+        ids_solver = ids.IDSAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = ids_solver.IDS(
+            self.initialState
+        )
+    
+    def solveBestFirstSearch(self):
+        best_first_solver = best_first_search.BestFirstSearchAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = best_first_solver.BestFirstSearch(
+            self.initialState
+        )
+    
+    def solveAStar(self):
+        astar_solver = astar.AStarAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = astar_solver.AStar(
+            self.initialState
+        )
+    
+    def solveIDAStar(self):
+        ida_star_solver = idastar.IDAStarAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = ida_star_solver.IDAStar(
+            self.initialState
+        )
+    
+    def solveSimpleHillClimbing(self):
+        simple_hill_climbing_solver = simple_hill_climbing.SimpleHillClimbingAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = simple_hill_climbing_solver.SimpleHillClimbing(
+            self.initialState
+        )
+    
+    def solveStochasticHillClimbing(self):
+        stochastic_hill_climbing_solver = stochastic_hill_climbing.StochasticHillClimbingAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = stochastic_hill_climbing_solver.StochasticHillClimbing(
+            self.initialState
+        )
+
+    def solveSimulatedAnnealing(self):
+        simulated_annealing_solver = simulated_annealing.SimulatedAnnealingAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = simulated_annealing_solver.SimulatedAnnealing(
+            self.initialState
+        )
+
+    def solveBeamSearch(self):
+        beam_search_solver = beam_search.BeamSearchAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = beam_search_solver.BeamSearch(
+            self.initialState
+        )
+    
+    def solveGeneticSearch(self):
+        genetic_search_solver = genetic_search.GeneticAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = genetic_search_solver.GeneticSearch(
+            self.initialState
+        )
+    
+    def solveAndOrGraphSearch(self):
+        and_or_graph_search_solver = and_or_graph_search.AndOrGraphSearchAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = and_or_graph_search_solver.AndOrGraphSearch(
+            self.initialState
+        )
+
+    def solveBeliefStateSearch(self):
+        belief_state_search_solver = belief_state_search.BeliefStateSearchAlgorithm()
+        self.path, self.cost, self.counter, self.depth, self.runtime = belief_state_search_solver.BeliefStateSearch(
+            self.initialState
+        )
+        
+
+    # ----------------- Vẽ biểu đồ ------------------
+
     def drawRuntimeChart(self, event=None):
-        # if not self.runtime_data:
-        #     messagebox.showinfo("Thông báo", "Chưa có dữ liệu runtime để vẽ biểu đồ!")
-        #     return
-
-        # algorithms = list(self.runtime_data.keys())
-        # runtimes = list(self.runtime_data.values())
-
-        # plt.figure(figsize=(10, 6))
-        # plt.bar(algorithms, runtimes, color="skyblue")
-        # plt.xlabel("Thuật toán", fontsize=14)
-        # plt.ylabel("Thời gian chạy (s)", fontsize=14)
-        # plt.title("So sánh thời gian chạy giữa các thuật toán", fontsize=16)
-        # plt.xticks(rotation=45, ha="right")
-        # plt.tight_layout()
-        # plt.show()
         if not self.runtime_data:
             messagebox.showinfo("Thông báo", "Chưa có dữ liệu để vẽ biểu đồ!")
             return
@@ -1126,3 +1300,54 @@ class GUI:
         # Adjust layout and show the plot
         plt.tight_layout()
         plt.show()
+    
+    # def selectImage(self, event=None):
+    #     # Mở hộp thoại để chọn ảnh
+    #     file_path = filedialog.askopenfilename(
+    #         title="Chọn ảnh",
+    #         filetypes=[("Image files", "*.jpg *.jpeg *.png *.bmp"), ("All files", "*.*")]
+    #     )
+    #     if not file_path:
+    #         return
+
+    #     try:
+    #         # Mở ảnh và chia thành 9 phần
+    #         img = Image.open(file_path)
+    #         img = img.resize((300, 300))  # Resize ảnh về kích thước 300x300
+    #         self.image_parts = self.splitImage(img)
+
+    #         # Đặt trạng thái mục tiêu là ảnh gốc
+    #         self.initialState = "012345678"
+    #         self.reset()
+    #         self.displayStateOnGrid(self.initialState)
+    #     except Exception as e:
+    #         messagebox.showerror("Lỗi", f"Không thể xử lý ảnh: {str(e)}")
+
+    # def splitImage(self, img):
+    #     """Chia ảnh thành 9 phần (3x3)."""
+    #     parts = []
+    #     width, height = img.size
+    #     part_width, part_height = width // 3, height // 3
+
+    #     for i in range(3):
+    #         for j in range(3):
+    #             left = j * part_width
+    #             upper = i * part_height
+    #             right = (j + 1) * part_width
+    #             lower = (i + 1) * part_height
+    #             part = img.crop((left, upper, right, lower))
+    #             parts.append(ImageTk.PhotoImage(part))
+    #     return parts
+
+    # def displayImageOnGrid(self, image_parts):
+    #     """Hiển thị các phần ảnh trên lưới."""
+    #     if not self.validateState(state):
+    #         state = "000000000"
+
+    #     # Hiển thị các phần ảnh theo trạng thái
+    #     for i, cell in enumerate([self.cell0, self.cell1, self.cell2, self.cell3, self.cell4, self.cell5, self.cell6, self.cell7, self.cell8]):
+    #         if state[i] == "0":  # Ô trống
+    #             cell.configure(image="", text=" ")
+    #         else:
+    #             index = int(state[i])  # Lấy chỉ số của phần ảnh
+    #             cell.configure(image=self.image_parts[index], text="")

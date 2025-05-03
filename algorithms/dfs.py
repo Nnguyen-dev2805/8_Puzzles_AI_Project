@@ -11,7 +11,6 @@ class DFSAlgorithm:
         self.time_taken = 0
 
     def DFS(self, inputState):
-        """Hàm DFS tìm kiếm theo chiều sâu cho bài toán 8-puzzle"""
         start_time = time.time()
         stack = []
         visited = set()
@@ -52,4 +51,4 @@ class DFSAlgorithm:
                         self.depth = max(self.depth, parent_cost[child_int])
                         
         self.time_taken = float(time.time() - start_time)
-        return None, 0, counter, self.depth, self.time_taken
+        return [], 0, counter, self.depth, self.time_taken

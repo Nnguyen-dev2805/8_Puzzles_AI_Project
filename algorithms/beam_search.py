@@ -36,14 +36,13 @@ class BeamSearchAlgorithm:
                 if state in visited:
                     continue
                 visited.add(state)
-                self.depth = max(depth, self.depth)
 
                 if goalTest(state):
                     path = getPath(parent, integer_state)
                     self.counter = counter
                     self.path = path
                     self.cost = len(path) - 1
-                    self.depth = self.cost
+                    self.depth = len(path) - 1
                     self.time_taken = float(time.time() - start_time)
                     return self.path, self.cost, self.counter, self.depth, self.time_taken
                 

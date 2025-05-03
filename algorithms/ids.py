@@ -2,6 +2,7 @@
 import time
 from algorithms.common import goalTest, getPath, getChildren, getStringRepresentation
 
+
 class IDSAlgorithm:
     def __init__(self):
         self.counter = 0
@@ -11,13 +12,13 @@ class IDSAlgorithm:
         self.time_taken = 0
 
     def IDS(self, inputState):
+        """Hàm IDS tìm kiếm theo chiều sâu lặp lại cho bài toán 8-puzzle"""
         start_time = time.time()
         integer_state = int(inputState)
         counter = 0
 
-        def depth_limited_search(state, depth_limit, visited, parent, parent_cost):
+        def depth_limited_search(state, depth_limit, parent, parent_cost):
             nonlocal counter
-            counter += 1
             if goalTest(state):
                 return True, getPath(parent, integer_state)
             if parent_cost[state] >= depth_limit:
@@ -25,26 +26,25 @@ class IDSAlgorithm:
             children = getChildren(getStringRepresentation(state))
             for child in children:
                 child_int = int(child)
-                if child_int not in visited:
-                    visited.add(child_int)
+                if child_int not in parent:
+                    counter += 1  # chỉ tăng khi trạng thái chưa được duyệt)
                     parent[child_int] = state
                     parent_cost[child_int] = parent_cost[state] + 1
                     found, path = depth_limited_search(
-                        child_int, depth_limit, visited, parent, parent_cost
+                        child_int, depth_limit, parent, parent_cost
                     )
                     if found:
                         return True, path
             return False, []
 
         depth_limit = 0
+        # max_depth_limit= 1000 # giới hạn độ sâu tối đa
         while True:
-            visited = set()
             parent = {}
             parent_cost = {}
             parent_cost[integer_state] = 0
-            visited.add(integer_state)
             found, path = depth_limited_search(
-                integer_state, depth_limit, visited, parent, parent_cost
+                integer_state, depth_limit, parent, parent_cost
             )
             if found:
                 self.counter = counter

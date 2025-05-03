@@ -17,8 +17,7 @@ class SimulatedAnnealingAlgorithm:
         integer_state = int(inputState)
         current_state = integer_state
         best_state = current_state
-        parent = {}
-        visited = set()
+        parent = {current_state: None}
         temperature = 1000.0
         cooling_rate = 0.995
         min_temperature = 0.01
@@ -29,19 +28,19 @@ class SimulatedAnnealingAlgorithm:
 
         while temperature > min_temperature:
             counter += 1
-            visited.add(current_state)
 
             if goalTest(current_state):
+                # print("Found goal state")
                 path = getPath(parent, integer_state)
+                # print("hehe");
                 self.counter = counter
                 self.path = path
                 self.cost = len(path) - 1
-                self.depth = self.cost
+                self.depth = len(path) - 1
                 self.time_taken = float(time.time() - start_time)
                 return self.path, self.cost, self.counter, self.depth, self.time_taken
             
-            children = [int(child) for child in getChildren(getStringRepresentation(current_state)) 
-                       if int(child) not in visited]
+            children = getChildren(getStringRepresentation(current_state))
             if not children:
                 break
 
@@ -53,7 +52,7 @@ class SimulatedAnnealingAlgorithm:
                 parent[next_state] = current_state
                 current_state = next_state
                 current_heuristic = next_heuristic
-                self.depth += 1
+                # self.depth += 1
 
             if current_heuristic < best_heuristic:
                 best_state = current_state
@@ -68,10 +67,10 @@ class SimulatedAnnealingAlgorithm:
                 self.counter = counter
                 self.path = path
                 self.cost = len(path) - 1
-                self.depth = self.cost
+                self.depth = len(path) - 1
                 self.time_taken = float(time.time() - start_time)
                 return self.path, self.cost, self.counter, self.depth, self.time_taken
-
+        print("Not found goal state")
         self.counter = counter
         self.time_taken = float(time.time() - start_time)
         return [], 0, self.counter, self.depth, self.time_taken
