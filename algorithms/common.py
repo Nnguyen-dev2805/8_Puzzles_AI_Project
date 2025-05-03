@@ -4,29 +4,39 @@ dy = [0, 0, -1, 1]
 
 
 def getStringRepresentation(x):
-    """Hàm chuyển đổi trạng thái thành chuỗi"""
     return str(x).zfill(9)
 
 
 def goalTest(state):
-    """Hàm kiểm tra trạng thái đích"""
     return state == 123456780
 
 
-def getPath(parentMap, inputState):
+# def getPath(parentMap, inputState):
+#     path = []
+#     temp = 123456780
+#     while temp != inputState:
+#         path.append(temp)
+#         temp = parentMap[temp]
+#     path.append(inputState)
+#     path.reverse()
+#     return path
+
+
+def getPath(parentMap, start_state):
     """Hàm lấy đường đi từ trạng thái ban đầu đến trạng thái đích"""
     path = []
-    temp = 123456780
-    while temp != inputState:
-        path.append(temp)
-        temp = parentMap[temp]
-    path.append(inputState)
-    path.reverse()
-    return path
+    # Tìm trạng thái mục tiêu trong parentMap
+    current_state = next((state for state, p in parentMap.items() if goalTest(state)), None)
+    if current_state is None:
+        return [start_state]  # Trả về trạng thái ban đầu nếu không tìm thấy mục tiêu
+    while current_state is not None and current_state != start_state:
+        path.append(current_state)
+        current_state = parentMap.get(current_state)
+    path.append(start_state)
+    return path[::-1]
 
 
 def getChildren(state):
-    """Hàm lấy trạng thái tiếp theo của trạng thái hiện tại"""
     children = []
     idx = state.index("0")
     i, j = divmod(idx, 3)
@@ -42,14 +52,12 @@ def getChildren(state):
 
 
 def checkValid(i, j):
-    """Hàm kiểm tra tính hợp lệ của tọa độ"""
     if i >= 3 or i < 0 or j >= 3 or j < 0:
         return 0
     return 1
 
 
 def manhattanDistance(state):
-    """Hàm tính khoảng cách Manhattan"""
     state_str = getStringRepresentation(state)
     total_distance = 0
     for i in range(9):

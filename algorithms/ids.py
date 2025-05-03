@@ -12,7 +12,6 @@ class IDSAlgorithm:
         self.time_taken = 0
 
     def IDS(self, inputState):
-        """Hàm IDS tìm kiếm theo chiều sâu lặp lại cho bài toán 8-puzzle"""
         start_time = time.time()
         integer_state = int(inputState)
         counter = 0
@@ -27,7 +26,7 @@ class IDSAlgorithm:
             for child in children:
                 child_int = int(child)
                 if child_int not in parent:
-                    counter += 1  # chỉ tăng khi trạng thái chưa được duyệt)
+                    counter += 1
                     parent[child_int] = state
                     parent_cost[child_int] = parent_cost[state] + 1
                     found, path = depth_limited_search(
@@ -38,11 +37,11 @@ class IDSAlgorithm:
             return False, []
 
         depth_limit = 0
-        # max_depth_limit= 1000 # giới hạn độ sâu tối đa
-        while True:
-            parent = {}
-            parent_cost = {}
-            parent_cost[integer_state] = 0
+        max_depth_limit= 1000 # giới hạn độ sâu tối đa
+        # while True:
+        while depth_limit <= max_depth_limit:
+            parent = {integer_state: None}
+            parent_cost = {integer_state: 0}
             found, path = depth_limited_search(
                 integer_state, depth_limit, parent, parent_cost
             )
@@ -56,4 +55,4 @@ class IDSAlgorithm:
             depth_limit += 1
 
         self.time_taken = float(time.time() - start_time)
-        return [], 0, counter, self.depth, self.time_taken
+        return [], 0, counter, self.depth, self.time_taken  # vì while True nên không bao giờ đến

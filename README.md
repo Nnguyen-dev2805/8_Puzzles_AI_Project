@@ -58,8 +58,8 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` để tránh lặp lại trạng thái, ngăn ngừa vòng lặp vô hạn. Tuy nhiên, nếu không giới hạn độ sâu, DFS có thể dẫn đến tràn ngăn xếp (stack overflow).
   ![DFS](https://upload.wikimedia.org/wikipedia/commons/7/7f/Depth-First-Search.gif)
 - **Độ phức tạp**:
-  - **Thời gian**: \( O(b^m) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), và \( m \) là độ sâu tối đa của cây tìm kiếm (có thể bằng số trạng thái tối đa \( 9! = 362,880 \) nếu không cắt tỉa). Với 8-puzzle, \( m \) thường rất lớn nếu không có giới hạn độ sâu.
-  - **Bộ nhớ**: \( O(bm) \), vì DFS chỉ lưu trữ các trạng thái trên nhánh hiện tại trong ngăn xếp, ít tốn bộ nhớ hơn BFS. Tuy nhiên, nếu \( m \) không được giới hạn, bộ nhớ vẫn có thể bị vượt quá do đệ quy sâu.
+  - **Thời gian**: \( O(b^d) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), và \( d \) là độ sâu tối đa của cây tìm kiếm (có thể bằng số trạng thái tối đa \( 9! = 362,880 \) nếu không cắt tỉa). Với 8-puzzle, \( d \) thường rất lớn nếu không có giới hạn độ sâu.
+  - **Bộ nhớ**: \( O(d) \), vì DFS chỉ lưu trữ các trạng thái trên nhánh hiện tại trong ngăn xếp, ít tốn bộ nhớ hơn BFS. Tuy nhiên, nếu \( d \) không được giới hạn, bộ nhớ vẫn có thể bị vượt quá do đệ quy sâu.
 - **Hình ảnh minh họa**: ![GIF mô tả DFS](assets/gif_solve/DFS.gif)
 - **Liên kết**: wikipedia -> https://en.wikipedia.org/wiki/Depth-first_search
 ### Uniform Cost Search (UCS)
@@ -83,8 +83,8 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Độ phức tạp**:
   - **Thời gian**: \( O(b^d) \), tương tự BFS, nhưng IDS có thể chậm hơn một chút do lặp lại nhiều lần. Tổng số trạng thái được duyệt qua là tổng của các lần lặp: \( (b^0 + b^1 + b^2 + \dots + b^d) \), nhưng hằng số ẩn lớn hơn BFS.
   - **Bộ nhớ**: \( O(bd) \), IDS chỉ lưu trữ các trạng thái trên nhánh hiện tại trong mỗi lần lặp, tương tự DFS, nên tiết kiệm bộ nhớ hơn BFS. Đây là lợi thế chính của IDS so với BFS.
-- **Hình ảnh minh họa**: ![GIF mô tả DFS](assets/gif_solve/DFS.gif)
-- **Liên kết**: geeksforgeeks -> https://www.geeksforgeeks.org/uniform-cost-search-ucs-in-ai/
+- **Hình ảnh minh họa**: ![GIF mô tả DFS]()
+- **Liên kết**: geeksforgeeks -> https://www.geeksforgeeks.org/iterative-deepening-searchids-iterative-deepening-depth-first-searchiddfs/
 ### A*
 Một thuật toán tìm kiếm và duyệt đồ thị tìm đường đi ngắn nhất từ ​​một nút bắt đầu đến một nút đích bằng cách kết hợp chi phí để đến nút đó và chi phí ước tính từ nút đến đích (sử dụng phương pháp tìm kiếm).
 ### Iterative Deepening A*
