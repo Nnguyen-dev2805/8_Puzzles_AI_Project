@@ -1,5 +1,7 @@
 ﻿# 8_Puzzles_AI_Project
-Kho lưu trữ này chứa dự án 8-Puzzle Solver with AI Algorithms – một ứng dụng giúp giải bài toán 8-puzzle cổ điển bằng nhiều thuật toán Trí tuệ Nhân tạo (AI) khác nhau. Dự án không chỉ triển khai các thuật toán tìm kiếm (uninformed & informed) mà còn hỗ trợ giao diện đồ họa thân thiện, giúp người dùng dễ dàng theo dõi quá trình giải và so sánh hiệu quả của các thuật toán.
+
+Kho lưu trữ này chứa dự án **8-Puzzle Solver with AI Algorithms** – một ứng dụng giải bài toán 8-puzzle cổ điển bằng nhiều thuật toán Trí tuệ Nhân tạo (AI) khác nhau. Dự án không chỉ triển khai các thuật toán tìm kiếm (uninformed & informed) mà còn hỗ trợ giao diện đồ họa thân thiện, giúp người dùng dễ dàng theo dõi quá trình giải và so sánh hiệu quả của các thuật toán.
+
 ## Mục lục
 - [Cách sử dụng](#cách-sử-dụng)
 - [Thuật toán](#thuật-toán)
@@ -22,16 +24,21 @@ Kho lưu trữ này chứa dự án 8-Puzzle Solver with AI Algorithms – một
     - [AND-OR Search Algorithm](#and-or-search-algorithm)
 - [Tính năng giao diện (GUI Features)](#tính-năng-giao-diện-gui-features)
 - [Đóng góp](#đóng-góp)
+
 ## Cách sử dụng
-1. Tải dự án bằng cách 
+
+1. Tải dự án bằng lệnh sau:
 
         git clone https://github.com/Nnguyen-dev2805/8_Puzzles_AI_Project.git
 
-2. Đi đến thư mục dự án 
+2. Di chuyển đến thư mục dự án:
 
-3. Chạy lệnh sau
+        cd 8_Puzzles_AI_Project
+
+3. Chạy chương trình bằng lệnh sau:
 
         python main.py
+
 ## Thuật toán
 
 Dự án triển khai một loạt thuật toán AI đa dạng, được phân loại thành các nhóm sau:
@@ -39,95 +46,281 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 ### Tìm kiếm không thông tin (Uninformed Search)
 
 #### Breadth-First Search (BFS)
-- **Mô tả**: BFS (Tìm kiếm theo chiều rộng) là một thuật toán tìm kiếm không thông tin, khám phá tất cả các trạng thái có thể có theo từng cấp độ độ sâu, từ trạng thái ban đầu đến trạng thái mục tiêu. Thuật toán này sử dụng hàng đợi (queue) để đảm bảo rằng các trạng thái được mở rộng theo thứ tự từ gần nhất đến xa nhất so với trạng thái ban đầu.
+- **Mô tả**: BFS (Tìm kiếm theo chiều rộng) là một thuật toán tìm kiếm không thông tin, khám phá tất cả các trạng thái theo từng cấp độ độ sâu, từ trạng thái ban đầu đến trạng thái mục tiêu. Thuật toán sử dụng hàng đợi (queue) để mở rộng các trạng thái theo thứ tự từ gần nhất đến xa nhất so với trạng thái ban đầu.
 - **Phân tích lý thuyết**:
-  - **Tính tối ưu**: BFS đảm bảo tìm ra con đường ngắn nhất đến trạng thái mục tiêu trong không gian tìm kiếm không có trọng số (unweighted graph), như bài toán 8-puzzle. Điều này xảy ra vì BFS khám phá tất cả các trạng thái ở độ sâu hiện tại trước khi đi sâu hơn.
+  - **Tính tối ưu**: BFS đảm bảo tìm ra con đường ngắn nhất đến trạng thái mục tiêu trong không gian tìm kiếm không có trọng số (như bài toán 8-puzzle), vì nó khám phá tất cả các trạng thái ở độ sâu hiện tại trước khi đi sâu hơn.
   - **Hoạt động**: Bắt đầu từ trạng thái ban đầu, BFS mở rộng tất cả các trạng thái con ở độ sâu 1, sau đó độ sâu 2, và tiếp tục cho đến khi tìm thấy trạng thái mục tiêu. Ví dụ, với trạng thái ban đầu `826514037`, BFS sẽ tìm đường đi ngắn nhất đến `123456780`.
   - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` để tránh lặp lại trạng thái, ngăn ngừa vòng lặp vô hạn.
-![BFS](https://upload.wikimedia.org/wikipedia/commons/f/f5/BFS-Algorithm_Search_Way.gif)
+- **Ưu điểm**:
+  - Đảm bảo tính tối ưu (đường đi ngắn nhất) trong không gian tìm kiếm không có trọng số.
+  - Hoàn chỉnh (luôn tìm được giải pháp nếu nó tồn tại).
+- **Nhược điểm**:
+  - Tiêu tốn nhiều bộ nhớ vì phải lưu trữ tất cả các trạng thái ở độ sâu hiện tại.
+  - Thời gian chạy có thể chậm nếu độ sâu của giải pháp lớn.
+- **Tối ưu hóa**:
+  - Sử dụng cấu trúc dữ liệu hiệu quả (như `deque` trong Python) cho hàng đợi để giảm chi phí tính toán.
+  - Có thể kết hợp với các kỹ thuật cắt tỉa (pruning) để giảm không gian trạng thái cần duyệt.
 - **Độ phức tạp**:
   - **Thời gian**: \( O(b^d) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle: lên, xuống, trái, phải), và \( d \) là độ sâu của trạng thái mục tiêu. Với 8-puzzle, \( b \) thường là 2-3 (do một số di chuyển không hợp lệ), và \( d \) có thể lên đến 31 (độ sâu tối đa cho một số trạng thái).
-  - **Bộ nhớ**: \( O(b^d) \), vì BFS phải lưu trữ tất cả các trạng thái ở độ sâu hiện tại trong hàng đợi. Điều này có thể dẫn đến tốn nhiều bộ nhớ nếu \( d \) lớn.
+  - **Bộ nhớ**: \( O(b^d) \), vì BFS phải lưu trữ tất cả các trạng thái ở độ sâu hiện tại trong hàng đợi.
 - **Hình ảnh minh họa**: ![GIF mô tả BFS](assets/gif_solve/BFS.gif)
-- **Liên kết**: wikipedia -> https://en.wikipedia.org/wiki/Breadth-first_search
-### Depth-First Search (DFS)
-- **Mô tả**: DFS (Tìm kiếm theo chiều sâu) là một thuật toán tìm kiếm không thông tin, khám phá sâu nhất một nhánh trước khi quay lui và thử nhánh khác. Thuật toán này sử dụng ngăn xếp (stack) hoặc phương pháp đệ quy để quản lý các trạng thái cần mở rộng.
+- **Hình ảnh bổ sung**: ![BFS](https://upload.wikimedia.org/wikipedia/commons/f/f5/BFS-Algorithm_Search_Way.gif)
+- **Liên kết**: [Wikipedia - Breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search)
+
+#### Depth-First Search (DFS)
+- **Mô tả**: DFS (Tìm kiếm theo chiều sâu) là một thuật toán tìm kiếm không thông tin, khám phá sâu nhất một nhánh trước khi quay lui và thử nhánh khác. Thuật toán sử dụng ngăn xếp (stack) hoặc đệ quy để quản lý các trạng thái cần mở rộng.
 - **Phân tích lý thuyết**:
-  - **Tính tối ưu**: DFS không đảm bảo tìm ra con đường ngắn nhất đến trạng thái mục tiêu trong không gian tìm kiếm không có trọng số, như bài toán 8-puzzle. Thay vào đó, nó có thể tìm một đường đi rất dài nếu nhánh đầu tiên không dẫn trực tiếp đến mục tiêu. Ví dụ, với trạng thái ban đầu `826514037`, DFS có thể tìm một đường đi dài hàng chục nghìn bước trước khi đạt `123456780`.
-  - **Hoạt động**: Bắt đầu từ trạng thái ban đầu, DFS đi sâu vào một nhánh bằng cách chọn một hành động (lên, xuống, trái, phải) và tiếp tục cho đến khi gặp trạng thái không thể mở rộng hoặc đạt mục tiêu. Nếu không thành công, nó quay lui và thử nhánh khác. Quá trình này tiếp diễn cho đến khi tìm thấy giải pháp hoặc đã thử hết các nhánh.
-  - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` để tránh lặp lại trạng thái, ngăn ngừa vòng lặp vô hạn. Tuy nhiên, nếu không giới hạn độ sâu, DFS có thể dẫn đến tràn ngăn xếp (stack overflow).
-  ![DFS](https://upload.wikimedia.org/wikipedia/commons/7/7f/Depth-First-Search.gif)
+  - **Tính tối ưu**: DFS không đảm bảo tìm ra con đường ngắn nhất, vì nó ưu tiên đi sâu vào một nhánh. Ví dụ, với trạng thái ban đầu `826514037`, DFS có thể tìm một đường đi dài hàng chục nghìn bước trước khi đạt `123456780`.
+  - **Hoạt động**: Bắt đầu từ trạng thái ban đầu, DFS đi sâu vào một nhánh bằng cách chọn một hành động (lên, xuống, trái, phải) và tiếp tục cho đến khi gặp trạng thái không thể mở rộng hoặc đạt mục tiêu. Nếu không thành công, nó quay lui và thử nhánh khác.
+  - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` để tránh lặp lại trạng thái. Nếu không giới hạn độ sâu, DFS có thể dẫn đến tràn ngăn xếp (stack overflow).
+- **Ưu điểm**:
+  - Tiết kiệm bộ nhớ hơn BFS, vì chỉ lưu trữ các trạng thái trên nhánh hiện tại.
+  - Có thể nhanh chóng tìm được giải pháp nếu nhánh đầu tiên chứa mục tiêu.
+- **Nhược điểm**:
+  - Không đảm bảo tính tối ưu (đường đi có thể rất dài).
+  - Có nguy cơ tràn ngăn xếp nếu không giới hạn độ sâu.
+  - Không hoàn chỉnh nếu không gian trạng thái có vòng lặp và không có cơ chế kiểm soát.
+- **Tối ưu hóa**:
+  - Thêm giới hạn độ sâu (Depth-Limited Search) để tránh tràn ngăn xếp.
+  - Sử dụng Iterative Deepening DFS (như IDS) để kết hợp ưu điểm của BFS và DFS.
 - **Độ phức tạp**:
-  - **Thời gian**: \( O(b^d) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), và \( d \) là độ sâu tối đa của cây tìm kiếm (có thể bằng số trạng thái tối đa \( 9! = 362,880 \) nếu không cắt tỉa). Với 8-puzzle, \( d \) thường rất lớn nếu không có giới hạn độ sâu.
-  - **Bộ nhớ**: \( O(d) \), vì DFS chỉ lưu trữ các trạng thái trên nhánh hiện tại trong ngăn xếp, ít tốn bộ nhớ hơn BFS. Tuy nhiên, nếu \( d \) không được giới hạn, bộ nhớ vẫn có thể bị vượt quá do đệ quy sâu.
+  - **Thời gian**: \( O(b^m) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), và \( m \) là độ sâu tối đa của cây tìm kiếm (có thể lên đến \( 9! = 362,880 \) nếu không cắt tỉa).
+  - **Bộ nhớ**: \( O(bm) \), vì DFS chỉ lưu trữ các trạng thái trên nhánh hiện tại.
 - **Hình ảnh minh họa**: ![GIF mô tả DFS](assets/gif_solve/DFS.gif)
-- **Liên kết**: wikipedia -> https://en.wikipedia.org/wiki/Depth-first_search
-### Uniform Cost Search (UCS)
-- **Mô tả**: UCS (Tìm kiếm chi phí đồng nhất) là một thuật toán tìm kiếm không thông tin, mở rộng trạng thái dựa trên chi phí thấp nhất từ trạng thái ban đầu đến trạng thái hiện tại. Thuật toán này sử dụng hàng đợi ưu tiên (priority queue) để luôn chọn trạng thái có tổng chi phí thấp nhất để mở rộng trước.
+- **Hình ảnh bổ sung**: ![DFS](https://upload.wikimedia.org/wikipedia/commons/7/7f/Depth-First-Search.gif)
+- **Liên kết**: [Wikipedia - Depth-first search](https://en.wikipedia.org/wiki/Depth-first_search)
+
+#### Uniform Cost Search (UCS)
+- **Mô tả**: UCS (Tìm kiếm chi phí đồng nhất) là một thuật toán tìm kiếm không thông tin, mở rộng trạng thái dựa trên chi phí thấp nhất từ trạng thái ban đầu đến trạng thái hiện tại. Thuật toán sử dụng hàng đợi ưu tiên (priority queue) để chọn trạng thái có tổng chi phí thấp nhất.
 - **Phân tích lý thuyết**:
-  - **Tính tối ưu**: UCS đảm bảo tìm ra con đường có chi phí thấp nhất đến trạng thái mục tiêu, ngay cả trong không gian tìm kiếm có trọng số (weighted graph). Trong bài toán 8-puzzle, nơi mỗi di chuyển có chi phí 1, UCS hoạt động tương tự BFS, đảm bảo tìm đường đi ngắn nhất về số bước.
-  - **Hoạt động**: Bắt đầu từ trạng thái ban đầu, UCS thêm tất cả trạng thái con vào hàng đợi ưu tiên, với chi phí là số bước từ trạng thái ban đầu. Nó luôn mở rộng trạng thái có chi phí thấp nhất trước. Ví dụ, với trạng thái ban đầu `826514037`, UCS sẽ tìm đường đi ngắn nhất đến `123456780`, tương tự BFS nhưng dựa trên chi phí.
-  - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` để tránh lặp lại trạng thái, nhưng cũng cần kiểm tra nếu một trạng thái được tìm thấy lại với chi phí thấp hơn (để cập nhật đường đi).
-  ![UCS](https://cs.stanford.edu/people/eroberts/courses/soco/projects/2003-04/intelligent-search/dijkstra.gif)
+  - **Tính tối ưu**: UCS đảm bảo tìm ra con đường có chi phí thấp nhất, ngay cả trong không gian tìm kiếm có trọng số. Trong 8-puzzle (mỗi di chuyển có chi phí 1), UCS tương tự BFS, đảm bảo đường đi ngắn nhất về số bước.
+  - **Hoạt động**: UCS thêm tất cả trạng thái con vào hàng đợi ưu tiên với chi phí là số bước từ trạng thái ban đầu, và mở rộng trạng thái có chi phí thấp nhất trước. Ví dụ, với trạng thái ban đầu `826514037`, UCS sẽ tìm đường đi ngắn nhất đến `123456780`.
+  - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` và kiểm tra nếu một trạng thái được tìm thấy lại với chi phí thấp hơn để cập nhật đường đi.
+- **Ưu điểm**:
+  - Đảm bảo tính tối ưu trong không gian tìm kiếm có trọng số.
+  - Hoàn chỉnh (luôn tìm được giải pháp nếu nó tồn tại).
+- **Nhược điểm**:
+  - Tiêu tốn nhiều bộ nhớ, tương tự BFS, vì phải lưu trữ tất cả trạng thái trong hàng đợi ưu tiên.
+  - Có thể chậm nếu không gian trạng thái lớn và không có heuristic hỗ trợ.
+- **Tối ưu hóa**:
+  - Sử dụng cấu trúc dữ liệu hiệu quả (như `heapq` trong Python) cho hàng đợi ưu tiên.
+  - Có thể kết hợp với heuristic (biến thành A*) để giảm số trạng thái cần duyệt.
 - **Độ phức tạp**:
-  - **Thời gian**: \( O(b^{C*/ε}) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), \( C* \) là chi phí của đường đi tối ưu, và \( ε\) là chi phí nhỏ nhất của một bước (trong 8-puzzle, \( ε = 1 \), nên \( C*/ε \) tương đương với độ sâu tối ưu \( d \)). Do đó, độ phức tạp tương tự BFS: \( O(b^d) \).
-  - **Bộ nhớ**: \( O(b^{C*/ε}) \), tương tự BFS, UCS phải lưu trữ tất cả các trạng thái trong hàng đợi ưu tiên, dẫn đến tốn nhiều bộ nhớ nếu không gian trạng thái lớn.
-- **Hình ảnh minh họa**: ![GIF mô tả DFS](assets/gif_solve/UCS.gif)
-- **Liên kết**: geeksforgeeks -> https://www.geeksforgeeks.org/uniform-cost-search-ucs-in-ai/
-### Iterative Deepening Search(IDS)
-- **Mô tả**: IDS (Tìm kiếm lặp sâu dần) là một thuật toán tìm kiếm không thông tin, kết hợp lợi ích của BFS và DFS. IDS thực hiện tìm kiếm theo chiều sâu (DFS) nhiều lần, mỗi lần với một giới hạn độ sâu tăng dần, cho đến khi tìm thấy trạng thái mục tiêu.
+  - **Thời gian**: \( O(b^{C*/\epsilon}) \), trong đó \( b \) là nhánh trung bình, \( C* \) là chi phí của đường đi tối ưu, và \( \epsilon \) là chi phí nhỏ nhất của một bước (\( \epsilon = 1 \) trong 8-puzzle, nên tương đương \( O(b^d) \)).
+  - **Bộ nhớ**: \( O(b^{C*/\epsilon}) \), tương tự BFS.
+- **Hình ảnh minh họa**: ![GIF mô tả UCS](assets/gif_solve/UCS.gif)
+- **Hình ảnh bổ sung**: ![UCS](https://cs.stanford.edu/people/eroberts/courses/soco/projects/2003-04/intelligent-search/dijkstra.gif)
+- **Liên kết**: [GeeksforGeeks - Uniform Cost Search](https://www.geeksforgeeks.org/uniform-cost-search-ucs-in-ai/)
+
+#### Iterative Deepening Search (IDS)
+- **Mô tả**: IDS (Tìm kiếm lặp sâu dần) là một thuật toán tìm kiếm không thông tin, kết hợp lợi ích của BFS và DFS. IDS thực hiện tìm kiếm theo chiều sâu (DFS) nhiều lần, mỗi lần với giới hạn độ sâu tăng dần, cho đến khi tìm thấy trạng thái mục tiêu.
 - **Phân tích lý thuyết**:
-  - **Tính tối ưu**: IDS đảm bảo tìm ra con đường ngắn nhất đến trạng thái mục tiêu trong không gian tìm kiếm không có trọng số, tương tự BFS. Điều này xảy ra vì IDS lặp lại tìm kiếm với độ sâu tăng dần, đảm bảo tìm thấy trạng thái mục tiêu ở độ sâu nhỏ nhất.
-  - **Hoạt động**: IDS bắt đầu với giới hạn độ sâu 0, thực hiện DFS với giới hạn này. Nếu không tìm thấy mục tiêu, tăng giới hạn lên 1 và lặp lại. Quá trình tiếp tục cho đến khi tìm thấy trạng thái mục tiêu. Ví dụ, với trạng thái ban đầu `826514037`, IDS sẽ tìm đường đi ngắn nhất đến `123456780` sau một số lần lặp.
-  - **Quản lý vòng lặp**: Tương tự DFS, IDS sử dụng tập hợp `visited` để tránh lặp lại trạng thái trong mỗi lần lặp. Tuy nhiên, vì lặp lại nhiều lần, IDS có thể duyệt qua một số trạng thái nhiều lần.
+  - **Tính tối ưu**: IDS đảm bảo tìm ra con đường ngắn nhất trong không gian tìm kiếm không có trọng số, tương tự BFS, vì nó lặp lại tìm kiếm với độ sâu tăng dần.
+  - **Hoạt động**: IDS bắt đầu với giới hạn độ sâu 0, thực hiện DFS với giới hạn này. Nếu không tìm thấy mục tiêu, tăng giới hạn lên 1 và lặp lại. Ví dụ, với trạng thái ban đầu `826514037`, IDS sẽ tìm đường đi ngắn nhất đến `123456780`.
+  - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` trong mỗi lần lặp để tránh lặp lại trạng thái.
+- **Ưu điểm**:
+  - Đảm bảo tính tối ưu (đường đi ngắn nhất) như BFS.
+  - Tiết kiệm bộ nhớ hơn BFS, chỉ lưu trữ các trạng thái trên nhánh hiện tại.
+  - Hoàn chỉnh nếu không gian trạng thái hữu hạn.
+- **Nhược điểm**:
+  - Thời gian chạy chậm hơn BFS do lặp lại nhiều lần, dẫn đến duyệt lại các trạng thái ở độ sâu thấp hơn.
+  - Có thể không hiệu quả nếu độ sâu giải pháp lớn.
+- **Tối ưu hóa**:
+  - Sử dụng cấu trúc dữ liệu nhẹ để giảm chi phí bộ nhớ trong mỗi lần lặp.
+  - Có thể kết hợp với heuristic để biến thành IDA* (Iterative Deepening A*).
 - **Độ phức tạp**:
-  - **Thời gian**: \( O(b^d) \), tương tự BFS, nhưng IDS có thể chậm hơn một chút do lặp lại nhiều lần. Tổng số trạng thái được duyệt qua là tổng của các lần lặp: \( (b^0 + b^1 + b^2 + \dots + b^d) \), nhưng hằng số ẩn lớn hơn BFS.
-  - **Bộ nhớ**: \( O(bd) \), IDS chỉ lưu trữ các trạng thái trên nhánh hiện tại trong mỗi lần lặp, tương tự DFS, nên tiết kiệm bộ nhớ hơn BFS. Đây là lợi thế chính của IDS so với BFS.
-- **Hình ảnh minh họa**: ![GIF mô tả IDS]()
-- **Liên kết**: geeksforgeeks -> https://www.geeksforgeeks.org/iterative-deepening-searchids-iterative-deepening-depth-first-searchiddfs/
+  - **Thời gian**: \( O(b^d) \), nhưng chậm hơn BFS do lặp lại nhiều lần. Tổng số trạng thái duyệt qua là \( (b^0 + b^1 + \dots + b^d) \).
+  - **Bộ nhớ**: \( O(bd) \), tương tự DFS, tiết kiệm hơn BFS.
+- **Hình ảnh minh họa**: ![GIF mô tả IDS](assets/gif_solve/IDS.gif)
+- **Liên kết**: [GeeksforGeeks - Iterative Deepening Search](https://www.geeksforgeeks.org/iterative-deepening-searchids-iterative-deepening-depth-first-searchiddfs/)
+
 ### Tìm kiếm có thông tin (Informed Search)
 
 #### Greedy Best-First Search
-- **Mô tả**: Greedy Best-First Search là một thuật toán tìm kiếm có thông tin, sử dụng hàm heuristic để định hướng tìm kiếm, ưu tiên mở rộng trạng thái có giá trị heuristic thấp nhất (ước lượng chi phí từ trạng thái hiện tại đến mục tiêu). Thuật toán này sử dụng hàng đợi ưu tiên (priority queue) để chọn trạng thái tiếp theo dựa trên giá trị heuristic.
+- **Mô tả**: Greedy Best-First Search là một thuật toán tìm kiếm có thông tin, sử dụng hàm heuristic để định hướng tìm kiếm, ưu tiên mở rộng trạng thái có giá trị heuristic thấp nhất (ước lượng chi phí từ trạng thái hiện tại đến mục tiêu). Thuật toán sử dụng hàng đợi ưu tiên (priority queue) để chọn trạng thái tiếp theo.
 - **Phân tích lý thuyết**:
-  - **Tính tối ưu**: Greedy Best-First Search **không đảm bảo** tìm ra con đường ngắn nhất đến trạng thái mục tiêu, ngay cả trong không gian tìm kiếm không có trọng số như bài toán 8-puzzle. Điều này xảy ra vì thuật toán chỉ dựa vào giá trị heuristic (ước lượng chi phí còn lại), mà không xem xét chi phí đã đi từ trạng thái ban đầu. Ví dụ, với trạng thái ban đầu `217304865`, Greedy Best-First Search có thể tìm một đường đi dài hơn (kết quả tối ưu của BFS), nếu nó đi theo nhánh có heuristic thấp nhưng không phải là đường đi ngắn nhất.
-  - **Hàm heuristic**: Trong dự án này, Greedy Best-First Search sử dụng **khoảng cách Manhattan** làm hàm heuristic. Khoảng cách Manhattan tính tổng khoảng cách thẳng (theo hàng và cột) của mỗi ô từ vị trí hiện tại đến vị trí mục tiêu, bỏ qua ô trống. Ví dụ, với trạng thái `217304865`, ô số 1 ở vị trí (0, 1), trong khi vị trí mục tiêu của nó là (0, 0), nên khoảng cách Manhattan của ô 1 là \( |0-0| + |1-0| = 1 \). Tổng khoảng cách Manhattan là tổng của tất cả các ô.
-  - **Hoạt động**: Bắt đầu từ trạng thái ban đầu, Greedy Best-First Search tính giá trị heuristic cho các trạng thái con và chọn trạng thái có giá trị heuristic thấp nhất để mở rộng. Quá trình này tiếp tục cho đến khi tìm thấy trạng thái mục tiêu. Ví dụ, với trạng thái ban đầu `217304865`, thuật toán có thể ưu tiên di chuyển ô trống để giảm khoảng cách Manhattan, nhưng có thể bỏ qua các đường đi ngắn hơn nếu chúng có giá trị heuristic cao hơn tại thời điểm đó.
-  - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` để tránh lặp lại trạng thái, ngăn ngừa vòng lặp vô hạn. Tuy nhiên, nếu heuristic không tốt (ví dụ: không nhất quán), thuật toán có thể bị mắc kẹt trong các trạng thái không dẫn đến mục tiêu.
-  ![UCS](https://media.geeksforgeeks.org/wp-content/uploads/20240919162457/Greedy-best-First-Search-in-AI.png)
+  - **Tính tối ưu**: Greedy Best-First Search **không đảm bảo** tìm ra con đường ngắn nhất, vì nó chỉ dựa vào giá trị heuristic mà không xem xét chi phí đã đi. Ví dụ, với trạng thái ban đầu `217304865`, Greedy Best-First Search có thể tìm một đường đi dài hơn 24 bước (kết quả tối ưu của BFS), chẳng hạn 30 bước.
+  - **Hàm heuristic**: Sử dụng **khoảng cách Manhattan**, tính tổng khoảng cách thẳng (theo hàng và cột) của mỗi ô từ vị trí hiện tại đến vị trí mục tiêu, bỏ qua ô trống.
+  - **Hoạt động**: Tính giá trị heuristic cho các trạng thái con và chọn trạng thái có giá trị thấp nhất để mở rộng. Ví dụ, với trạng thái `217304865`, thuật toán ưu tiên di chuyển ô trống để giảm khoảng cách Manhattan.
+  - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` để tránh lặp lại trạng thái.
+- **Ưu điểm**:
+  - Nhanh hơn các thuật toán không thông tin (như BFS, DFS) nhờ sử dụng heuristic.
+  - Tiêu tốn ít bộ nhớ hơn BFS nếu heuristic tốt, vì chỉ tập trung vào các trạng thái "hứa hẹn".
+- **Nhược điểm**:
+  - Không đảm bảo tính tối ưu (đường đi có thể dài hơn tối ưu).
+  - Hiệu quả phụ thuộc nhiều vào chất lượng của heuristic; nếu heuristic không tốt, có thể bị mắc kẹt.
+- **Tối ưu hóa**:
+  - Sử dụng heuristic tốt hơn, như kết hợp khoảng cách Manhattan với các yếu tố khác (ví dụ: số ô không đúng vị trí).
+  - Có thể kết hợp với A* để đảm bảo tính tối ưu.
 - **Độ phức tạp**:
-  - **Thời gian**: \( O(b^d) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), và \( d \) là độ sâu tối đa của cây tìm kiếm (có thể lên đến \( 9! = 362,880 \) nếu không cắt tỉa). Độ phức tạp thực tế phụ thuộc vào chất lượng của hàm heuristic: nếu heuristic tốt, thuật toán có thể nhanh hơn; nếu không, nó có thể tệ hơn cả DFS.
-  - **Bộ nhớ**: \( O(b^d) \), vì Greedy Best-First Search phải lưu trữ tất cả các trạng thái trong hàng đợi ưu tiên. Trong trường hợp xấu nhất, bộ nhớ cần thiết có thể lớn hơn cả BFS, đặc biệt nếu heuristic dẫn đến việc mở rộng nhiều trạng thái không liên quan.
+  - **Thời gian**: \( O(b^m) \), trong đó \( b \) là nhánh trung bình, và \( m \) là độ sâu tối đa của cây tìm kiếm. Phụ thuộc vào chất lượng heuristic.
+  - **Bộ nhớ**: \( O(b^m) \), nhưng thường ít hơn BFS nếu heuristic hiệu quả.
 - **Hình ảnh minh họa**: ![GIF mô tả GBFS](assets/gif_solve/GBFS.gif)
-- **Liên kết**: geeksforgeeks -> https://www.geeksforgeeks.org/greedy-best-first-search-algorithm/
+- **Hình ảnh bổ sung**: ![Greedy Best-First Search](https://media.geeksforgeeks.org/wp-content/uploads/20240919162457/Greedy-best-First-Search-in-AI.png)
+- **Liên kết**: [GeeksforGeeks - Greedy Best-First Search](https://www.geeksforgeeks.org/greedy-best-first-search-algorithm/)
 
 #### A* Search
-- **Mô tả**: A* Search là một thuật toán tìm kiếm có thông tin, kết hợp chi phí đã đi (g) từ trạng thái ban đầu đến trạng thái hiện tại với giá trị heuristic (h) để ước lượng chi phí thấp nhất từ trạng thái ban đầu đến mục tiêu qua trạng thái hiện tại. Thuật toán này sử dụng hàng đợi ưu tiên (priority queue) để chọn trạng thái tiếp theo dựa trên giá trị \( f = g + h \).
+- **Mô tả**: A* Search là một thuật toán tìm kiếm có thông tin, kết hợp chi phí đã đi \( g \) (từ trạng thái ban đầu đến trạng thái hiện tại) với giá trị heuristic \( h \) (ước lượng chi phí từ trạng thái hiện tại đến mục tiêu) để tìm đường đi tối ưu. Thuật toán sử dụng hàng đợi ưu tiên (priority queue) để chọn trạng thái có giá trị \( f = g + h \) thấp nhất.
 - **Phân tích lý thuyết**:
-  - **Tính tối ưu**: A* đảm bảo tìm ra con đường ngắn nhất đến trạng thái mục tiêu trong không gian tìm kiếm không có trọng số (như bài toán 8-puzzle), miễn là hàm heuristic \( h \) là **admissible** (không bao giờ ước lượng quá chi phí thực tế) và **consistent** (tuân theo bất đẳng thức tam giác: \( h(n) \leq c(n, n') + h(n') \)). Trong dự án này, khoảng cách Manhattan là admissible và consistent, nên A* luôn tối ưu.
-  - **Hàm heuristic**: A* sử dụng **khoảng cách Manhattan** làm hàm heuristic \( h \), tương tự Greedy Best-First Search. Chi phí đã đi \( g \) là số bước từ trạng thái ban đầu đến trạng thái hiện tại (mỗi bước có chi phí 1). Ví dụ, với trạng thái ban đầu `217304865`, nếu một trạng thái con có \( g = 5 \) (5 bước từ trạng thái ban đầu) và \( h = 10 \) (khoảng cách Manhattan), thì \( f = 15 \).
-  - **Hoạt động**: Bắt đầu từ trạng thái ban đầu, A* tính \( f = g + h \) cho mỗi trạng thái con và chọn trạng thái có giá trị \( f \) thấp nhất để mở rộng. Quá trình này tiếp tục cho đến khi tìm thấy trạng thái mục tiêu. Với trạng thái ban đầu `217304865`, A* sẽ tìm đường đi ngắn nhất (24 bước, giống BFS), nhưng thường nhanh hơn nhờ heuristic định hướng tìm kiếm.
-  - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` để tránh lặp lại trạng thái, nhưng A* cũng cần kiểm tra nếu một trạng thái được tìm thấy lại với \( f \) thấp hơn (để cập nhật đường đi). Điều này đảm bảo tính tối ưu ngay cả khi không gian tìm kiếm có vòng lặp.
+  - **Tính tối ưu**: A* đảm bảo tìm ra con đường ngắn nhất trong không gian tìm kiếm không có trọng số, miễn là hàm heuristic \( h \) là **admissible** (không bao giờ ước lượng quá chi phí thực tế) và **consistent** (tuân theo bất đẳng thức tam giác: \( h(n) \leq c(n, n') + h(n') \)). Trong dự án này, khoảng cách Manhattan là admissible và consistent, nên A* luôn tối ưu.
+  - **Hàm heuristic**: Sử dụng **khoảng cách Manhattan** làm hàm \( h \). Chi phí \( g \) là số bước từ trạng thái ban đầu (mỗi bước có chi phí 1). Ví dụ, với trạng thái ban đầu `217304865`, nếu một trạng thái con có \( g = 5 \) và \( h = 10 \), thì \( f = 15 \).
+  - **Hoạt động**: A* tính \( f = g + h \) cho mỗi trạng thái con và chọn trạng thái có \( f \) thấp nhất để mở rộng. Với trạng thái `217304865`, A* sẽ tìm đường đi ngắn nhất (24 bước, giống BFS), nhưng nhanh hơn nhờ heuristic.
+  - **Quản lý vòng lặp**: Sử dụng tập hợp `visited`, nhưng A* cũng kiểm tra nếu một trạng thái được tìm thấy lại với \( f \) thấp hơn để cập nhật đường đi.
+- **Ưu điểm**:
+  - Đảm bảo tính tối ưu (đường đi ngắn nhất) nếu heuristic là admissible và consistent.
+  - Hiệu quả hơn BFS và UCS nhờ heuristic định hướng tìm kiếm, giảm số trạng thái cần duyệt.
+  - Hoàn chỉnh (luôn tìm được giải pháp nếu nó tồn tại).
+- **Nhược điểm**:
+  - Tiêu tốn nhiều bộ nhớ, vì phải lưu trữ tất cả trạng thái trong hàng đợi ưu tiên.
+  - Thời gian chạy phụ thuộc vào chất lượng heuristic; nếu heuristic kém, hiệu suất có thể giảm.
+- **Tối ưu hóa**:
+  - Sử dụng heuristic tốt hơn (ví dụ: kết hợp khoảng cách Manhattan với số ô không đúng vị trí).
+  - Kết hợp với kỹ thuật như Weighted A* (tăng trọng số cho heuristic để ưu tiên tốc độ hơn tính tối ưu).
+  - Sử dụng cấu trúc dữ liệu hiệu quả (như `heapq` trong Python) cho hàng đợi ưu tiên.
 - **Độ phức tạp**:
-  - **Thời gian**: \( O(b^d) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), và \( d \) là độ sâu của đường đi tối ưu. Tuy nhiên, với một heuristic tốt (như khoảng cách Manhattan), A* thường duyệt ít trạng thái hơn BFS, nên hiệu quả hơn về thời gian trong thực tế.
-  - **Bộ nhớ**: \( O(b^d) \), vì A* phải lưu trữ tất cả các trạng thái trong hàng đợi ưu tiên, tương tự BFS và Greedy Best-First Search. Tuy nhiên, nhờ heuristic, số trạng thái được lưu trữ thường ít hơn.
+  - **Thời gian**: \( O(b^d) \), nhưng thường nhanh hơn BFS nhờ heuristic. Số trạng thái duyệt qua phụ thuộc vào chất lượng của \( h \).
+  - **Bộ nhớ**: \( O(b^d) \), tương tự BFS, nhưng số trạng thái lưu trữ thường ít hơn nhờ heuristic.
+- **Hình ảnh minh họa**: ![GIF mô tả A*](assets/gif_solve/AStar.gif)
+- **Hình ảnh bổ sung**: ![A* Search](https://upload.wikimedia.org/wikipedia/commons/5/5d/Astar_progress_animation.gif)
+- **Liên kết**: [Wikipedia - A* Search Algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)
 
 #### Iterative Deepening A* (IDA*)
-- **Mô tả**: Biến thể của A* với giới hạn độ sâu để tiết kiệm bộ nhớ.
+- **Mô tả**: IDA* (Tìm kiếm lặp sâu dần A*) là một biến thể của A*, kết hợp ý tưởng lặp sâu dần (như IDS) với tìm kiếm có thông tin của A*. Thuật toán sử dụng ngưỡng \( f = g + h \) để giới hạn độ sâu tìm kiếm, tăng dần ngưỡng cho đến khi tìm thấy mục tiêu.
+- **Phân tích lý thuyết**:
+  - **Tính tối ưu**: IDA* đảm bảo tính tối ưu nếu heuristic là admissible và consistent, tương tự A*.
+  - **Hoạt động**: Bắt đầu với ngưỡng ban đầu là \( f \) của trạng thái ban đầu, IDA* thực hiện tìm kiếm theo chiều sâu (DFS) với giới hạn là ngưỡng này. Nếu không tìm thấy mục tiêu, tăng ngưỡng và lặp lại.
+  - **Quản lý vòng lặp**: Sử dụng cơ chế tương tự IDS, nhưng dựa trên giá trị \( f \).
+- **Ưu điểm**:
+  - Tiết kiệm bộ nhớ hơn A*, vì chỉ lưu trữ các trạng thái trên nhánh hiện tại.
+  - Đảm bảo tính tối ưu nếu heuristic là admissible và consistent.
+- **Nhược điểm**:
+  - Thời gian chạy có thể chậm hơn A* do lặp lại nhiều lần, dẫn đến duyệt lại các trạng thái.
+  - Hiệu quả phụ thuộc vào chất lượng heuristic.
+- **Tối ưu hóa**:
+  - Sử dụng heuristic tốt hơn để giảm số lần lặp.
+  - Kết hợp với kỹ thuật như Transposition Table để tránh duyệt lại các trạng thái.
+- **Độ phức tạp**:
+  - **Thời gian**: \( O(b^d) \), nhưng có thể chậm hơn A* do lặp lại.
+  - **Bộ nhớ**: \( O(bd) \), tiết kiệm hơn A*.
+- **Hình ảnh minh họa**: ![GIF mô tả IDA*](assets/gif_solve/IDAStar.gif)
+- **Liên kết**: [Wikipedia - Iterative Deepening A*](https://en.wikipedia.org/wiki/Iterative_deepening_A*)
 
 #### Beam Search
-- **Mô tả**: Tìm kiếm cục bộ với giới hạn số lượng trạng thái tốt nhất tại mỗi bước.
+- **Mô tả**: Beam Search là một thuật toán tìm kiếm có thông tin, giới hạn số lượng trạng thái được giữ lại tại mỗi bước (gọi là "beam width"). Thuật toán chỉ giữ lại \( k \) trạng thái tốt nhất (dựa trên heuristic) để mở rộng ở bước tiếp theo.
+- **Phân tích lý thuyết**:
+  - **Tính tối ưu**: Beam Search không đảm bảo tính tối ưu, vì nó cắt bỏ nhiều trạng thái tiềm năng.
+  - **Hoạt động**: Tại mỗi bước, Beam Search mở rộng tất cả trạng thái con của \( k \) trạng thái tốt nhất, sau đó chỉ giữ lại \( k \) trạng thái có giá trị heuristic tốt nhất.
+  - **Quản lý vòng lặp**: Sử dụng cơ chế giới hạn số trạng thái để tránh lặp vô hạn.
+- **Ưu điểm**:
+  - Tiết kiệm bộ nhớ hơn A* và Greedy Best-First Search, vì chỉ lưu trữ \( k \) trạng thái tại mỗi bước.
+  - Nhanh hơn nếu \( k \) nhỏ, phù hợp với các bài toán lớn.
+- **Nhược điểm**:
+  - Không đảm bảo tính tối ưu, có thể bỏ qua đường đi tốt nhất do giới hạn \( k \).
+  - Hiệu quả phụ thuộc vào giá trị \( k \) và chất lượng heuristic.
+- **Tối ưu hóa**:
+  - Điều chỉnh giá trị \( k \) để cân bằng giữa tốc độ và chất lượng giải pháp.
+  - Sử dụng heuristic tốt hơn để chọn trạng thái chính xác hơn.
+- **Độ phức tạp**:
+  - **Thời gian**: Phụ thuộc vào \( k \), thường nhỏ hơn \( O(b^d) \).
+  - **Bộ nhớ**: \( O(k) \), rất tiết kiệm.
+- **Hình ảnh minh họa**: ![GIF mô tả Beam Search](assets/gif_solve/BeamSearch.gif)
+- **Liên kết**: [Wikipedia - Beam Search](https://en.wikipedia.org/wiki/Beam_search)
 
 ### Tìm kiếm cục bộ (Local Search)
 
 #### Biến thể Hill Climbing
-- **Simple Hill Climbing**: Tìm kiếm theo hướng tăng dần giá trị heuristic.
-- **Stochastic Hill Climbing**: Thêm yếu tố ngẫu nhiên để tránh mắc kẹt tại cực trị cục bộ.
+
+##### Simple Hill Climbing
+- **Mô tả**: Simple Hill Climbing là một thuật toán tìm kiếm cục bộ, luôn chọn trạng thái con có giá trị heuristic tốt hơn trạng thái hiện tại, di chuyển theo hướng tăng dần giá trị heuristic.
+- **Phân tích lý thuyết**:
+  - **Tính tối ưu**: Không đảm bảo tính tối ưu, dễ bị mắc kẹt tại cực trị cục bộ.
+  - **Hoạt động**: Từ trạng thái ban đầu, chọn trạng thái con tốt nhất (dựa trên heuristic) và lặp lại cho đến khi không còn trạng thái con nào tốt hơn.
+- **Ưu điểm**:
+  - Rất nhanh, vì chỉ xem xét các trạng thái lân cận.
+  - Tiết kiệm bộ nhớ, chỉ lưu trữ trạng thái hiện tại.
+- **Nhược điểm**:
+  - Dễ bị mắc kẹt tại cực trị cục bộ, bỏ qua giải pháp toàn cục.
+  - Không đảm bảo tính tối ưu hoặc hoàn chỉnh.
+- **Tối ưu hóa**:
+  - Sử dụng nhiều lần khởi động ngẫu nhiên (Random Restarts) để thoát khỏi cực trị cục bộ.
+  - Kết hợp với Simulated Annealing để chấp nhận các bước xấu.
+- **Độ phức tạp**:
+  - **Thời gian**: Phụ thuộc vào số lần lặp, thường rất nhanh.
+  - **Bộ nhớ**: \( O(1) \), chỉ lưu trữ trạng thái hiện tại.
+- **Hình ảnh minh họa**: ![GIF mô tả Hill Climbing](assets/gif_solve/HillClimbing.gif)
+- **Liên kết**: [Wikipedia - Hill Climbing](https://en.wikipedia.org/wiki/Hill_climbing)
+
+##### Stochastic Hill Climbing
+- **Mô tả**: Stochastic Hill Climbing là biến thể của Hill Climbing, chọn trạng thái con ngẫu nhiên (nhưng vẫn ưu tiên trạng thái tốt hơn), nhằm tránh mắc kẹt tại cực trị cục bộ.
+- **Phân tích lý thuyết**:
+  - **Tính tối ưu**: Vẫn không đảm bảo tính tối ưu, nhưng có khả năng thoát khỏi cực trị cục bộ tốt hơn Simple Hill Climbing.
+  - **Hoạt động**: Chọn ngẫu nhiên một trạng thái con và chỉ chấp nhận nếu nó tốt hơn trạng thái hiện tại.
+- **Ưu điểm**:
+  - Có khả năng thoát khỏi cực trị cục bộ tốt hơn Simple Hill Climbing.
+  - Vẫn nhanh và tiết kiệm bộ nhớ.
+- **Nhược điểm**:
+  - Không đảm bảo tính tối ưu hoặc hoàn chỉnh.
+  - Hiệu quả phụ thuộc vào yếu tố ngẫu nhiên.
+- **Tối ưu hóa**:
+  - Điều chỉnh xác suất chọn trạng thái con để cân bằng giữa khám phá và khai thác.
+  - Kết hợp với Random Restarts để tăng cơ hội tìm giải pháp tốt.
+- **Độ phức tạp**:
+  - **Thời gian**: Tương tự Simple Hill Climbing, phụ thuộc vào số lần lặp.
+  - **Bộ nhớ**: \( O(1) \).
+- **Hình ảnh minh họa**: ![GIF mô tả Stochastic Hill Climbing](assets/gif_solve/StochasticHillClimbing.gif)
+- **Liên kết**: [Wikipedia - Stochastic Hill Climbing](https://en.wikipedia.org/wiki/Hill_climbing#Variants)
 
 #### Simulated Annealing
-- **Mô tả**: Tìm kiếm dựa trên mô phỏng quá trình làm nguội kim loại, chấp nhận các bước xấu để thoát khỏi cực trị cục bộ.
+- **Mô tả**: Simulated Annealing là một thuật toán tìm kiếm cục bộ, mô phỏng quá trình làm nguội kim loại, chấp nhận các bước xấu (trạng thái con tệ hơn) với xác suất giảm dần để thoát khỏi cực trị cục bộ.
+- **Phân tích lý thuyết**:
+  - **Tính tối ưu**: Có thể đạt được giải pháp tối ưu nếu lịch làm nguội (schedule) đủ chậm, nhưng không đảm bảo trong thực tế.
+  - **Hoạt động**: Bắt đầu từ trạng thái ban đầu, chọn ngẫu nhiên một trạng thái con. Nếu trạng thái con tốt hơn, chấp nhận; nếu tệ hơn, chấp nhận với xác suất dựa trên "nhiệt độ" hiện tại.
+- **Ưu điểm**:
+  - Có khả năng thoát khỏi cực trị cục bộ, tăng cơ hội tìm giải pháp toàn cục.
+  - Linh hoạt, có thể điều chỉnh lịch làm nguội để cân bằng tốc độ và chất lượng.
+- **Nhược điểm**:
+  - Hiệu quả phụ thuộc vào lịch làm nguội; nếu làm nguội quá nhanh, có thể bị mắc kẹt.
+  - Không đảm bảo tính tối ưu hoặc hoàn chỉnh trong thời gian hữu hạn.
+- **Tối ưu hóa**:
+  - Điều chỉnh lịch làm nguội (ví dụ: làm nguội tuyến tính hoặc hình học) để cân bằng giữa khám phá và khai thác.
+  - Sử dụng nhiều lần khởi động ngẫu nhiên để tăng cơ hội tìm giải pháp tốt.
+- **Độ phức tạp**:
+  - **Thời gian**: Phụ thuộc vào số lần lặp và lịch làm nguội.
+  - **Bộ nhớ**: \( O(1) \), chỉ lưu trữ trạng thái hiện tại.
+- **Hình ảnh minh họa**: ![GIF mô tả Simulated Annealing](assets/gif_solve/SimulatedAnnealing.gif)
+- **Liên kết**: [Wikipedia - Simulated Annealing](https://en.wikipedia.org/wiki/Simulated_annealing)
 
 ### Tìm kiếm không xác định (Non-deterministic Search)
 
 #### AND-OR Search Algorithm
-- **Mô tả**: Thuật toán xử lý các bài toán có nhánh AND/OR, tìm kiếm giải pháp trong không gian không xác định.
+- **Mô tả**: AND-OR Search là một thuật toán tìm kiếm không xác định, xử lý các bài toán có nhánh AND/OR, thường được sử dụng trong không gian tìm kiếm không xác định (như bài toán với các luật hoặc điều kiện phức tạp).
+- **Phân tích lý thuyết**:
+  - **Tính tối ưu**: Phụ thuộc vào cách triển khai, không luôn đảm bảo tính tối ưu.
+  - **Hoạt động**: Xây dựng một cây tìm kiếm với các nút AND (yêu cầu tất cả điều kiện con phải đúng) và OR (chỉ cần một điều kiện con đúng), tìm kiếm giải pháp thỏa mãn tất cả điều kiện.
+  - **Quản lý vòng lặp**: Sử dụng cơ chế kiểm tra trạng thái để tránh lặp vô hạn.
+- **Ưu điểm**:
+  - Phù hợp với các bài toán không xác định hoặc có nhiều điều kiện phức tạp.
+  - Linh hoạt trong việc xử lý các không gian tìm kiếm phức tạp.
+- **Nhược điểm**:
+  - Phức tạp trong triển khai và có thể tiêu tốn nhiều tài nguyên nếu không gian trạng thái lớn.
+  - Không đảm bảo tính tối ưu hoặc hoàn chỉnh nếu không được thiết kế cẩn thận.
+- **Tối ưu hóa**:
+  - Sử dụng heuristic để định hướng tìm kiếm, giảm số trạng thái cần duyệt.
+  - Kết hợp với kỹ thuật cắt tỉa để loại bỏ các nhánh không hứa hẹn.
+- **Độ phức tạp**:
+  - **Thời gian**: Phụ thuộc vào cấu trúc của không gian tìm kiếm, có thể lên đến \( O(b^d) \).
+  - **Bộ nhớ**: Phụ thuộc vào cách triển khai, thường là \( O(b^d) \).
+- **Hình ảnh minh họa**: ![GIF mô tả AND-OR Search](assets/gif_solve/ANDORSearch.gif)
+- **Liên kết**: [Wikipedia - AND-OR Search](https://en.wikipedia.org/wiki/AND%E2%80%93OR_search_algorithm)
+
+## Tính năng giao diện (GUI Features)
+- **Giao diện hiện đại, thân thiện với người dùng**: Được xây dựng bằng Tkinter, cung cấp trải nghiệm trực quan.
+- **Trực quan hóa trạng thái và chuyển tiếp**: Hiển thị các trạng thái của bàn cờ và quá trình chuyển đổi giữa các bước.
+- **Hoạt hình giải pháp**: Cho phép xem trực tiếp quá trình giải với hiệu ứng động.
+- **Tốc độ hoạt hình có thể điều chỉnh**: Người dùng có thể thay đổi tốc độ hiển thị.
+- **Tạo trạng thái ban đầu ngẫu nhiên**: Tạo bảng 8-puzzle ngẫu nhiên để thử nghiệm.
+- **Thực thi từng bước**: Cho phép xem giải pháp từng bước một.
+- **Hiển thị nhật ký thực thi và đường đi**: Cung cấp thông tin chi tiết về hiệu suất và đường đi của thuật toán.
+
+## Đóng góp
+- Mọi đóng góp đều được hoan nghênh! Vui lòng gửi pull request hoặc báo cáo vấn đề qua trang GitHub của dự án.
