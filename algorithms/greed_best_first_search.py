@@ -2,7 +2,7 @@ import time
 import heapq
 from algorithms.common import goalTest, getPath, getChildren, getStringRepresentation, manhattanDistance
 
-class BestFirstSearchAlgorithm:
+class GreedBestFirstSearchAlgorithm:
     def __init__(self):
         self.counter = 0
         self.path = []
@@ -11,7 +11,6 @@ class BestFirstSearchAlgorithm:
         self.time_taken = 0
 
     def BestFirstSearch(self, inputState):
-        """Hàm Best First Search sử dụng heuristic Manhattan Distance cho bài toán 8-puzzle"""
         start_time = time.time()
         pq = []  
         visited = set()
@@ -19,6 +18,7 @@ class BestFirstSearchAlgorithm:
         parent_cost = {}
         integer_state = int(inputState)
         
+        parent[integer_state] = None
         parent_cost[integer_state] = 0
         manhattan_cost = manhattanDistance(integer_state)
         heapq.heappush(pq, (manhattan_cost, integer_state))
@@ -26,6 +26,8 @@ class BestFirstSearchAlgorithm:
         while pq:
             self.counter += 1
             _, state = heapq.heappop(pq)
+            if state in visited:
+                continue
 
             if goalTest(state):
                 self.path = getPath(parent, int(inputState))

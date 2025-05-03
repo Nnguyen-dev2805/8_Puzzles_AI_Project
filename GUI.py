@@ -12,9 +12,9 @@ import AI_algorithm
 from algorithms import (
     bfs,
     dfs,
+    greed_best_first_search,
     ucs,
     ids,
-    best_first_search,
     astar,
     idastar,
     simple_hill_climbing,
@@ -157,7 +157,7 @@ class GUI:
                 "DFS",
                 "Uniform Cost Search",
                 "Iterative Deepening",
-                "Best first search",
+                "Greed Best First Search",
                 "A*",
                 "IDA*",
                 "Simple Hill Climbing",
@@ -1121,8 +1121,8 @@ class GUI:
         elif str(self.algorithm) == "Iterative Deepening":
             self.solveIDS()
 
-        elif str(self.algorithm) == "Best first search":
-            self.solveBestFirstSearch()
+        elif str(self.algorithm) == "Greed Best First Search":
+            self.solveGreedBestFirstSearch()
         
         elif str(self.algorithm) == "A*":
             self.solveAStar()
@@ -1191,8 +1191,8 @@ class GUI:
             self.initialState
         )
     
-    def solveBestFirstSearch(self):
-        best_first_solver = best_first_search.BestFirstSearchAlgorithm()
+    def solveGreedBestFirstSearch(self):
+        best_first_solver = greed_best_first_search.GreedBestFirstSearchAlgorithm()
         self.path, self.cost, self.counter, self.depth, self.runtime = best_first_solver.BestFirstSearch(
             self.initialState
         )
