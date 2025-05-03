@@ -70,8 +70,8 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - **Quản lý vòng lặp**: Sử dụng tập hợp `visited` để tránh lặp lại trạng thái, nhưng cũng cần kiểm tra nếu một trạng thái được tìm thấy lại với chi phí thấp hơn (để cập nhật đường đi).
   ![UCS](https://cs.stanford.edu/people/eroberts/courses/soco/projects/2003-04/intelligent-search/dijkstra.gif)
 - **Độ phức tạp**:
-  - **Thời gian**: \( O(b^{C*/\epsilon}) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), \( C* \) là chi phí của đường đi tối ưu, và \( \epsilon \) là chi phí nhỏ nhất của một bước (trong 8-puzzle, \( \epsilon = 1 \), nên \( C*/\epsilon \) tương đương với độ sâu tối ưu \( d \)). Do đó, độ phức tạp tương tự BFS: \( O(b^d) \).
-  - **Bộ nhớ**: \( O(b^{C*/\epsilon}) \), tương tự BFS, UCS phải lưu trữ tất cả các trạng thái trong hàng đợi ưu tiên, dẫn đến tốn nhiều bộ nhớ nếu không gian trạng thái lớn.
+  - **Thời gian**: \( O(b^{C*/ε}) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), \( C* \) là chi phí của đường đi tối ưu, và \( ε\) là chi phí nhỏ nhất của một bước (trong 8-puzzle, \( ε = 1 \), nên \( C*/ε \) tương đương với độ sâu tối ưu \( d \)). Do đó, độ phức tạp tương tự BFS: \( O(b^d) \).
+  - **Bộ nhớ**: \( O(b^{C*/ε}) \), tương tự BFS, UCS phải lưu trữ tất cả các trạng thái trong hàng đợi ưu tiên, dẫn đến tốn nhiều bộ nhớ nếu không gian trạng thái lớn.
 - **Hình ảnh minh họa**: ![GIF mô tả DFS](assets/gif_solve/UCS.gif)
 - **Liên kết**: geeksforgeeks -> https://www.geeksforgeeks.org/uniform-cost-search-ucs-in-ai/
 ### Iterative Deepening Search(IDS)
