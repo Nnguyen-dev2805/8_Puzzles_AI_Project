@@ -182,7 +182,7 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - **Bộ nhớ**: \( O(b^d) \), tương tự BFS, nhưng số trạng thái lưu trữ thường ít hơn nhờ heuristic.
 - **Hình ảnh minh họa**: ![GIF mô tả A*](assets/gif_solve/AStar.gif)
 - **Hình ảnh bổ sung**: ![A* Search](https://upload.wikimedia.org/wikipedia/commons/5/5d/Astar_progress_animation.gif)
-- **Liên kết**: [Wikipedia - A* Search Algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)
+- **Liên kết**: [GeeksforGeeks - A* Search Algorithm](https://www.geeksforgeeks.org/a-search-algorithm/)
 
 #### Iterative Deepening A* (IDA*)
 - **Mô tả**: IDA* (Tìm kiếm lặp sâu dần A*) là một biến thể của A*, kết hợp ý tưởng lặp sâu dần (như IDS) với tìm kiếm có thông tin của A*. Thuật toán sử dụng ngưỡng \( f = g + h \) để giới hạn độ sâu tìm kiếm, tăng dần ngưỡng cho đến khi tìm thấy mục tiêu.

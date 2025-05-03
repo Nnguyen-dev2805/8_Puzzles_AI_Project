@@ -1,4 +1,3 @@
-# algorithms/ids.py
 import time
 from algorithms.common import goalTest, getPath, getChildren, getStringRepresentation
 

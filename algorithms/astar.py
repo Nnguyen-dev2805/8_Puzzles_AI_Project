@@ -1,4 +1,3 @@
-# algorithms/astar.py
 import time
 import heapq
 from algorithms.common import goalTest, getPath, getChildren, getStringRepresentation, manhattanDistance
@@ -12,13 +11,14 @@ class AStarAlgorithm:
         self.time_taken = 0
 
     def AStar(self, inputState):
-        """Thuật toán A* sử dụng heuristic Manhattan Distance sự kết hợp giữa UCS và Greedy BFS cho bài toán 8-puzzle"""
         start_time = time.time()
         pq = []
         visited = {}
         parent = {}
         g_cost = {}
         integer_state = int(inputState)
+
+        parent[integer_state] = None
         g_cost[integer_state] = 0
         h_cost = manhattanDistance(integer_state)
         f_cost = h_cost
@@ -56,4 +56,4 @@ class AStarAlgorithm:
                     g_cost[child_int] = new_g_cost
 
         self.time_taken = float(time.time() - start_time)
-        return None, 0, counter, self.depth, self.time_taken
+        return [], 0, counter, self.depth, self.time_taken
