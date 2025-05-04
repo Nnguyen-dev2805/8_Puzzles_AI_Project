@@ -16,10 +16,10 @@ Kho lưu trữ này chứa dự án **8-Puzzle Solver with AI Algorithms** – m
     - [Iterative Deepening A* (IDA*)](#iterative-deepening-a-ida)
     - [Beam Search](#beam-search)
   - [Tìm kiếm cục bộ (Local Search)](#tìm-kiếm-cục-bộ-local-search)
-    - [Biến thể Hill Climbing](#biến-thể-hill-climbing)
-      - [Simple Hill Climbing](#simple-hill-climbing)
-      - [Stochastic Hill Climbing](#stochastic-hill-climbing)
+    - [Simple Hill Climbing](#simple-hill-climbing)
+    - [Stochastic Hill Climbing](#stochastic-hill-climbing)
     - [Simulated Annealing](#simulated-annealing)
+    - [Genetic Search](#genetic-search)
   - [Tìm kiếm không xác định (Non-deterministic Search)](#tìm-kiếm-không-xác-định-non-deterministic-search)
     - [AND-OR Search Algorithm](#and-or-search-algorithm)
 - [Tính năng giao diện (GUI Features)](#tính-năng-giao-diện-gui-features)
@@ -206,29 +206,24 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 
 ### Tìm kiếm cục bộ (Local Search)
 
-#### Biến thể Hill Climbing
-
-##### Simple Hill Climbing
+#### Simple Hill Climbing
 - **Mô tả**: Simple Hill Climbing là một thuật toán tìm kiếm cục bộ, luôn chọn trạng thái con có giá trị heuristic tốt hơn trạng thái hiện tại, di chuyển theo hướng tăng dần giá trị heuristic.
 - **Phân tích lý thuyết**:
   - **Tính tối ưu**: Không đảm bảo tính tối ưu, dễ bị mắc kẹt tại cực trị cục bộ.
-  - **Hoạt động**: Từ trạng thái ban đầu, chọn trạng thái con tốt nhất (dựa trên heuristic) và lặp lại cho đến khi không còn trạng thái con nào tốt hơn.
+  - **Hoạt động**: Từ trạng thái ban đầu, chọn trạng thái con tốt nhất đầu tiên(dựa trên heuristic) và lặp lại cho đến khi không còn trạng thái con nào tốt hơn.
 - **Ưu điểm**:
   - Rất nhanh, vì chỉ xem xét các trạng thái lân cận.
   - Tiết kiệm bộ nhớ, chỉ lưu trữ trạng thái hiện tại.
 - **Nhược điểm**:
   - Dễ bị mắc kẹt tại cực trị cục bộ, bỏ qua giải pháp toàn cục.
   - Không đảm bảo tính tối ưu hoặc hoàn chỉnh.
-- **Tối ưu hóa**:
-  - Sử dụng nhiều lần khởi động ngẫu nhiên (Random Restarts) để thoát khỏi cực trị cục bộ.
-  - Kết hợp với Simulated Annealing để chấp nhận các bước xấu.
 - **Độ phức tạp**:
   - **Thời gian**: Phụ thuộc vào số lần lặp, thường rất nhanh.
   - **Bộ nhớ**: \( O(1) \), chỉ lưu trữ trạng thái hiện tại.
 - **Hình ảnh minh họa**: ![GIF mô tả Hill Climbing](assets/gif_solve/HillClimbing.gif)
-- **Liên kết**: [Wikipedia - Hill Climbing](https://en.wikipedia.org/wiki/Hill_climbing)
+- **Liên kết**: [GeeksforGeeks - Hill Climbing](https://www.geeksforgeeks.org/introduction-hill-climbing-artificial-intelligence/)
 
-##### Stochastic Hill Climbing
+#### Stochastic Hill Climbing
 - **Mô tả**: Stochastic Hill Climbing là biến thể của Hill Climbing, chọn trạng thái con ngẫu nhiên (nhưng vẫn ưu tiên trạng thái tốt hơn), nhằm tránh mắc kẹt tại cực trị cục bộ.
 - **Phân tích lý thuyết**:
   - **Tính tối ưu**: Vẫn không đảm bảo tính tối ưu, nhưng có khả năng thoát khỏi cực trị cục bộ tốt hơn Simple Hill Climbing.
@@ -259,14 +254,13 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Nhược điểm**:
   - Hiệu quả phụ thuộc vào lịch làm nguội; nếu làm nguội quá nhanh, có thể bị mắc kẹt.
   - Không đảm bảo tính tối ưu hoặc hoàn chỉnh trong thời gian hữu hạn.
-- **Tối ưu hóa**:
-  - Điều chỉnh lịch làm nguội (ví dụ: làm nguội tuyến tính hoặc hình học) để cân bằng giữa khám phá và khai thác.
-  - Sử dụng nhiều lần khởi động ngẫu nhiên để tăng cơ hội tìm giải pháp tốt.
 - **Độ phức tạp**:
   - **Thời gian**: Phụ thuộc vào số lần lặp và lịch làm nguội.
   - **Bộ nhớ**: \( O(1) \), chỉ lưu trữ trạng thái hiện tại.
 - **Hình ảnh minh họa**: ![GIF mô tả Simulated Annealing](assets/gif_solve/SimulatedAnnealing.gif)
 - **Liên kết**: [Wikipedia - Simulated Annealing](https://en.wikipedia.org/wiki/Simulated_annealing)
+
+#### Genetic Search
 
 ### Tìm kiếm không xác định (Non-deterministic Search)
 

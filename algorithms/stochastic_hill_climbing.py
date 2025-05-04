@@ -14,7 +14,7 @@ class StochasticHillClimbingAlgorithm:
         start_time = time.time()
         integer_state = int(inputState)
         current_state = integer_state
-        parent = {}
+        parent = {current_state: None}
         visited = set()
         counter = 0
         depth = 0
