@@ -1,4 +1,3 @@
-# algorithms/beamsearch.py
 import time
 import heapq
 from algorithms.common import goalTest, getPath, getChildren, getStringRepresentation, manhattanDistance
@@ -63,3 +62,74 @@ class BeamSearchAlgorithm:
         self.counter = counter
         self.time_taken = float(time.time() - start_time)
         return [], 0, self.counter, self.depth, self.time_taken
+
+# import time
+# import heapq
+# from algorithms.common import goalTest, getPath, getChildren, getStringRepresentation, manhattanDistance
+
+# class BeamSearchAlgorithm:
+#     def __init__(self):
+#         self.counter = 0
+#         self.path = []
+#         self.cost = 0
+#         self.depth = 0
+#         self.time_taken = 0
+
+#     def BeamSearch(self, inputState, beam_width=2):
+#         start_time = time.time()
+#         integer_state = int(inputState)
+
+#         visited = {integer_state}
+#         pq = [(manhattanDistance(integer_state), 0, integer_state)] 
+#         parent = {integer_state: None}
+#         counter = 0
+
+#         while pq:
+#             counter += 1
+#             current_beam = []
+#             while len(current_beam) < beam_width and pq:
+#                 f_cost, g_cost, state = heapq.heappop(pq)
+#                 if state not in visited:
+#                     current_beam.append((f_cost, g_cost, state))
+
+#             if not current_beam:
+#                 break
+
+#             next_beam = []
+#             for f_cost, g_cost, state in current_beam:
+#                 visited.add(state)
+
+#                 if goalTest(state):
+#                     path = getPath(parent, integer_state)
+#                     self.counter = counter
+#                     self.path = path
+#                     self.cost = len(path) - 1
+#                     self.depth = len(path) - 1
+#                     self.time_taken = float(time.time() - start_time)
+#                     return self.path, self.cost, self.counter, self.depth, self.time_taken
+
+#                 children = getChildren(getStringRepresentation(state))
+#                 for child in children:
+#                     child_int = int(child)
+#                     if child_int not in visited:
+#                         g_cost_new = g_cost + 1
+#                         h_cost = manhattanDistance(child_int)
+#                         f_cost_new = g_cost_new + h_cost
+#                         next_beam.append((f_cost_new, g_cost_new, child_int))
+#                         parent[child_int] = state
+#                         visited.add(child_int)
+
+#             pq = []
+#             if next_beam:
+#                 next_beam.sort()
+#                 for item in next_beam[:beam_width]:
+#                     heapq.heappush(pq, item)
+
+#             # next_beam.sort()  
+#             # pq = next_beam[:beam_width]  
+#             # for f_cost, g_cost, state in pq:
+#             #     heapq.heappush(pq, (f_cost, g_cost, state)) 
+
+#         self.counter = counter
+#         self.time_taken = float(time.time() - start_time)
+#         return [], 0, self.counter, self.depth, self.time_taken

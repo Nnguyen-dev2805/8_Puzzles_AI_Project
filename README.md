@@ -57,9 +57,6 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Nhược điểm**:
   - Tiêu tốn nhiều bộ nhớ vì phải lưu trữ tất cả các trạng thái ở độ sâu hiện tại.
   - Thời gian chạy có thể chậm nếu độ sâu của giải pháp lớn.
-- **Tối ưu hóa**:
-  - Sử dụng cấu trúc dữ liệu hiệu quả (như `deque` trong Python) cho hàng đợi để giảm chi phí tính toán.
-  - Có thể kết hợp với các kỹ thuật cắt tỉa (pruning) để giảm không gian trạng thái cần duyệt.
 - **Độ phức tạp**:
   - **Thời gian**: \( O(b^d) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle: lên, xuống, trái, phải), và \( d \) là độ sâu của trạng thái mục tiêu. Với 8-puzzle, \( b \) thường là 2-3 (do một số di chuyển không hợp lệ), và \( d \) có thể lên đến 31 (độ sâu tối đa cho một số trạng thái).
   - **Bộ nhớ**: \( O(b^d) \), vì BFS phải lưu trữ tất cả các trạng thái ở độ sâu hiện tại trong hàng đợi.
@@ -80,9 +77,6 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - Không đảm bảo tính tối ưu (đường đi có thể rất dài).
   - Có nguy cơ tràn ngăn xếp nếu không giới hạn độ sâu.
   - Không hoàn chỉnh nếu không gian trạng thái có vòng lặp và không có cơ chế kiểm soát.
-- **Tối ưu hóa**:
-  - Thêm giới hạn độ sâu (Depth-Limited Search) để tránh tràn ngăn xếp.
-  - Sử dụng Iterative Deepening DFS (như IDS) để kết hợp ưu điểm của BFS và DFS.
 - **Độ phức tạp**:
   - **Thời gian**: \( O(b^d) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), và \( d \) là độ sâu tối đa của cây tìm kiếm (có thể lên đến \( 9! = 362,880 \) nếu không cắt tỉa).
   - **Bộ nhớ**: \( O(d) \), vì DFS chỉ lưu trữ các trạng thái trên nhánh hiện tại.
@@ -102,9 +96,6 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Nhược điểm**:
   - Tiêu tốn nhiều bộ nhớ, tương tự BFS, vì phải lưu trữ tất cả trạng thái trong hàng đợi ưu tiên.
   - Có thể chậm nếu không gian trạng thái lớn và không có heuristic hỗ trợ.
-- **Tối ưu hóa**:
-  - Sử dụng cấu trúc dữ liệu hiệu quả (như `heapq` trong Python) cho hàng đợi ưu tiên.
-  - Có thể kết hợp với heuristic (biến thành A*) để giảm số trạng thái cần duyệt.
 - **Độ phức tạp**:
   - **Thời gian**: \( O(b^{C*/ε}) \), trong đó \( b \) là nhánh trung bình, \( C* \) là chi phí của đường đi tối ưu, và \( ε \) là chi phí nhỏ nhất của một bước (\( ε = 1 \) trong 8-puzzle, nên tương đương \( O(b^d) \)).
   - **Bộ nhớ**: \( O(b^{C*/ε}) \), tương tự BFS.
@@ -125,9 +116,6 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Nhược điểm**:
   - Thời gian chạy chậm hơn BFS do lặp lại nhiều lần, dẫn đến duyệt lại các trạng thái ở độ sâu thấp hơn.
   - Có thể không hiệu quả nếu độ sâu giải pháp lớn.
-- **Tối ưu hóa**:
-  - Sử dụng cấu trúc dữ liệu nhẹ để giảm chi phí bộ nhớ trong mỗi lần lặp.
-  - Có thể kết hợp với heuristic để biến thành IDA* (Iterative Deepening A*).
 - **Độ phức tạp**:
   - **Thời gian**: \( O(b^d) \), nhưng chậm hơn BFS do lặp lại nhiều lần. Tổng số trạng thái duyệt qua là \( (b^0 + b^1 + \dots + b^d) \).
   - **Bộ nhớ**: \( O(bd) \), tương tự DFS, tiết kiệm hơn BFS.
@@ -149,9 +137,6 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Nhược điểm**:
   - Không đảm bảo tính tối ưu (đường đi có thể dài hơn tối ưu).
   - Hiệu quả phụ thuộc nhiều vào chất lượng của heuristic; nếu heuristic không tốt, có thể bị mắc kẹt.
-- **Tối ưu hóa**:
-  - Sử dụng heuristic tốt hơn, như kết hợp khoảng cách Manhattan với các yếu tố khác (ví dụ: số ô không đúng vị trí).
-  - Có thể kết hợp với A* để đảm bảo tính tối ưu.
 - **Độ phức tạp**:
   - **Thời gian**: \( O(b^d) \), trong đó \( b \) là nhánh trung bình, và \( d \) là độ sâu tối đa của cây tìm kiếm. Phụ thuộc vào chất lượng heuristic.
   - **Bộ nhớ**: \( O(b^d) \), nhưng thường ít hơn BFS nếu heuristic hiệu quả.
@@ -173,10 +158,6 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Nhược điểm**:
   - Tiêu tốn nhiều bộ nhớ, vì phải lưu trữ tất cả trạng thái trong hàng đợi ưu tiên.
   - Thời gian chạy phụ thuộc vào chất lượng heuristic; nếu heuristic kém, hiệu suất có thể giảm.
-- **Tối ưu hóa**:
-  - Sử dụng heuristic tốt hơn (ví dụ: kết hợp khoảng cách Manhattan với số ô không đúng vị trí).
-  - Kết hợp với kỹ thuật như Weighted A* (tăng trọng số cho heuristic để ưu tiên tốc độ hơn tính tối ưu).
-  - Sử dụng cấu trúc dữ liệu hiệu quả (như `heapq` trong Python) cho hàng đợi ưu tiên.
 - **Độ phức tạp**:
   - **Thời gian**: \( O(b^d) \), nhưng thường nhanh hơn BFS nhờ heuristic. Số trạng thái duyệt qua phụ thuộc vào chất lượng của \( h \).
   - **Bộ nhớ**: \( O(b^d) \), tương tự BFS, nhưng số trạng thái lưu trữ thường ít hơn nhờ heuristic.
@@ -187,23 +168,20 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 #### Iterative Deepening A* (IDA*)
 - **Mô tả**: IDA* (Tìm kiếm lặp sâu dần A*) là một biến thể của A*, kết hợp ý tưởng lặp sâu dần (như IDS) với tìm kiếm có thông tin của A*. Thuật toán sử dụng ngưỡng \( f = g + h \) để giới hạn độ sâu tìm kiếm, tăng dần ngưỡng cho đến khi tìm thấy mục tiêu.
 - **Phân tích lý thuyết**:
-  - **Tính tối ưu**: IDA* đảm bảo tính tối ưu nếu heuristic là admissible và consistent, tương tự A*.
-  - **Hoạt động**: Bắt đầu với ngưỡng ban đầu là \( f \) của trạng thái ban đầu, IDA* thực hiện tìm kiếm theo chiều sâu (DFS) với giới hạn là ngưỡng này. Nếu không tìm thấy mục tiêu, tăng ngưỡng và lặp lại.
+  - **Tính tối ưu**: IDA* đảm bảo tính tối ưu nếu heuristic là admissible(không đánh giá thấp) và consistent (đơn điệu), tương tự A*.
+  - **Hoạt động**: Bắt đầu với ngưỡng ban đầu là \( f \) của trạng thái ban đầu, IDA* thực hiện tìm kiếm theo chiều sâu (DFS) với giới hạn là ngưỡng này. Nếu không tìm thấy mục tiêu, tăng ngưỡng lên giá trị f nhỏ nhất vượt quá ngưỡng hiện tại và lặp lại.
   - **Quản lý vòng lặp**: Sử dụng cơ chế tương tự IDS, nhưng dựa trên giá trị \( f \).
 - **Ưu điểm**:
   - Tiết kiệm bộ nhớ hơn A*, vì chỉ lưu trữ các trạng thái trên nhánh hiện tại.
   - Đảm bảo tính tối ưu nếu heuristic là admissible và consistent.
 - **Nhược điểm**:
-  - Thời gian chạy có thể chậm hơn A* do lặp lại nhiều lần, dẫn đến duyệt lại các trạng thái.
+  - Thời gian chạy có thể chậm hơn A* do lặp lại nhiều lần. Vì nó lặp lại theo ngưỡng, có thể mở rộng nhiều node giống nhau ở mỗi vòng lặp. Dẫn đến tốn thời gian hơn A*.
   - Hiệu quả phụ thuộc vào chất lượng heuristic.
-- **Tối ưu hóa**:
-  - Sử dụng heuristic tốt hơn để giảm số lần lặp.
-  - Kết hợp với kỹ thuật như Transposition Table để tránh duyệt lại các trạng thái.
 - **Độ phức tạp**:
   - **Thời gian**: \( O(b^d) \), nhưng có thể chậm hơn A* do lặp lại.
-  - **Bộ nhớ**: \( O(bd) \), tiết kiệm hơn A*.
+  - **Bộ nhớ**: \( O(d) \), tiết kiệm hơn A*.
 - **Hình ảnh minh họa**: ![GIF mô tả IDA*](assets/gif_solve/IDAStar.gif)
-- **Liên kết**: [Wikipedia - Iterative Deepening A*](https://en.wikipedia.org/wiki/Iterative_deepening_A*)
+- **Liên kết**: [GeeksforGeeks - Iterative Deepening A*](https://www.geeksforgeeks.org/iterative-deepening-a-algorithm-ida-artificial-intelligence/)
 
 #### Beam Search
 - **Mô tả**: Beam Search là một thuật toán tìm kiếm có thông tin, giới hạn số lượng trạng thái được giữ lại tại mỗi bước (gọi là "beam width"). Thuật toán chỉ giữ lại \( k \) trạng thái tốt nhất (dựa trên heuristic) để mở rộng ở bước tiếp theo.
@@ -214,17 +192,17 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Ưu điểm**:
   - Tiết kiệm bộ nhớ hơn A* và Greedy Best-First Search, vì chỉ lưu trữ \( k \) trạng thái tại mỗi bước.
   - Nhanh hơn nếu \( k \) nhỏ, phù hợp với các bài toán lớn.
+  - Điều chỉnh linh hoạt, beamwidth(k) nhỏ thì nhanh, lớn thì chính xác hơn - dễ dàng cân bằng giữa tốc độ và độ chính xác
 - **Nhược điểm**:
   - Không đảm bảo tính tối ưu, có thể bỏ qua đường đi tốt nhất do giới hạn \( k \).
+  - Nếu đi sai hướng thì không thể quay đầu
   - Hiệu quả phụ thuộc vào giá trị \( k \) và chất lượng heuristic.
-- **Tối ưu hóa**:
-  - Điều chỉnh giá trị \( k \) để cân bằng giữa tốc độ và chất lượng giải pháp.
-  - Sử dụng heuristic tốt hơn để chọn trạng thái chính xác hơn.
 - **Độ phức tạp**:
-  - **Thời gian**: Phụ thuộc vào \( k \), thường nhỏ hơn \( O(b^d) \).
+  - **Thời gian**: Phụ thuộc vào \( k \), thường nhỏ hơn \( O(b^d) \).  => O(kbd) mỗi node tạo tối đa b con, trong d tầng
   - **Bộ nhớ**: \( O(k) \), rất tiết kiệm.
+- **Hình ảnh bổ sung**: ![BeamSearch Search](https://upload.wikimedia.org/wikipedia/commons/2/23/Beam_search.gif)
 - **Hình ảnh minh họa**: ![GIF mô tả Beam Search](assets/gif_solve/BeamSearch.gif)
-- **Liên kết**: [Wikipedia - Beam Search](https://en.wikipedia.org/wiki/Beam_search)
+- **Liên kết**: [GeeksforGeeks - Beam Search](https://www.geeksforgeeks.org/introduction-to-beam-search-algorithm/)
 
 ### Tìm kiếm cục bộ (Local Search)
 

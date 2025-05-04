@@ -160,10 +160,10 @@ class GUI:
                 "Greed Best First Search",
                 "A*",
                 "IDA*",
+                "Beam Search",
                 "Simple Hill Climbing",
                 "Stochastic Hill Climbing",
-                "Simulated Annealing",
-                "Beam Search",
+                "Simulated Annealing",                
                 "Genetic Search",
                 "AND OR Graph Search",
                 "Belief State Search"

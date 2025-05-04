@@ -1,4 +1,3 @@
-# algorithms/idastar.py
 import time
 import heapq
 from algorithms.common import goalTest, getPath, getChildren, getStringRepresentation, manhattanDistance
@@ -12,12 +11,11 @@ class IDAStarAlgorithm:
         self.time_taken = 0
 
     def IDAStar(self, inputState):
-        """Thuật toán IDA* sử dụng heuristic Manhattan Distance kết hợp A* và IDS cho bài toán 8-puzzle"""
         start_time = time.time()
         integer_state = int(inputState)
         counter = 0
 
-        def search(state, g_cost, f_limit, parent, visited):
+        def search(state, g_cost, f_limit, parent, path_stack):
             nonlocal counter, next_f_limit
             h_cost = manhattanDistance(state)
             f_cost = h_cost + g_cost
@@ -30,25 +28,27 @@ class IDAStarAlgorithm:
                 return True, getPath(parent, integer_state)
             
             children = getChildren(getStringRepresentation(state))
+            path_stack.append(state)
             for child in children:
                 child_int = int(child)
-                if child_int not in visited:
-                    counter += 1
-                    visited.add(child_int)
-                    parent[child_int] = state
-                    found, path = search(child_int, g_cost + 1, f_limit, parent, visited)
-                    if found:
-                        return True, path
+                if child_int in path_stack:
+                    continue
+                
+                counter += 1
+                parent[child_int] = state
+                found, path = search(child_int, g_cost + 1, f_limit, parent, path_stack)
+                if found:
+                    return True, path
+            path_stack.pop()
             return False, []
 
         h_initial = manhattanDistance(integer_state)
         f_limit = h_initial
         while True:
-            visited = set()
             parent = {}
-            visited.add(integer_state)
+            path_stack = [] # tránh lặp chu trình
             next_f_limit = float('inf')
-            found, path = search(integer_state, 0, f_limit, parent, visited)
+            found, path = search(integer_state, 0, f_limit, parent, path_stack)
 
             if found:
                 self.counter = counter
