@@ -23,7 +23,6 @@ Kho lưu trữ này chứa dự án **8-Puzzle Solver with AI Algorithms** – m
   - [Tìm kiếm không xác định (Non-deterministic Search)](#tìm-kiếm-không-xác-định-non-deterministic-search)
     - [AND-OR Search Algorithm](#and-or-search-algorithm)
 - [Tính năng giao diện (GUI Features)](#tính-năng-giao-diện-gui-features)
-- [Đóng góp](#đóng-góp)
 
 ## Cách sử dụng
 
@@ -261,7 +260,23 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Liên kết**: [Wikipedia - Simulated Annealing](https://en.wikipedia.org/wiki/Simulated_annealing)
 
 #### Genetic Search
-
+- **Mô tả**: Genetic Search (hay Genetic Algorithm - GA) là một thuật toán tối ưu hóa dựa trên tiến hóa sinh học, mô phỏng quá trình chọn lọc tự nhiên. Nó sử dụng quần thể các giải pháp tiềm năng, áp dụng các toán tử di truyền (lai ghép, đột biến) để tiến hóa qua các thế hệ, nhằm tìm kiếm giải pháp tối ưu hoặc gần tối ưu.
+- **Phân tích lý thuyết**:
+  - **Tính tối ưu**: GA không đảm bảo tìm được giải pháp tối ưu toàn cục, nhưng có khả năng tìm giải pháp gần tối ưu nhờ cơ chế khám phá không gian giải pháp song song và đa dạng di truyền.
+  - **Hoạt động**: Bắt đầu với một quần thể ngẫu nhiên, đánh giá mức độ thích nghi (fitness) của từng cá thể, sau đó lặp lại các bước: lựa chọn cá thể tốt, lai ghép để tạo cá thể con, đột biến để tăng đa dạng, và thay thế quần thể cũ bằng thế hệ mới.
+- **Ưu điểm**:
+  - Khả năng khám phá không gian giải pháp lớn và phức tạp, phù hợp với các bài toán không khả vi hoặc không gian tìm kiếm không liên tục.
+  - Có khả năng thoát khỏi cực trị cục bộ nhờ đa dạng di truyền từ lai ghép và đột biến.
+  - Linh hoạt, có thể áp dụng cho nhiều bài toán bằng cách điều chỉnh cách mã hóa và hàm fitness.
+- **Nhược điểm**:
+  - Hiệu quả phụ thuộc vào tham số (kích thước quần thể, tỷ lệ lai ghép, đột biến); điều chỉnh không tốt có thể dẫn đến hội tụ sớm hoặc phân tán.
+  - Tốn tài nguyên tính toán do phải đánh giá fitness cho toàn bộ quần thể qua nhiều thế hệ.
+  - Không đảm bảo tìm được giải pháp tối ưu trong thời gian hữu hạn, đặc biệt với các bài toán có không gian giải pháp rất lớn.
+- **Độ phức tạp**:
+  - **Thời gian**: \( O(G.F.P) \), trong đó \( G \) là số thế hệ, \( F \) là độ phức tạp của hàm fitness, \( P \) là kích thước quần thể.
+  - **Bộ nhớ**: \( O(P.L) \), trong đó \( P \) là kích thước quần thể, \( L \) là độ dài của mỗi cá thể (chromosome).
+- **Hình ảnh minh họa**: ![GIF mô tả Genetic Search](assets/gif_solve/GeneticSearch.gif)
+- **Liên kết**: [Wikipedia - Genetic Search](https://www.geeksforgeeks.org/genetic-algorithms/)
 ### Tìm kiếm không xác định (Non-deterministic Search)
 
 #### AND-OR Search Algorithm
@@ -293,6 +308,3 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Tạo trạng thái ban đầu ngẫu nhiên**: Tạo bảng 8-puzzle ngẫu nhiên để thử nghiệm.
 - **Thực thi từng bước**: Cho phép xem giải pháp từng bước một.
 - **Hiển thị nhật ký thực thi và đường đi**: Cung cấp thông tin chi tiết về hiệu suất và đường đi của thuật toán.
-
-## Đóng góp
-- Mọi đóng góp đều được hoan nghênh! Vui lòng gửi pull request hoặc báo cáo vấn đề qua trang GitHub của dự án.

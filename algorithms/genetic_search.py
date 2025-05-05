@@ -21,8 +21,7 @@ class GeneticAlgorithm:
         return inversions % 2 == 0
 
     def GeneticSearch(self, initialState, population_size=100, generations=1000, mutation_rate=0.2):
-        """Thuật toán di truyền để giải bài toán 8-puzzle"""
-        start_time = time.time()
+        start_time = time.perf_counter()
 
         def create_individual():
             while True:
@@ -36,19 +35,15 @@ class GeneticAlgorithm:
             digits = list(map(int, str(individual)))
             missing = [x for x in range(9) if x not in digits]
             duplicates = [x for x in digits if digits.count(x) > 1]
-
             for i in range(len(digits)):
                 if digits[i] in duplicates:
                     digits[i] = missing.pop(0)
                     duplicates.remove(digits[i])
-
             return int("".join(map(str, digits)))
 
         def fitness(state):
-            # max_fitness = 36
-            # return max_fitness - manhattanDistance(state)
-            return 1 / (1 + manhattanDistance(state))
-
+            max_fitness = 36
+            return max_fitness - manhattanDistance(state)
 
         def crossover(parent1, parent2):
             p1 = list(str(parent1))
@@ -63,48 +58,99 @@ class GeneticAlgorithm:
             state[i], state[j] = state[j], state[i]
             return repair_individual(int("".join(state)))
 
-        population = [create_individual() for _ in range(population_size)]
-        population = list(set(population))  # Loại bỏ cá thể trùng lặp
-        chromosome_map = {state: [] for state in population}
+        population = []
+        seen = set()
+        seen.add(initialState)
+        population.append(initialState) 
+        while len(population) < population_size:
+            individual = create_individual()
+            if individual not in seen:
+                seen.add(individual)
+                population.append(individual)
+
+        chromosome_map = {initialState: [initialState]}
+        for state in population:
+            if state != initialState:
+                chromosome_map[state] = [state]
 
         best_fitness = float('-inf')
+        best_individual = initialState
         no_improvement_count = 0
 
         for generation in range(generations):
             self.counter += 1
 
+            # sắp xếp quần thể theo fitness
             population = sorted(population, key=fitness, reverse=True)
 
+            # kiểm tra cá thể tốt nhất
             if goalTest(population[0]):
                 self.solution = population[0]
-                self.time_taken = time.time() - start_time
+                self.time_taken = time.perf_counter() - start_time
                 self.path = chromosome_map[self.solution]
-                self.cost = len(self.path)
+                self.cost = len(self.path) - 1
                 self.depth = self.cost
                 return self.path, self.cost, self.depth, self.counter, self.time_taken
 
+            # Cập nhật fitness tốt nhất
             current_best_fitness = fitness(population[0])
             if current_best_fitness > best_fitness:
                 best_fitness = current_best_fitness
+                best_individual = population[0]
                 no_improvement_count = 0
             else:
                 no_improvement_count += 1
 
+            # điều kiện dừng
             if no_improvement_count >= 20 or len(set(population)) == 1:
-                print("Không có cải thiện hoặc quần thể bị thoái hóa, thuật toán dừng.")
+                print("Không có sự cải thiện hoặc suy thoái dân số, dừng lại.")
                 break
 
-            next_generation = population[:population_size // 2]
+            # lựa chọn (Elitism + Tournament Selection)
+            next_generation = population[:population_size // 4]  # giữ 1/4 tốt nhất
 
             while len(next_generation) < population_size:
-                parent1, parent2 = random.sample(next_generation, 2)
+                tournament_size = 5
+                tournament = random.sample(population, min(tournament_size, len(population)))
+                parent1 = max(tournament, key=fitness)
+                tournament = random.sample(population, min(tournament_size, len(population)))
+                parent2 = max(tournament, key=fitness)
+                while parent2 == parent1 and len(population) > 1:
+                    tournament = random.sample(population, min(tournament_size, len(population)))
+                    parent2 = max(tournament, key=fitness)
+
+                # lai ghép
                 child = crossover(parent1, parent2)
+                # đột biến
                 if random.random() < mutation_rate:
                     child = mutate(child)
+
+                # thêm cá thể con
                 next_generation.append(child)
-                chromosome_map[child] = chromosome_map[parent1] + [child]
+                # cập nhật chromosome_map
+                if child not in chromosome_map:
+                    chromosome_map[child] = chromosome_map[parent1] + [child]
 
-            population = list(set(next_generation))
+            # loại bỏ trùng lặp và đảm bảo kích thước quần thể
+            seen = set()
+            population = []
+            for individual in next_generation:
+                if individual not in seen:
+                    seen.add(individual)
+                    population.append(individual)
+            while len(population) < population_size:
+                individual = create_individual()
+                if individual not in seen:
+                    seen.add(individual)
+                    population.append(individual)
+                    chromosome_map[individual] = [individual]
 
-        self.time_taken = time.time() - start_time
+        # trả về cá thể tốt nhất nếu không tìm được giải pháp
+        self.time_taken = time.perf_counter() - start_time
+        if goalTest(best_individual):
+            self.solution = best_individual
+            self.path = chromosome_map[self.solution]
+            self.cost = len(self.path) - 1
+            self.depth = self.cost
+            return self.path, self.cost, self.depth, self.counter, self.time_taken
         return [], 0, 0, self.counter, self.time_taken

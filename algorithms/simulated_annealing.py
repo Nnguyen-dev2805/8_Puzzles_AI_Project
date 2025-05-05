@@ -73,8 +73,6 @@
 #         self.time_taken = float(time.time() - start_time)
 #         return [], 0, self.counter, self.depth, self.time_taken
 
-
-# algorithms/simulatedannealing.py
 import time
 import random
 import math
