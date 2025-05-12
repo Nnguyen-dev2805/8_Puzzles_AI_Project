@@ -1,4 +1,4 @@
-﻿#8-Puzzle Solver with AI Algorithms
+# ﻿8-Puzzle Solver with AI Algorithms
 
 ## Mục lục
 1. [Mục tiêu](#1-mục-tiêu)  
