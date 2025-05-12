@@ -1,5 +1,5 @@
 ﻿<!-- # 8-Puzzle Solver with AI Algorithms -->
-# GIẢI BÀI TOÁN 8-PUZZLE VỚI CÁC THUẬT TOÁN TÌM KIẾM 
+# 8-PUZZLE VỚI CÁC THUẬT TOÁN TÌM KIẾM 
 
 ## Mục lục
 1. [Mục tiêu](#1-mục-tiêu)  
