@@ -73,7 +73,8 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - **Tính tối ưu**: BFS luôn tìm được đường đi ngắn nhất, điều này rất quan trọng trong 8-puzzle khi người dùng cần giải pháp hiệu quả nhất. Tuy nhiên, với các trạng thái có độ sâu lớn, số lượng trạng thái cần duyệt rất lớn khiến thuật toán trở nên tốn kém.
   - **Thời gian chạy**: Trong các thử nghiệm, BFS mất khoảng 2-3 giây để giải quyết bài toán
   - **Bộ nhớ sử dụng**: BFS tiêu thụ nhiều bộ nhớ, do phải lưu trữ hàng đợi chứa tất cả các trạng thái chưa thăm.
-  
+  - **Tính thực tiễn**: BFS là lựa chọn lý tưởng khi cần đảm bảo giải pháp tối ưu và tài nguyên máy tính không phải là vấn đề. Tuy nhiên, trong 8-puzzle, hiệu suất giảm mạnh khi độ sâu tăng, do đó cần cân nhắc kết hợp với các kỹ thuật cắt tỉa hoặc chuyển sang thuật toán informed search nếu độ sâu lớn.
+
 #### Depth-First Search (DFS)
 - **Mô tả**: DFS (Tìm kiếm theo chiều sâu) là một thuật toán tìm kiếm không thông tin, khám phá sâu nhất một nhánh trước khi quay lui và thử nhánh khác. Thuật toán sử dụng ngăn xếp (stack) hoặc đệ quy để quản lý các trạng thái cần mở rộng.
 - **Phân tích lý thuyết**:
@@ -93,6 +94,11 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Hình ảnh minh họa**: ![GIF mô tả DFS](assets/gif_solve/DFS.gif)
 - **Hình ảnh bổ sung**: ![DFS](https://upload.wikimedia.org/wikipedia/commons/7/7f/Depth-First-Search.gif)
 - **Liên kết**: [Wikipedia - Depth-first search](https://en.wikipedia.org/wiki/Depth-first_search)
+- **Nhận xét về hiệu suất khi áp dụng lên 8-Puzzle**:
+  - **Tính tối ưu**: DFS thường không tìm được đường đi ngắn nhất trong 8-puzzle. Điều này làm DFS không phù hợp khi cần hiệu quả tối đa.
+  - **Thời gian chạy**: DFS có thể rất nhanh nếu nhánh đầu tiên chứa mục tiêu hoặc độ sâu nhỏ. Tuy nhiên, nếu nhánh sai kéo dài, thời gian chạy có thể tăng lên hàng phút do phải quay lui nhiều lần. Điều này phụ thuộc mạnh vào thứ tự chọn nhánh.
+  - **Bộ nhớ sử dụng**: DFS sử dụng rất ít bộ nhớ, vì chỉ lưu trữ nhánh hiện tại. Với 8-puzzle, điều này là lợi thế lớn trên các thiết bị có tài nguyên hạn chế, nhưng không giới hạn độ sâu có thể gây tràn ngăn xếp.
+  - **Tính thực tiễn**: DFS phù hợp khi không quan tâm đến tính tối ưu và cần giải pháp nhanh với bộ nhớ hạn chế. Tuy nhiên, trong 8-puzzle, hiệu suất của DFS bị ảnh hưởng bởi khả năng đi lạc vào nhánh sâu, do đó cần giới hạn độ sâu để tránh tràn bộ nhớ hoặc vòng lặp vô hạn.
 
 #### Uniform Cost Search (UCS)
 - **Mô tả**: UCS (Tìm kiếm chi phí đồng nhất) là một thuật toán tìm kiếm không thông tin, mở rộng trạng thái dựa trên chi phí thấp nhất từ trạng thái ban đầu đến trạng thái hiện tại. Thuật toán sử dụng hàng đợi ưu tiên (priority queue) để chọn trạng thái có tổng chi phí thấp nhất.
@@ -112,6 +118,11 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Hình ảnh minh họa**: ![GIF mô tả UCS](assets/gif_solve/UCS.gif)
 - **Hình ảnh bổ sung**: ![UCS](https://cs.stanford.edu/people/eroberts/courses/soco/projects/2003-04/intelligent-search/dijkstra.gif)
 - **Liên kết**: [GeeksforGeeks - Uniform Cost Search](https://www.geeksforgeeks.org/uniform-cost-search-ucs-in-ai/)
+- **Nhận xét về hiệu suất khi áp dụng lên 8-Puzzle**:
+  - **Tính tối ưu**: UCS đảm bảo tìm được đường đi ngắn nhất, tương tự BFS, nhờ sử dụng hàng đợi ưu tiên dựa trên chi phí. Điều này rất hữu ích trong 8-puzzle khi cần giải pháp tối ưu.
+  - **Thời gian chạy**: UCS có thời gian chạy tương tự BFS, khoảng 2-3 giây cho trạng thái độ sâu trung bình, và tăng lên đáng kể với độ sâu lớn. Sự khác biệt với BFS là không đáng kể trong 8-puzzle do chi phí đồng nhất (1 cho mỗi bước).
+  - **Bộ nhớ sử dụng**: UCS tiêu thụ nhiều bộ nhớ, tương tự BFS, do phải lưu trữ hàng đợi ưu tiên.
+  - **Tính thực tiễn**: UCS là lựa chọn tốt khi cần giải pháp tối ưu và chi phí không đồng đều, nhưng trong 8-puzzle (chi phí đồng nhất), hiệu quả không vượt trội so với BFS. Việc sử dụng hàng đợi ưu tiên có thể làm tăng chi phí tính toán so với BFS thông thường, do đó BFS thường được ưu tiên hơn.
 
 #### Iterative Deepening Search (IDS)
 - **Mô tả**: IDS (Tìm kiếm lặp sâu dần) là một thuật toán tìm kiếm không thông tin, kết hợp lợi ích của BFS và DFS. IDS thực hiện tìm kiếm theo chiều sâu (DFS) nhiều lần, mỗi lần với giới hạn độ sâu tăng dần, cho đến khi tìm thấy trạng thái mục tiêu.
@@ -131,6 +142,11 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - **Bộ nhớ**: \( O(bd) \), tương tự DFS, tiết kiệm hơn BFS.
 - **Hình ảnh minh họa**: ![GIF mô tả IDS](assets/gif_solve/IDS.gif)
 - **Liên kết**: [GeeksforGeeks - Iterative Deepening Search](https://www.geeksforgeeks.org/iterative-deepening-searchids-iterative-deepening-depth-first-searchiddfs/)
+- **Nhận xét về hiệu suất khi áp dụng lên 8-Puzzle**:
+  - **Tính tối ưu**: IDS đảm bảo tìm được đường đi ngắn nhất, tương tự BFS, nhờ cơ chế lặp với độ sâu tăng dần. Điều này làm IDS trở thành lựa chọn đáng tin cậy khi cần giải pháp tối ưu.
+  - **Thời gian chạy**: IDS có thời gian chạy chậm hơn BFS, khoảng 3-5 giây cho trạng thái độ sâu trung bình, và có thể lên đến hàng phút với độ sâu lớn , do phải lặp lại nhiều lần. 
+  - **Bộ nhớ sử dụng**: IDS tiêu thụ ít bộ nhớ hơn BFS, vì chỉ lưu trữ nhánh hiện tại trong mỗi lần lặp. Điều này là lợi thế lớn trong 8-puzzle.
+  - **Tính thực tiễn**: IDS là giải pháp cân bằng giữa tính tối ưu và tiết kiệm bộ nhớ. Tuy nhiên, thời gian chạy dài hơn BFS làm giảm hiệu quả khi độ sâu tăng, do đó nên kết hợp với các giới hạn độ sâu hợp lý để tối ưu hóa.
 
 ### Tìm kiếm có thông tin (Informed Search)
 
