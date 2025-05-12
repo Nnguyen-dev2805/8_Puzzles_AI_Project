@@ -70,7 +70,11 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Hình ảnh minh họa**: ![GIF mô tả BFS](assets/gif_solve/BFS.gif)
 - **Hình ảnh bổ sung**: ![BFS](https://upload.wikimedia.org/wikipedia/commons/f/f5/BFS-Algorithm_Search_Way.gif)
 - **Liên kết**: [Wikipedia - Breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search)
-
+- **Nhận xét về hiệu suất khi áp dụng lên 8-Puzzle**:
+  - **Tính tối ưu**: BFS luôn tìm được đường đi ngắn nhất, điều này rất quan trọng trong 8-puzzle khi người dùng cần giải pháp hiệu quả nhất. Tuy nhiên, với các trạng thái có độ sâu lớn, số lượng trạng thái cần duyệt rất lớn khiến thuật toán trở nên tốn kém.
+  - **Thời gian chạy**: Trong các thử nghiệm, BFS mất khoảng 2-3 giây để giải quyết bài toán
+  - **Bộ nhớ sử dụng**: BFS tiêu thụ nhiều bộ nhớ, do phải lưu trữ hàng đợi chứa tất cả các trạng thái chưa thăm.
+  
 #### Depth-First Search (DFS)
 - **Mô tả**: DFS (Tìm kiếm theo chiều sâu) là một thuật toán tìm kiếm không thông tin, khám phá sâu nhất một nhánh trước khi quay lui và thử nhánh khác. Thuật toán sử dụng ngăn xếp (stack) hoặc đệ quy để quản lý các trạng thái cần mở rộng.
 - **Phân tích lý thuyết**:
