@@ -1,4 +1,5 @@
-﻿# 8-Puzzle Solver with AI Algorithms
+﻿<!-- # 8-Puzzle Solver with AI Algorithms -->
+# GIẢI BÀI TOÁN 8-PUZZLE VỚI CÁC THUẬT TOÁN TÌM KIẾM 
 
 ## Mục lục
 1. [Mục tiêu](#1-mục-tiêu)  
@@ -31,7 +32,7 @@
    3.6. [Học tăng cường (Reinforcement Learning)](#36-học-tăng-cường-reinforcement-learning)  
       3.6.1. [Q-Learning](#361-q-learning)  
 4. [Kết luận](#4-kết-luận)  
-5. [Tác giả](#5-tác-giả)
+5. [Tác giả](#5-tác-giả)  
 
 ## 1. Mục tiêu
 
