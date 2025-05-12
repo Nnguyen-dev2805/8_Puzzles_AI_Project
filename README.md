@@ -7,7 +7,6 @@ Kho lưu trữ này chứa dự án **8-Puzzle Solver with AI Algorithms** – m
 - **Triển khai các thuật toán AI**: Ứng dụng nhiều thuật toán tìm kiếm (uninformed, informed, local search, v.v.) để giải bài toán 8-puzzle, giúp người dùng hiểu rõ cách hoạt động và hiệu suất của từng thuật toán.
 - **So sánh hiệu suất**: Phân tích và so sánh hiệu quả của các thuật toán về thời gian chạy, bộ nhớ sử dụng, và tính tối ưu của đường đi.
 - **Trực quan hóa**: Cung cấp giao diện đồ họa (GUI) để người dùng có thể theo dõi quá trình giải bài toán một cách trực quan.
-- **Hỗ trợ học tập và nghiên cứu**: Dự án là tài liệu tham khảo hữu ích cho sinh viên, nhà nghiên cứu hoặc những người yêu thích AI, giúp họ hiểu rõ cách áp dụng các thuật toán tìm kiếm vào bài toán thực tế.
 
 ## Mục lục
 - [Cách sử dụng](#cách-sử-dụng)
