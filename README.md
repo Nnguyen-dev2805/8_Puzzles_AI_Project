@@ -16,6 +16,7 @@ Kho lưu trữ này chứa dự án **8-Puzzle Solver with AI Algorithms** – m
     - [Depth-First Search (DFS)](#depth-first-search-dfs)
     - [Uniform Cost Search (UCS)](#uniform-cost-search-ucs)
     - [Iterative Deepening Search (IDS)](#iterative-deepening-search-ids)
+    - [So sánh các thuật toán](#so-sánh-các-thuật-toán-trong-nhóm-tìm-kiếm-không-thông-tin)
   - [Tìm kiếm có thông tin (Informed Search)](#tìm-kiếm-có-thông-tin-informed-search)
     - [Greedy Best-First Search](#greedy-best-first-search)
     - [A* Search](#a-search)
@@ -147,6 +148,12 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - **Thời gian chạy**: IDS có thời gian chạy chậm hơn BFS, khoảng 3-5 giây cho trạng thái độ sâu trung bình, và có thể lên đến hàng phút với độ sâu lớn , do phải lặp lại nhiều lần. 
   - **Bộ nhớ sử dụng**: IDS tiêu thụ ít bộ nhớ hơn BFS, vì chỉ lưu trữ nhánh hiện tại trong mỗi lần lặp. Điều này là lợi thế lớn trong 8-puzzle.
   - **Tính thực tiễn**: IDS là giải pháp cân bằng giữa tính tối ưu và tiết kiệm bộ nhớ. Tuy nhiên, thời gian chạy dài hơn BFS làm giảm hiệu quả khi độ sâu tăng, do đó nên kết hợp với các giới hạn độ sâu hợp lý để tối ưu hóa.
+
+##### **Hình ảnh so sánh hiệu suất**
+
+Dưới đây là hình ảnh minh họa so sánh hiệu suất của các thuật toán tìm kiếm không thông tin:
+
+![So sánh hiệu suất Uninformed Search](assets/UninformedSearchCMP.jpg)
 
 ### Tìm kiếm có thông tin (Informed Search)
 
