@@ -149,7 +149,11 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - **Bộ nhớ sử dụng**: IDS tiêu thụ ít bộ nhớ hơn BFS, vì chỉ lưu trữ nhánh hiện tại trong mỗi lần lặp. Điều này là lợi thế lớn trong 8-puzzle.
   - **Tính thực tiễn**: IDS là giải pháp cân bằng giữa tính tối ưu và tiết kiệm bộ nhớ. Tuy nhiên, thời gian chạy dài hơn BFS làm giảm hiệu quả khi độ sâu tăng, do đó nên kết hợp với các giới hạn độ sâu hợp lý để tối ưu hóa.
 
-##### Hình ảnh so sánh hiệu suất
+#### So sánh các thuật toán trong nhóm Tìm kiếm không thông tin
+
+Dưới đây là so sánh hiệu suất của các thuật toán tìm kiếm không thông tin (BFS, DFS, UCS, IDS) khi áp dụng vào bài toán 8-puzzle, dựa trên các tiêu chí: **tính tối ưu**, **thời gian chạy**, **bộ nhớ sử dụng**, và **tính thực tiễn**.
+
+##### **Hình ảnh so sánh hiệu suất**
 
 Dưới đây là hình ảnh minh họa so sánh hiệu suất của các thuật toán tìm kiếm không thông tin:
 
