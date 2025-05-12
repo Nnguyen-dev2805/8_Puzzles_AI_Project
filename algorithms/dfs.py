@@ -9,9 +9,12 @@ class DFSAlgorithm:
         self.cost = 0
         self.depth = 0
         self.time_taken = 0
+        self.max_stack_size = 0
+        self.max_visited_size = 0
 
     def DFS(self, inputState):
-        start_time = time.time()
+        start_time = time.perf_counter()
+
         stack = []
         visited = set()
         parent = {}
@@ -23,6 +26,9 @@ class DFSAlgorithm:
 
         while stack:
             counter += 1
+            if len(stack) > self.max_stack_size:
+                self.max_stack_size = len(stack)
+
             state = stack.pop()
             if goalTest(state):
                     path = getPath(parent, int(inputState))
@@ -30,13 +36,15 @@ class DFSAlgorithm:
                     self.path = path
                     self.cost = len(path) - 1
                     self.depth = len(path) - 1
-                    self.time_taken = float(time.time() - start_time)
+                    self.time_taken = time.perf_counter() - start_time
+                    total_space = self.max_stack_size + self.max_visited_size
                     return (
                         self.path,
                         self.cost,
                         self.counter,
                         self.depth,
                         self.time_taken,
+                        total_space
                     )
             
             if state not in visited:
@@ -50,5 +58,6 @@ class DFSAlgorithm:
                         parent_cost[child_int] = 1 + parent_cost[state]
                         self.depth = max(self.depth, parent_cost[child_int])
                         
-        self.time_taken = float(time.time() - start_time)
-        return [], 0, counter, self.depth, self.time_taken
+        self.time_taken = time.perf_counter() - start_time
+        total_space = self.max_stack_size + self.max_visited_size
+        return [], 0, counter, self.depth, self.time_taken,total_space

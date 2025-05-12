@@ -2,6 +2,13 @@
 
 Kho lưu trữ này chứa dự án **8-Puzzle Solver with AI Algorithms** – một ứng dụng giải bài toán 8-puzzle cổ điển bằng nhiều thuật toán Trí tuệ Nhân tạo (AI) khác nhau. Dự án không chỉ triển khai các thuật toán tìm kiếm (uninformed & informed) mà còn hỗ trợ giao diện đồ họa thân thiện, giúp người dùng dễ dàng theo dõi quá trình giải và so sánh hiệu quả của các thuật toán.
 
+## Mục tiêu
+
+- **Triển khai các thuật toán AI**: Ứng dụng nhiều thuật toán tìm kiếm (uninformed, informed, local search, v.v.) để giải bài toán 8-puzzle, giúp người dùng hiểu rõ cách hoạt động và hiệu suất của từng thuật toán.
+- **So sánh hiệu suất**: Phân tích và so sánh hiệu quả của các thuật toán về thời gian chạy, bộ nhớ sử dụng, và tính tối ưu của đường đi.
+- **Trực quan hóa**: Cung cấp giao diện đồ họa (GUI) để người dùng có thể theo dõi quá trình giải bài toán một cách trực quan.
+- **Hỗ trợ học tập và nghiên cứu**: Dự án là tài liệu tham khảo hữu ích cho sinh viên, nhà nghiên cứu hoặc những người yêu thích AI, giúp họ hiểu rõ cách áp dụng các thuật toán tìm kiếm vào bài toán thực tế.
+
 ## Mục lục
 - [Cách sử dụng](#cách-sử-dụng)
 - [Thuật toán](#thuật-toán)
@@ -20,8 +27,9 @@ Kho lưu trữ này chứa dự án **8-Puzzle Solver with AI Algorithms** – m
     - [Stochastic Hill Climbing](#stochastic-hill-climbing)
     - [Simulated Annealing](#simulated-annealing)
     - [Genetic Search](#genetic-search)
-  - [Tìm kiếm không xác định (Non-deterministic Search)](#tìm-kiếm-không-xác-định-non-deterministic-search)
+  - [Tìm kiếm trong môi trường phức tạp (Complex Environment Search)](#tìm-kiếm-trong-môi-trường-phức-tạp-complex-environment-search)
     - [AND-OR Search Algorithm](#and-or-search-algorithm)
+  - [Tìm kiếm có điều kiện ràng buộc (Non-deterministic Search)](#tìm-kiếm-không-xác-định-non-deterministic-search)
 - [Tính năng giao diện (GUI Features)](#tính-năng-giao-diện-gui-features)
 
 ## Cách sử dụng

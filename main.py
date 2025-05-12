@@ -5,3 +5,14 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = GUI(master=root)
     app.run()  
+
+
+
+# AC- 3
+# Kiểm thử
+# backtracking
+# min confict
+
+
+# search with no observation
+# serach with partial observation

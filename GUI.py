@@ -6,6 +6,11 @@ import pandas as pd
 from tkinter import filedialog
 import matplotlib.pyplot as plt
 from PIL import Image, ImageTk
+import seaborn as sns
+
+from backtracking_window import BacktrackingWindow
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 import AI_algorithm
 
@@ -39,6 +44,7 @@ class GUI:
         self.depth = 0 
         self.runtime = 0.0
         self.path = []
+        self.memory_size = 0 
         self.runtime_data = {}
         self._job = None
         self.appFrame = ttk.Frame(master)
@@ -53,11 +59,9 @@ class GUI:
         window_width = 1000
         window_height = 800
 
-        # Tính toán vị trí để căn giữa
         position_x = (screen_width - window_width) // 2
         position_y = (screen_height - window_height) // 2
 
-        # Đặt vị trí cửa sổ
         self.master.geometry(f"{window_width}x{window_height}+{position_x}+{position_y}")
        
         self.mainLabel.configure(
@@ -172,35 +176,6 @@ class GUI:
         self.algorithmbox.place(anchor="center", height=30, width=150, x=910, y=330)
         self.algorithmbox.bind("<<ComboboxSelected>>", self.selectAlgorithm)
 
-        # self.algorithm_tree = ttk.Treeview(self.appFrame)
-        # self.algorithm_tree.place(anchor="center", height=200, width=250, x=910, y=330)
-
-        # # Thêm các nhóm thuật toán
-        # self.algorithm_tree.insert("", "end", "uninformed", text="Uninformed Search")
-        # self.algorithm_tree.insert("uninformed", "end", "bfs", text="BFS")
-        # self.algorithm_tree.insert("uninformed", "end", "dfs", text="DFS")
-        # self.algorithm_tree.insert("uninformed", "end", "ucs", text="Uniform Cost Search")
-        # self.algorithm_tree.insert("uninformed", "end", "ids", text="Iterative Deepening")
-
-        # self.algorithm_tree.insert("", "end", "informed", text="Informed Search")
-        # self.algorithm_tree.insert("informed", "end", "best_first", text="Best First Search")
-        # self.algorithm_tree.insert("informed", "end", "astar", text="A*")
-        # self.algorithm_tree.insert("informed", "end", "idastar", text="IDA*")
-
-        # self.algorithm_tree.insert("", "end", "local", text="Local Search")
-        # self.algorithm_tree.insert("local", "end", "hill_climbing", text="Simple Hill Climbing")
-        # self.algorithm_tree.insert("local", "end", "stochastic", text="Stochastic Hill Climbing")
-        # self.algorithm_tree.insert("local", "end", "annealing", text="Simulated Annealing")
-        # self.algorithm_tree.insert("local", "end", "beam", text="Beam Search")
-
-        # self.algorithm_tree.insert("", "end", "non_deterministic", text="Non-deterministic Search")
-        # self.algorithm_tree.insert("non_deterministic", "end", "genetic", text="Genetic Search")
-        # self.algorithm_tree.insert("non_deterministic", "end", "and_or", text="AND OR Graph Search")
-        # self.algorithm_tree.insert("non_deterministic", "end", "belief", text="Belief State Search")
-
-        # # Xử lý sự kiện chọn thuật toán
-        # self.algorithm_tree.bind("<<TreeviewSelect>>", self.selectAlgorithmFromTree)
-
         # label chọn thuật toán
         self.algolabel = ttk.Label(self.appFrame)
         self.algolabel.configure(anchor="center", text="Chọn thuật toán:")
@@ -231,16 +206,13 @@ class GUI:
         self.runtimeChartButton.place(anchor="n", height=40, width=180, x=500, y=530)
         self.runtimeChartButton.bind("<ButtonPress>", self.drawRuntimeChart)
 
-        # Thêm nút Backtracking vào giao diện chính
-        # self.backtracking_button = ttk.Button(self.appFrame)
-        # self.backtracking_button.configure(cursor="hand2", text="Backtracking")
-        # self.backtracking_button.place(anchor="n", height=40, width=150, x=910, y=400)
-        # self.backtracking_button.bind("<ButtonPress>", self.openBacktrackingWindow)
 
-        # self.selectImageButton = ttk.Button(self.appFrame)
-        # self.selectImageButton.configure(cursor="hand2", text="Chọn ảnh")
-        # self.selectImageButton.place(anchor="n", height=40, width=150, x=910, y=400)
-        # self.selectImageButton.bind("<ButtonPress>", self.selectImage)
+        # Thêm nút Backtracking vào giao diện chính
+        self.backtracking_button = ttk.Button(self.appFrame)
+        self.backtracking_button.configure(cursor="hand2", text="Backtracking")
+        self.backtracking_button.place(anchor="n", height=40, width=150, x=120, y=600)
+        self.backtracking_button.bind("<ButtonPress>", self.openBacktrackingWindow)
+
 
         # tạo các ô cho puzzle
         self.cell0 = ttk.Label(self.appFrame)
@@ -646,40 +618,172 @@ class GUI:
         if algorithm not in ["Uninformed Search", "Informed Search", "Local Search", "Non-deterministic Search"]:
             self.algorithm = algorithm
             self.reset()
+
     def openBacktrackingWindow(self, event=None):
-        """Mở cửa sổ mới để thực hiện Backtracking."""
-        backtracking_window = tk.Toplevel(self.master)
-        backtracking_window.title("Backtracking - 8 Puzzle")
-        backtracking_window.geometry("600x600")
-        backtracking_window.resizable(False, False)
+        BacktrackingWindow(self.master)
+        # # Tạo cửa sổ mới cho backtracking
+        # backtracking_window = tk.Toplevel(self.master)
+        # backtracking_window.title("Backtracking 8-Puzzle")
+        # backtracking_window.geometry("600x700")
+        
+        # # Tạo bảng 3x3
+        # self.create_backtracking_board(backtracking_window)
+        
+        # # Nút điều khiển
+        # control_frame = ttk.Frame(backtracking_window)
+        # control_frame.pack(pady=10)
+        
+        # self.start_button = ttk.Button(control_frame, text="Bắt đầu", 
+        #                             command=lambda: self.start_backtracking(backtracking_window))
+        # self.start_button.pack(side=tk.LEFT, padx=5)
+        
+        # self.step_button = ttk.Button(control_frame, text="Từng bước", 
+        #                             command=self.next_backtracking_step, state=tk.DISABLED)
+        # self.step_button.pack(side=tk.LEFT, padx=5)
+        
+        # self.auto_button = ttk.Button(control_frame, text="Tự động", 
+        #                             command=self.auto_backtracking, state=tk.DISABLED)
+        # self.auto_button.pack(side=tk.LEFT, padx=5)
+        
+        # # Khởi tạo biến cho backtracking
+        # self.backtracking_steps = []
+        # self.current_step = 0
+        # self.backtracking_solution = []
+        # self.backtracking_running = False
 
-        # Tạo giao diện cho bảng 8-puzzle
-        board_frame = ttk.Frame(backtracking_window)
-        board_frame.place(anchor="center", relx=0.5, rely=0.4)
-
-        cells = []
+    def create_backtracking_board(self, window):
+        # Tạo frame chính cho bảng
+        board_frame = ttk.Frame(window)
+        board_frame.pack(pady=20)  # Dùng pack() cho frame chính
+        
+        # Tạo frame riêng cho bảng 3x3 (chỉ dùng grid() trong frame này)
+        grid_frame = ttk.Frame(board_frame)
+        grid_frame.pack()  # Dùng pack() để đặt grid_frame vào board_frame
+        
+        self.backtracking_tiles = []
         for i in range(3):
             row = []
             for j in range(3):
-                cell = tk.Label(
-                    board_frame,
+                tile = tk.Label(
+                    grid_frame,  # Sử dụng grid_frame thay vì board_frame
                     text="",
-                    font=("Arial", 24),
-                    background="#ffffff",
-                    relief="sunken",
-                    anchor="center",
+                    font=("Arial", 24, "bold"),
                     width=4,
                     height=2,
+                    relief="raised",
+                    bg="white"
                 )
-                cell.grid(row=i, column=j, padx=5, pady=5)
-                row.append(cell)
-            cells.append(row)
+                tile.grid(row=i, column=j, padx=2, pady=2)  # Dùng grid() trong grid_frame
+                row.append(tile)
+            self.backtracking_tiles.append(row)
+        
+        # Tạo frame riêng cho mục tiêu (dùng pack() hoặc grid() riêng biệt)
+        goal_frame = ttk.Frame(window)
+        goal_frame.pack(pady=10)
+        
+        tk.Label(goal_frame, text="Mục tiêu:", font=("Arial", 12)).pack()
+        
+        # Tạo frame riêng cho bảng mục tiêu (chỉ dùng grid() trong frame này)
+        goal_grid_frame = ttk.Frame(goal_frame)
+        goal_grid_frame.pack()
+        
+        goal_state = [1,2,3,4,5,6,7,8,0]
+        for i in range(3):
+            for j in range(3):
+                idx = i*3 + j
+                val = goal_state[idx] if goal_state[idx] != 0 else ""
+                tk.Label(
+                    goal_grid_frame,  # Sử dụng goal_grid_frame thay vì goal_frame
+                    text=str(val),
+                    font=("Arial", 16),
+                    width=4,
+                    height=2,
+                    relief="sunken"
+                ).grid(row=i, column=j, padx=2, pady=2)
+    
+    def start_backtracking(self, window):
+        # Khởi tạo trạng thái ban đầu (rỗng)
+        initial_state = [0]*9  # 0 đại diện cho ô trống
+        self.backtracking_solution = []
+        self.current_step = 0
+        
+        # Tìm giải pháp
+        if self.solve_backtracking(initial_state, 0):
+            self.backtracking_steps = self.backtracking_solution.copy()
+            self.update_backtracking_board(self.backtracking_steps[0])
+            self.step_button.config(state=tk.NORMAL)
+            self.auto_button.config(state=tk.NORMAL)
+        else:
+            messagebox.showinfo("Thông báo", "Không tìm thấy giải pháp")
 
-        # Nút bắt đầu Backtracking
-        start_button = ttk.Button(
-            backtracking_window, text="Bắt đầu Backtracking", command=lambda: self.runBacktracking(cells)
-        )
-        start_button.place(anchor="center", relx=0.5, rely=0.8)
+    def solve_backtracking(self, state, position):
+        # Điều kiện dừng: nếu đã điền hết tất cả ô
+        if position == 9:
+            return True
+        
+        # Giá trị mong muốn tại vị trí hiện tại (1-8, ô cuối là 0)
+        desired_value = position + 1 if position < 8 else 0
+        
+        # Nếu ô đã có giá trị đúng thì chuyển sang ô tiếp theo
+        if state[position] == desired_value:
+            return self.solve_backtracking(state, position + 1)
+        
+        # Nếu ô đã có giá trị khác (không phải 0) thì không hợp lệ
+        if state[position] != 0:
+            return False
+        
+        # Thử điền giá trị mong muốn vào ô trống
+        state[position] = desired_value
+        self.backtracking_solution.append(state.copy())
+        
+        # Tiếp tục đệ quy
+        if self.solve_backtracking(state, position + 1):
+            return True
+        
+        # Backtrack nếu không thành công
+        state[position] = 0
+        self.backtracking_solution.append(state.copy())
+        return False
+    def update_backtracking_board(self, state):
+        for i in range(3):
+            for j in range(3):
+                idx = i*3 + j
+                value = state[idx] if state[idx] != 0 else ""
+                self.backtracking_tiles[i][j].config(text=str(value))
+        
+        # Highlight ô đang được xử lý
+        for i in range(9):
+            if state[i] == 0 or (i < 8 and state[i] != i+1):
+                row, col = i//3, i%3
+                self.backtracking_tiles[row][col].config(bg="lightyellow")
+                break
+
+    def next_backtracking_step(self):
+        if self.current_step < len(self.backtracking_steps):
+            self.update_backtracking_board(self.backtracking_steps[self.current_step])
+            self.current_step += 1
+        else:
+            self.step_button.config(state=tk.DISABLED)
+            messagebox.showinfo("Thông báo", "Đã hoàn thành backtracking!")
+
+    def auto_backtracking(self):
+        if not self.backtracking_running:
+            self.backtracking_running = True
+            self.auto_button.config(text="Dừng lại")
+            self.animate_backtracking()
+        else:
+            self.backtracking_running = False
+            self.auto_button.config(text="Tự động")
+
+    def animate_backtracking(self):
+        if self.current_step < len(self.backtracking_steps) and self.backtracking_running:
+            self.update_backtracking_board(self.backtracking_steps[self.current_step])
+            self.current_step += 1
+            self.master.after(500, self.animate_backtracking)  # Cập nhật mỗi 0.5 giây
+        elif self.backtracking_running:
+            self.backtracking_running = False
+            self.auto_button.config(text="Tự động")
+            messagebox.showinfo("Thông báo", "Đã hoàn thành backtracking!")
     
     def runBacktracking(self, cells):
         """Thực hiện thuật toán Backtracking và cập nhật giao diện."""
@@ -1092,6 +1196,8 @@ class GUI:
                 + "Thời gian chạy: \n"
                 + str(self.runtime)
                 + " s"
+                + "\nKích thước bộ nhớ: \n"
+                + str(self.memory_size)
             )
         else:
             analytics = ""
@@ -1152,10 +1258,12 @@ class GUI:
 
         if self.algorithm and self.initialState:
             self.runtime_data[self.algorithm] = {
-                "runtime": self.runtime,
-                "cost": self.cost,
-                "counter": self.counter,
                 "depth": self.depth,
+                "memory_size": self.memory_size,
+                "runtime": self.runtime,
+                # "cost": self.cost,
+                "counter": self.counter,
+                # "depth": self.depth,
             }
 
     def reset(self):
@@ -1169,25 +1277,25 @@ class GUI:
 
     def solveBFS(self):
         bfs_solver = bfs.BFSAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = bfs_solver.BFS(
+        self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = bfs_solver.BFS(
             self.initialState
         )
 
     def solveDFS(self):
         dfs_solver = dfs.DFSAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = dfs_solver.DFS(
+        self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = dfs_solver.DFS(
             self.initialState
         )
 
     def solveUCS(self):
         ucs_solver = ucs.UCSAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = ucs_solver.UCS(
+        self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = ucs_solver.UCS(
             self.initialState
         )
 
     def solveIDS(self):
         ids_solver = ids.IDSAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = ids_solver.IDS(
+        self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = ids_solver.IDS(
             self.initialState
         )
     
@@ -1255,99 +1363,118 @@ class GUI:
     # ----------------- Vẽ biểu đồ ------------------
 
     def drawRuntimeChart(self, event=None):
-        if not self.runtime_data:
-            messagebox.showinfo("Thông báo", "Chưa có dữ liệu để vẽ biểu đồ!")
+        if not self.runtime_data: 
             return
-
-        # Extract data for the charts
+        
         algorithms = list(self.runtime_data.keys())
-        runtimes = [data["runtime"] for data in self.runtime_data.values()]
-        costs = [data["cost"] for data in self.runtime_data.values()]
-        counters = [data["counter"] for data in self.runtime_data.values()]
-        depths = [data["depth"] for data in self.runtime_data.values()]
+        metrics = {
+            "Thời gian chạy (s)": [],
+            "Kích thước bộ nhớ (node)": [],
+            "Số trạng thái duyệt": [],
+            "Độ sâu lời giải": []
+        }
 
-        # Create subplots for runtime, cost, counter, and depth
-        fig, axs = plt.subplots(2, 2, figsize=(12, 10))
+        for algo in algorithms:
+            runtime = self.runtime_data[algo].get("runtime", 0)
+            metrics["Thời gian chạy (s)"].append(runtime)  
+            
+            metrics["Kích thước bộ nhớ (node)"].append(self.runtime_data[algo].get("memory_size", 0))
+            metrics["Số trạng thái duyệt"].append(self.runtime_data[algo].get("counter", 0))
+            metrics["Độ sâu lời giải"].append(self.runtime_data[algo].get("depth", 0))
 
-        # Runtime chart
-        axs[0, 0].bar(algorithms, runtimes, color="skyblue")
-        axs[0, 0].set_title("Thời gian chạy (s)", fontsize=14)
-        axs[0, 0].set_xlabel("Thuật toán", fontsize=12)
-        axs[0, 0].set_ylabel("Thời gian (s)", fontsize=12)
-        axs[0, 0].tick_params(axis="x", rotation=45)
+        fig = make_subplots(
+            rows=2, 
+            cols=2, 
+            subplot_titles=list(metrics.keys()),
+            vertical_spacing=0.15,
+            horizontal_spacing=0.1
+        )
+        
+        colors = ['#636EFA', '#EF553B', '#00CC96', '#AB63FA']
+        marker_symbols = ['circle', 'square', 'diamond', 'cross']
+        
+        for i, (name, values) in enumerate(metrics.items()):
+            row = (i//2)+1
+            col = (i%2)+1
+            
+            text_values = []
+            for v in values:
+                if name == "Thời gian chạy (s)":
+                    text_values.append(f'{v:.3f}'.rstrip('0').rstrip('.') if '.' in f'{v:.3f}' else f'{v:.3f}')
+                else:
+                    text_values.append(f'{v:,}' if isinstance(v, (int, float)) else str(v))
+            
+            fig.add_trace(
+                go.Scatter(
+                    x=algorithms,
+                    y=values,
+                    name=name,
+                    mode='lines+markers+text',
+                    text=text_values,
+                    textposition='top center',
+                    marker=dict(
+                        size=12,
+                        color=colors[i],
+                        symbol=marker_symbols[i],
+                        line=dict(width=2, color='DarkSlateGrey')
+                    ),
+                    line=dict(width=3, color=colors[i]),
+                    textfont=dict(size=11, color=colors[i]),
+                    hoverinfo='x+y+name',
+                    hoverlabel=dict(bgcolor='white', font_size=12)
+                ),
+                row=row, col=col
+            )
 
-        # Cost chart
-        axs[0, 1].bar(algorithms, costs, color="lightgreen")
-        axs[0, 1].set_title("Chi phí", fontsize=14)
-        axs[0, 1].set_xlabel("Thuật toán", fontsize=12)
-        axs[0, 1].set_ylabel("Chi phí", fontsize=12)
-        axs[0, 1].tick_params(axis="x", rotation=45)
+            if name == "Thời gian chạy (s)":
+                min_val = min(values)
+                max_val = max(values)
 
-        # Counter chart
-        axs[1, 0].bar(algorithms, counters, color="salmon")
-        axs[1, 0].set_title("Số trạng thái đã duyệt qua", fontsize=14)
-        axs[1, 0].set_xlabel("Thuật toán", fontsize=12)
-        axs[1, 0].set_ylabel("Số trạng thái", fontsize=12)
-        axs[1, 0].tick_params(axis="x", rotation=45)
-
-        # Depth chart
-        axs[1, 1].bar(algorithms, depths, color="gold")
-        axs[1, 1].set_title("Độ sâu", fontsize=14)
-        axs[1, 1].set_xlabel("Thuật toán", fontsize=12)
-        axs[1, 1].set_ylabel("Độ sâu", fontsize=12)
-        axs[1, 1].tick_params(axis="x", rotation=45)
-
-        # Adjust layout and show the plot
-        plt.tight_layout()
-        plt.show()
-    
-    # def selectImage(self, event=None):
-    #     # Mở hộp thoại để chọn ảnh
-    #     file_path = filedialog.askopenfilename(
-    #         title="Chọn ảnh",
-    #         filetypes=[("Image files", "*.jpg *.jpeg *.png *.bmp"), ("All files", "*.*")]
-    #     )
-    #     if not file_path:
-    #         return
-
-    #     try:
-    #         # Mở ảnh và chia thành 9 phần
-    #         img = Image.open(file_path)
-    #         img = img.resize((300, 300))  # Resize ảnh về kích thước 300x300
-    #         self.image_parts = self.splitImage(img)
-
-    #         # Đặt trạng thái mục tiêu là ảnh gốc
-    #         self.initialState = "012345678"
-    #         self.reset()
-    #         self.displayStateOnGrid(self.initialState)
-    #     except Exception as e:
-    #         messagebox.showerror("Lỗi", f"Không thể xử lý ảnh: {str(e)}")
-
-    # def splitImage(self, img):
-    #     """Chia ảnh thành 9 phần (3x3)."""
-    #     parts = []
-    #     width, height = img.size
-    #     part_width, part_height = width // 3, height // 3
-
-    #     for i in range(3):
-    #         for j in range(3):
-    #             left = j * part_width
-    #             upper = i * part_height
-    #             right = (j + 1) * part_width
-    #             lower = (i + 1) * part_height
-    #             part = img.crop((left, upper, right, lower))
-    #             parts.append(ImageTk.PhotoImage(part))
-    #     return parts
-
-    # def displayImageOnGrid(self, image_parts):
-    #     """Hiển thị các phần ảnh trên lưới."""
-    #     if not self.validateState(state):
-    #         state = "000000000"
-
-    #     # Hiển thị các phần ảnh theo trạng thái
-    #     for i, cell in enumerate([self.cell0, self.cell1, self.cell2, self.cell3, self.cell4, self.cell5, self.cell6, self.cell7, self.cell8]):
-    #         if state[i] == "0":  # Ô trống
-    #             cell.configure(image="", text=" ")
-    #         else:
-    #             index = int(state[i])  # Lấy chỉ số của phần ảnh
-    #             cell.configure(image=self.image_parts[index], text="")
+                y_range = [
+                    min_val * 0.9 if min_val > 0 else -0.1 * max_val,
+                    max_val * 1.2
+                ]
+                
+                fig.update_yaxes(
+                    tickformat=".3f",  
+                    range=y_range,
+                    row=row, col=col
+                )
+        
+        fig.update_layout(
+            title_text='<b>SO SÁNH HIỆU SUẤT THUẬT TOÁN</b>',
+            title_font=dict(size=22, family='Arial', color='black'),
+            title_x=0.5,
+            showlegend=False,
+            height=850,
+            width=1000,
+            template='plotly_white',
+            margin=dict(l=50, r=50, b=50, t=100, pad=4),
+            hovermode='x unified',
+            plot_bgcolor='rgba(245,245,245,0.8)'
+        )
+        
+        fig.update_xaxes(
+            tickangle=-30,
+            tickfont=dict(size=10),
+            showline=True,
+            linecolor='gray',
+            mirror=True
+        )
+        
+        fig.update_yaxes(
+            zeroline=True,
+            zerolinewidth=1,
+            zerolinecolor='lightgray',
+            showline=True,
+            linecolor='gray',
+            mirror=True,
+            # tickformat=',.0f'  # Định dạng số
+        )
+        
+        fig.update_annotations(
+            font_size=13,
+            yshift=10
+        )
+        
+        fig.show(config={'displayModeBar': True})

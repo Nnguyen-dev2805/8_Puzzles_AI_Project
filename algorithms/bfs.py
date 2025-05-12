@@ -10,9 +10,12 @@ class BFSAlgorithm:
         self.cost = 0
         self.depth = 0
         self.time_taken = 0
+        self.max_queue_size = 0
+        self.max_visited_size = 0
 
     def BFS(self, inputState):
-        start_time = time.time()
+        start_time = time.perf_counter()
+
         queue = deque()
         visited = set()
         parent = {}
@@ -24,6 +27,13 @@ class BFSAlgorithm:
 
         while queue:
             counter += 1
+
+            if len(queue) > self.max_queue_size:
+                self.max_queue_size = len(queue)
+
+            if len(visited) > self.max_visited_size:
+                self.max_visited_size = len(visited)
+            
             state = queue.popleft()
 
             if state in visited:
@@ -35,9 +45,11 @@ class BFSAlgorithm:
                 self.path = path
                 self.cost = len(path) - 1
                 self.depth = parent_cost[state]
-                self.time_taken = float(time.time() - start_time)
-                return self.path, self.cost, self.counter, self.depth, self.time_taken
-
+                self.time_taken = time.perf_counter() - start_time
+                total_space = self.max_queue_size + self.max_visited_size
+                return (self.path, self.cost, self.counter, self.depth, self.time_taken,
+                        total_space)
+            
             visited.add(state)
 
             children = getChildren(getStringRepresentation(state))
@@ -47,5 +59,7 @@ class BFSAlgorithm:
                     queue.append(child_int)
                     parent[child_int] = state
                     parent_cost[child_int] = 1 + parent_cost[state]
-        time_taken = float(time.time() - start_time)
-        return [], 0, counter, self.depth, time_taken
+        self.time_taken = time.perf_counter() - start_time
+        total_space = self.max_queue_size + self.max_visited_size
+
+        return [], 0, counter, self.depth, self.time_taken,total_space

@@ -1,8 +1,6 @@
-# algorithms/ucs.py
 import time
 import heapq
 from algorithms.common import goalTest, getPath, getChildren, getStringRepresentation
-
 
 class UCSAlgorithm:
     def __init__(self):
@@ -11,9 +9,12 @@ class UCSAlgorithm:
         self.cost = 0
         self.depth = 0
         self.time_taken = 0
+        self.max_queue_size = 0
+        self.max_visited_size = 0
 
     def UCS(self, inputState):
-        start_time = time.time()
+        start_time = time.perf_counter()
+
         pq = []
         visited = set()
         parent = {}
@@ -25,6 +26,9 @@ class UCSAlgorithm:
 
         while pq:
             counter += 1
+            if len(pq) > self.max_queue_size:
+                self.max_queue_size = len(pq)
+
             curr_cost, state = heapq.heappop(pq)
 
             if goalTest(state):
@@ -33,17 +37,20 @@ class UCSAlgorithm:
                 self.path = path
                 self.cost = len(path) - 1
                 self.depth = len(path) - 1
-                self.time_taken = float(time.time() - start_time)
+                self.time_taken = float(time.perf_counter() - start_time)
                 return (
                     self.path,
                     self.cost,
                     self.counter,
                     self.depth,
                     self.time_taken,
+                    self.max_queue_size + self.max_visited_size,
                 )
 
             if state not in visited:
                 visited.add(state)
+                if len(visited) > self.max_visited_size:
+                    self.max_visited_size = len(visited)
 
                 children = getChildren(getStringRepresentation(state))
                 for child in children:
@@ -57,5 +64,5 @@ class UCSAlgorithm:
                         parent[child_int] = state
                         parent_cost[child_int] = new_cost
 
-        self.time_taken = float(time.time() - start_time)
-        return None, 0, counter, self.depth, self.time_taken
+        self.time_taken = float(time.perf_counter() - start_time)
+        return None, 0, counter, self.depth, self.time_taken, self.max_queue_size + self.max_visited_size
