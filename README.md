@@ -153,11 +153,7 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 
 Dưới đây là so sánh hiệu suất của các thuật toán tìm kiếm không thông tin (BFS, DFS, UCS, IDS) khi áp dụng vào bài toán 8-puzzle, dựa trên các tiêu chí: **tính tối ưu**, **thời gian chạy**, **bộ nhớ sử dụng**, và **tính thực tiễn**.
 
-##### **Hình ảnh so sánh hiệu suất**
-
-Dưới đây là hình ảnh minh họa so sánh hiệu suất của các thuật toán tìm kiếm không thông tin:
-
-![So sánh hiệu suất Uninformed Search](assets/UninformedSearchCMP.jpg)
+- **Hình ảnh so sánh hiệu suất**: ![So sánh hiệu suất Uninformed Search](assets/UninformedSearchCMP.jpg)
 
 ### Tìm kiếm có thông tin (Informed Search)
 
