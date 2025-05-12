@@ -1,11 +1,9 @@
 ﻿# 8-Puzzle Solver with AI Algorithms
 
-Kho lưu trữ này chứa dự án **8-Puzzle Solver with AI Algorithms** – một ứng dụng giải bài toán 8-puzzle cổ điển bằng nhiều thuật toán Trí tuệ Nhân tạo (AI) khác nhau. Dự án triển khai các thuật toán tìm kiếm (uninformed, informed, local, non-deterministic, constraint satisfaction, reinforcement learning, và complex environment search), đồng thời cung cấp giao diện đồ họa thân thiện để trực quan hóa quá trình giải và so sánh hiệu quả của các thuật toán.
-
 ## Mục lục
-1. [Mục tiêu](#1-mục-tiêu)
-2. [Nội dung dự án](#2-nội-dung-dự-án)
-3. [Thuật toán](#3-thuật-toán)
+1. [Mục tiêu](#1-mục-tiêu)  
+2. [Nội dung dự án](#2-nội-dung-dự-án)  
+3. [Thuật toán](#3-thuật-toán)  
    3.1. [Tìm kiếm không thông tin (Uninformed Search)](#31-tìm-kiếm-không-thông-tin-uninformed-search)  
       3.1.1. [Breadth-First Search (BFS)](#311-breadth-first-search-bfs)  
       3.1.2. [Depth-First Search (DFS)](#312-depth-first-search-dfs)  
@@ -22,18 +20,17 @@ Kho lưu trữ này chứa dự án **8-Puzzle Solver with AI Algorithms** – m
       3.3.3. [Simulated Annealing](#333-simulated-annealing)  
       3.3.4. [Genetic Search](#334-genetic-search)  
       3.3.5. [Beam Search](#335-beam-search)  
-   3.4. [Tìm kiếm không xác định (Non-deterministic Search)](#34-tìm-kiếm-trong-môi-trường-phức-tạp-complex-environment-search)   
-      3.4.1. [AND-OR Search Algorithm](#341-and-or-search-algorithm)  
-      3.4.2. [Partially Observable Search](#342-partially-observable-search)  
-      3.4.3. [No Observation Search](#343-no-observation-search)
+   3.4. [Tìm kiếm trong môi trường phức tạp (Complex Environment Search)](#34-tìm-kiếm-trong-môi-trường-phức-tạp-complex-environment-search)  
+      3.4.1. [Partially Observable Search](#341-partially-observable-search)  
+      3.4.2. [No Observation Search](#342-no-observation-search)  
+      3.4.3. [AND-OR Search Algorithm](#343-and-or-search-algorithm)  
    3.5. [Tìm kiếm có điều kiện ràng buộc (Constraint Satisfaction Problem)](#35-tìm-kiếm-có-điều-kiện-ràng-buộc-constraint-satisfaction-problem)  
       3.5.1. [Tìm kiếm kiểm thử (Constraint Testing)](#351-tìm-kiếm-kiểm-thử-constraint-testing)  
       3.5.2. [Backtracking CSP](#352-backtracking-csp)  
       3.5.3. [Backtracking AC-3](#353-backtracking-ac-3)  
    3.6. [Học tăng cường (Reinforcement Learning)](#36-học-tăng-cường-reinforcement-learning)  
       3.6.1. [Q-Learning](#361-q-learning)  
-       
-4. [Kết luận](#4-kết-luận)
+4. [Kết luận](#4-kết-luận)  
 5. [Tác giả](#5-tác-giả)
 
 ## 1. Mục tiêu
