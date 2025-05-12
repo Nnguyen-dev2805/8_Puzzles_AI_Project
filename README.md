@@ -1,12 +1,11 @@
-﻿<!-- # 8-Puzzle Solver with AI Algorithms -->
-# 8-PUZZLE VỚI CÁC THUẬT TOÁN TÌM KIẾM 
+﻿#8-Puzzle Solver with AI Algorithms
 
 ## Mục lục
 1. [Mục tiêu](#1-mục-tiêu)  
 2. [Nội dung dự án](#2-nội-dung-dự-án)  
 3. [Thuật toán](#3-thuật-toán)  
    3.1. [Tìm kiếm không thông tin (Uninformed Search)](#31-tìm-kiếm-không-thông-tin-uninformed-search)  
-      3.1.1. [Breadth-First Search (BFS)](#311-breadth-first-search-bfs)  
+         3.1.1. [Breadth-First Search (BFS)](#311-breadth-first-search-bfs)  
       3.1.2. [Depth-First Search (DFS)](#312-depth-first-search-dfs)  
       3.1.3. [Uniform Cost Search (UCS)](#313-uniform-cost-search-ucs)  
       3.1.4. [Iterative Deepening Search (IDS)](#314-iterative-deepening-search-ids)  
