@@ -2,14 +2,16 @@
 
 Kho lưu trữ này chứa dự án **8-Puzzle Solver with AI Algorithms** – một ứng dụng giải bài toán 8-puzzle cổ điển bằng nhiều thuật toán Trí tuệ Nhân tạo (AI) khác nhau. Dự án không chỉ triển khai các thuật toán tìm kiếm (uninformed & informed) mà còn hỗ trợ giao diện đồ họa thân thiện, giúp người dùng dễ dàng theo dõi quá trình giải và so sánh hiệu quả của các thuật toán.
 
-## Mục tiêu
+Giảng viên hướng dẫn: TS.Phan Thị Huyền Trang
 
-- **Triển khai các thuật toán AI**: Ứng dụng nhiều thuật toán tìm kiếm (uninformed, informed, local search, v.v.) để giải bài toán 8-puzzle, giúp người dùng hiểu rõ cách hoạt động và hiệu suất của từng thuật toán.
-- **So sánh hiệu suất**: Phân tích và so sánh hiệu quả của các thuật toán về thời gian chạy, bộ nhớ sử dụng, và tính tối ưu của đường đi.
-- **Trực quan hóa**: Cung cấp giao diện đồ họa (GUI) để người dùng có thể theo dõi quá trình giải bài toán một cách trực quan.
+Sinh viên thực hiện: Trương Nhất Nguyên
+
+Mã số sinh viên: 23110273
+
+Mã lớp học: ARIN330585_04
 
 ## Mục lục
-- [Cách sử dụng](#cách-sử-dụng)
+- [Mục tiêu](#mục-tiêu)
 - [Thuật toán](#thuật-toán)
   - [Tìm kiếm không thông tin (Uninformed Search)](#tìm-kiếm-không-thông-tin-uninformed-search)
     - [Breadth-First Search (BFS)](#breadth-first-search-bfs)
@@ -32,19 +34,28 @@ Kho lưu trữ này chứa dự án **8-Puzzle Solver with AI Algorithms** – m
   - [Tìm kiếm có điều kiện ràng buộc (Non-deterministic Search)](#tìm-kiếm-không-xác-định-non-deterministic-search)
 - [Tính năng giao diện (GUI Features)](#tính-năng-giao-diện-gui-features)
 
-## Cách sử dụng
 
-1. Tải dự án bằng lệnh sau:
+## 1.Mục tiêu
 
-        git clone https://github.com/Nnguyen-dev2805/8_Puzzles_AI_Project.git
+- **Triển khai các thuật toán AI**: Ứng dụng nhiều thuật toán tìm kiếm (uninformed, informed, local search, v.v.) để giải bài toán 8-puzzle, giúp người dùng hiểu rõ cách hoạt động và hiệu suất của từng thuật toán.
+- **So sánh hiệu suất**: Phân tích và so sánh hiệu quả của các thuật toán về thời gian chạy, bộ nhớ sử dụng, và tính tối ưu của đường đi để hiểu rõ ưu/nhược điểm của từng thuật toán sử dụng.
+- **Trực quan hóa**: Cung cấp giao diện đồ họa (GUI) để người dùng có thể theo dõi quá trình giải bài toán một cách trực quan.
 
-2. Di chuyển đến thư mục dự án:
+## 2. Nội dung
+Dự án **8-Puzzle Visualizer** triển khai bài toán 8-puzzle, một bài toán cổ điển trong Trí tuệ Nhân tạo, với mục tiêu sắp xếp các ô số từ trạng thái ban đầu về trạng thái mục tiêu thông qua việc di chuyển ô trống. Dự án tích hợp **sáu nhóm thuật toán** tìm kiếm, bao gồm:
+- **Tìm kiếm không có thông tin** (Uninformed Search): Các thuật toán dựa trên khám phá mù, không sử dụng hàm thông tin heuristic.
+- **Tìm kiếm có thông tin** (Informed Search): Các thuật toán sử dụng heuristic để hướng dẫn tìm kiếm một cách hiệu quả hơn.
+- **Tìm kiếm có ràng buộc** (Constraint Satisfaction Problem): Các thuật toán giải bài toán bằng cách gán các giá trị thỏa mãn với các ràng buộc cho trước.
+- **Tìm kiếm cục bộ** (Local Search): Các thuật toán cải thiện trạng thái dần dần dựa trên hàm đánh giá.
+- **Tìm kiếm trong môi trường phức tạp** (Searching in complex environments): Các thuật toán xử lý các tình huống không xác định hoặc quan sát không đầy đủ.
+- **Học tăng cường** (Reinforcement Learning): Các thuật toán học từ kinh nghiệm để tìm lời giải tối ưu.
 
-        cd 8_Puzzles_AI_Project
-
-3. Chạy chương trình bằng lệnh sau:
-
-        python main.py
+Mỗi nhóm được trình bày chi tiết với:
+- **Thành phần chính của bài toán**: Mô tả trạng thái, hành động, kiểm tra mục tiêu, và hàm heuristic (nếu có).
+- **Lời giải**: Chuỗi trạng thái và hành động từ trạng thái ban đầu đến mục tiêu.
+- **GIF minh họa**: Hình ảnh động thể hiện quá trình giải của từng thuật toán.
+- **So sánh hiệu suất**: Bảng so sánh ghi lại thời gian thực thi và số lần mở rộng (expansions) để so sánh (cùng trạng thái ban đầu và mục tiêu).
+- **Nhận xét**: Phân tích ưu điểm, nhược điểm và hiệu quả khi áp dụng vào bài toán 8-puzzle.
 
 ## Thuật toán
 

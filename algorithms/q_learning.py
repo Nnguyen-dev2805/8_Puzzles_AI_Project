@@ -1,169 +1,282 @@
+# # import numpy as np
+# # from collections import defaultdict
+# # import random
+# # import time
+# # from algorithms.common import goalTest, getPath, getChildren, getStringRepresentation
+
+# # class QLearning:
+# #     def __init__(self, alpha=0.1, gamma=0.9, epsilon=0.1):
+# #         self.Q_table = defaultdict(lambda: [0.0] * 4) 
+# #         self.alpha = alpha  # tốc độ học
+# #         self.gamma = gamma  # hệ số chiết khấu
+# #         self.epsilon = epsilon  # tỷ lệ khám phá
+# #         self.counter = 0  
+# #         self.path = []  
+# #         self.cost = 0  
+# #         self.depth = 0 
+# #         self.time_taken = 0 
+
+# #     def choose_action(self, state, valid_moves):
+# #         if random.random() < self.epsilon:
+# #             return random.choice(valid_moves) 
+# #         else:
+# #             q_values = self.Q_table[state]
+# #             return max(range(4), key=lambda i: q_values[i] if i in valid_moves else -float('inf'))
+
+# #     def train(self, inputState, episodes=1000, max_steps=100):
+# #         start_time = time.time()
+# #         integer_state = int(inputState)
+# #         visited = set()
+# #         best_path = None # đường đi tốt nhất tìm thấy
+# #         best_path_length = float('inf')
+# #         for ep in range(episodes):
+# #             state = getStringRepresentation(inputState)   
+# #             path = [state]
+# #             parent = {}
+# #             visited.add(state)
+# #             total_reward = 0
+            
+# #             for step in range (max_steps):
+                
+# import numpy as np
+# from collections import defaultdict
+# import random
+# import time
+# from algorithms.common import goalTest, getPath, getChildren, getStringRepresentation
+
+# # Hàm tính khoảng cách Manhattan
+# def manhattan_distance(state, goal_state):
+#     distance = 0
+#     state = np.array(state).reshape(3, 3)
+#     goal_state = np.array(goal_state).reshape(3, 3)
+#     for i in range(3):
+#         for j in range(3):
+#             if state[i][j] != 0:  # Bỏ qua ô trống
+#                 value = state[i][j]
+#                 gi, gj = np.where(goal_state == value)
+#                 distance += abs(i - gi[0]) + abs(j - gj[0])
+#     return distance
+
+# class QLearning:
+#     def __init__(self, alpha=0.1, gamma=0.95, epsilon_start=1.0, epsilon_end=0.01):
+#         self.Q_table = defaultdict(lambda: defaultdict(float))  # Q-table với giá trị mặc định
+#         self.alpha = alpha  # Tốc độ học
+#         self.gamma = gamma  # Hệ số chiết khấu
+#         self.epsilon = epsilon_start  # Tỷ lệ khám phá ban đầu
+#         self.epsilon_end = epsilon_end
+#         self.counter = 0  # Số trạng thái đã thăm
+#         self.path = []  # Đường đi
+#         self.cost = 0  # Chi phí (số bước)
+#         self.depth = 0  # Độ sâu
+#         self.time_taken = 0  # Thời gian thực hiện
+#         self.visited = set()  # Tập hợp các trạng thái đã thăm
+#         self.best_path = None  # Đường đi tốt nhất
+#         self.best_path_length = float('inf')
+#         self.distance_cache = {}  # Cache cho khoảng cách Manhattan
+
+#     def choose_action(self, state, valid_moves):
+#         if random.random() < self.epsilon:
+#             return random.choice(valid_moves)  # Khám phá
+#         q_vals = [self.Q_table[state][a] for a in valid_moves]
+#         return valid_moves[q_vals.index(max(q_vals))]  # Khai thác
+
+#     def train(self, inputState, episodes=5000, max_steps=50):
+#         start_time = time.time()
+#         epsilon_decay = (self.epsilon - self.epsilon_end) / episodes
+#         goal_state_str = getStringRepresentation(goalState)
+
+#         for ep in range(episodes):
+#             state = getStringRepresentation(inputState)
+#             self.visited.add(state)
+#             episode_path = [state]
+#             parent = {}
+#             total_reward = 0
+
+#             for step in range(max_steps):
+#                 self.counter += 1
+#                 valid_moves = [str(i) for i in range(4) if str(i) in getChildren(state)]
+#                 if not valid_moves:
+#                     break
+
+#                 action = self.choose_action(state, valid_moves)
+#                 next_state = getChildren(state).get(action, state)
+
+#                 self.visited.add(next_state)
+#                 episode_path.append(next_state)
+#                 parent[next_state] = (state, action)
+
+#                 # Tính khoảng cách Manhattan sử dụng cache
+#                 if state not in self.distance_cache:
+#                     state_array = np.array([int(c) for c in state.split(',')])
+#                     self.distance_cache[state] = manhattan_distance(state_array, goalState)
+#                 if next_state not in self.distance_cache:
+#                     next_state_array = np.array([int(c) for c in next_state.split(',')])
+#                     self.distance_cache[next_state] = manhattan_distance(next_state_array, goalState)
+
+#                 current_distance = self.distance_cache[state]
+#                 next_distance = self.distance_cache[next_state]
+
+#                 # Tính phần thưởng
+#                 reward = 100 if goalTest(next_state, goal_state_str) else (current_distance - next_distance) * 10
+
+#                 # Cập nhật Q-table
+#                 next_valid_moves = [str(i) for i in range(4) if str(i) in getChildren(next_state)]
+#                 max_q_next = max([self.Q_table[next_state][a] for a in next_valid_moves], default=0)
+#                 self.Q_table[state][action] += self.alpha * (reward + self.gamma * max_q_next - self.Q_table[state][action])
+
+#                 total_reward += reward
+
+#                 if goalTest(next_state, goal_state_str):
+#                     if len(episode_path) < self.best_path_length:
+#                         self.best_path = episode_path
+#                         self.best_path_length = len(episode_path)
+#                     self.path = episode_path
+#                     self.cost = len(episode_path) - 1
+#                     self.depth = len(episode_path) - 1
+#                     print(f"Episode {ep + 1}: Solved in {len(episode_path) - 1} steps")
+#                     break
+
+#                 state = next_state
+
+#             if ep % 100 == 0:
+#                 print(f"Episode {ep + 1}/{episodes}, Epsilon: {self.epsilon:.3f}")
+
+#             self.epsilon = max(self.epsilon_end, self.epsilon - epsilon_decay)
+
+#             if self.best_path and len(self.best_path) <= 31:
+#                 break
+
+#         # Nếu không tìm thấy đường đi, thử xây dựng từ Q-table
+#         if not self.best_path:
+#             state = getStringRepresentation(inputState)
+#             path = [state]
+#             for _ in range(max_steps):
+#                 if goalTest(state, goal_state_str):
+#                     break
+#                 valid_moves = [str(i) for i in range(4) if str(i) in getChildren(state)]
+#                 if not valid_moves:
+#                     break
+#                 action = self.choose_action(state, valid_moves)
+#                 state = getChildren(state).get(action, state)
+#                 path.append(state)
+#             self.best_path = path
+#             self.path = path
+#             self.cost = len(path) - 1
+#             self.depth = len(path) - 1
+
+#         self.time_taken = time.time() - start_time
+#         return self.best_path, self.cost, self.counter, self.depth, self.time_taken
+
 import numpy as np
 from collections import defaultdict
 import random
 import time
+from algorithms.common import goalTest, getPath, getChildren, getStringRepresentation, manhattanDistance
 
-# Lớp 8-Puzzle
-class EightPuzzle:
-    def __init__(self, difficulty=10):
-        self.n = 3  # Kích thước 3x3
-        self.goal = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]])  # Trạng thái mục tiêu
-        self.board = self._generate_puzzle(difficulty)
-        self.actions = [0, 1, 2, 3]  # 0: right, 1: up, 2: left, 3: down
-
-    def _generate_puzzle(self, difficulty):
-        # Bắt đầu từ trạng thái mục tiêu và tráo ngẫu nhiên
-        board = self.goal.copy()
-        for _ in range(difficulty):
-            valid_moves = self._get_valid_moves(board)
-            action = random.choice(valid_moves)
-            board = self._move(board, action)
-        return board
-
-    def _get_blank_position(self):
-        return np.where(self.board == 0)
-
-    def _get_valid_moves(self, board):
-        i, j = self._get_blank_position()
-        valid = []
-        if i > 0: valid.append(1)  # up
-        if i < self.n - 1: valid.append(3)  # down
-        if j > 0: valid.append(2)  # left
-        if j < self.n - 1: valid.append(0)  # right
-        return valid
-
-    def _move(self, board, action):
-        i, j = self._get_blank_position()
-        new_board = board.copy()
-        if action == 0 and j < self.n - 1:  # right
-            new_board[i, j], new_board[i, j + 1] = new_board[i, j + 1], new_board[i, j]
-        elif action == 1 and i > 0:  # up
-            new_board[i, j], new_board[i - 1, j] = new_board[i - 1, j], new_board[i, j]
-        elif action == 2 and j > 0:  # left
-            new_board[i, j], new_board[i, j - 1] = new_board[i, j - 1], new_board[i, j]
-        elif action == 3 and i < self.n - 1:  # down
-            new_board[i, j], new_board[i + 1, j] = new_board[i + 1, j], new_board[i, j]
-        return new_board
-
-    def move(self, action):
-        valid_moves = self._get_valid_moves(self.board)
-        if action not in valid_moves:
-            return -1000  # Phạt nặng nếu di chuyển không hợp lệ
-        self.board = self._move(self.board, action)
-        return 100 if np.array_equal(self.board, self.goal) else -1  # Phần thưởng: 100 nếu thắng, -1 nếu không
-
-    def get_state(self):
-        return tuple(self.board.flatten())  # Chuyển trạng thái thành tuple để làm khóa
-
-    def is_goal(self):
-        return np.array_equal(self.board, self.goal)
-
-# Lớp Q-Learning với Q-table
 class QLearning:
-    def __init__(self, alpha=0.1, gamma=0.9, epsilon=0.1):
-        self.Q_table = defaultdict(lambda: [0.0] * 4)  # Q-table với giá trị mặc định [0, 0, 0, 0]
+    def __init__(self, alpha=0.1, gamma=0.95, epsilon_start=1.0, epsilon_end=0.01):
+        self.Q_table = defaultdict(lambda: defaultdict(float))  # Q-table với giá trị mặc định
         self.alpha = alpha  # Tốc độ học
         self.gamma = gamma  # Hệ số chiết khấu
-        self.epsilon = epsilon  # Tỷ lệ khám phá
+        self.epsilon = epsilon_start  # Tỷ lệ khám phá ban đầu
+        self.epsilon_end = epsilon_end
         self.counter = 0  # Số trạng thái đã thăm
         self.path = []  # Đường đi
         self.cost = 0  # Chi phí (số bước)
         self.depth = 0  # Độ sâu
         self.time_taken = 0  # Thời gian thực hiện
+        self.visited = set()  # Tập hợp các trạng thái đã thăm
+        self.best_path = None  # Đường đi tốt nhất
+        self.best_path_length = float('inf')
+        self.distance_cache = {}  # Cache cho khoảng cách Manhattan
 
     def choose_action(self, state, valid_moves):
         if random.random() < self.epsilon:
-            return random.choice(valid_moves)  # Khám phá: chọn ngẫu nhiên
-        else:
-            q_values = self.Q_table[state]
-            return max(range(4), key=lambda i: q_values[i] if i in valid_moves else -float('inf'))  # Khai thác
+            return random.choice(valid_moves)  # Khám phá
+        q_vals = [self.Q_table[state][a] for a in valid_moves]
+        return valid_moves[q_vals.index(max(q_vals))]  # Khai thác
 
-    def train(self, episodes=1000, max_steps=100):
+    def train(self, inputState, episodes=5000, max_steps=50):
         start_time = time.time()
-        for episode in range(episodes):
-            puzzle = EightPuzzle(difficulty=10)
-            state = puzzle.get_state()
-            steps = 0
-            done = False
+        epsilon_decay = (self.epsilon - self.epsilon_end) / episodes
 
-            while not done and steps < max_steps:
+        for ep in range(episodes):
+            state = getStringRepresentation(inputState)
+            self.visited.add(state)
+            episode_path = [state]
+            parent = {}
+            total_reward = 0
+
+            for step in range(max_steps):
                 self.counter += 1
-                valid_moves = puzzle._get_valid_moves(puzzle.board)
-                action = self.choose_action(state, valid_moves)
+                valid_moves = [str(i) for i in range(4) if str(i) in getChildren(state)]
+                if not valid_moves:
+                    break
 
-                # Thực hiện hành động
-                reward = puzzle.move(action)
-                next_state = puzzle.get_state()
-                done = puzzle.is_goal()
+                action = self.choose_action(state, valid_moves)
+                next_state = getChildren(state).get(action, state)
+
+                self.visited.add(next_state)
+                episode_path.append(next_state)
+                parent[next_state] = (state, action)
+
+                # Tính khoảng cách Manhattan sử dụng cache
+                if state not in self.distance_cache:
+                    self.distance_cache[state] = manhattanDistance(state)
+                if next_state not in self.distance_cache:
+                    self.distance_cache[next_state] = manhattanDistance(next_state)
+
+                current_distance = self.distance_cache[state]
+                next_distance = self.distance_cache[next_state]
+
+                # Tính phần thưởng
+                reward = 100 if goalTest(next_state) else (current_distance - next_distance) * 10
 
                 # Cập nhật Q-table
-                old_value = self.Q_table[state][action]
-                next_max = max(self.Q_table[next_state]) if not done else 0
-                new_value = old_value + self.alpha * (reward + self.gamma * next_max - old_value)
-                self.Q_table[state][action] = new_value
+                next_valid_moves = [str(i) for i in range(4) if str(i) in getChildren(next_state)]
+                max_q_next = max([self.Q_table[next_state][a] for a in next_valid_moves], default=0)
+                self.Q_table[state][action] += self.alpha * (reward + self.gamma * max_q_next - self.Q_table[state][action])
+
+                total_reward += reward
+
+                if goalTest(next_state):
+                    if len(episode_path) < self.best_path_length:
+                        self.best_path = episode_path
+                        self.best_path_length = len(episode_path)
+                    self.path = episode_path
+                    self.cost = len(episode_path) - 1
+                    self.depth = len(episode_path) - 1
+                    print(f"Episode {ep + 1}: Solved in {len(episode_path) - 1} steps")
+                    break
 
                 state = next_state
-                steps += 1
 
-                if done:
-                    self.path = self._reconstruct_path(state)  # Xây dựng đường đi
-                    self.cost = steps
-                    self.depth = steps
-                    print(f"Episode {episode + 1}: Solved in {steps} steps")
+            if ep % 100 == 0:
+                print(f"Episode {ep + 1}/{episodes}, Epsilon: {self.epsilon:.3f}")
 
-            if episode % 100 == 0:
-                print(f"Episode {episode + 1}/{episodes}, Epsilon: {self.epsilon}")
+            self.epsilon = max(self.epsilon_end, self.epsilon - epsilon_decay)
 
-            # Giảm epsilon dần
-            if self.epsilon > 0.01:
-                self.epsilon *= 0.995
-
-        self.time_taken = time.time() - start_time
-        return self.path, self.cost, self.counter, self.depth, self.time_taken
-
-    def _reconstruct_path(self, final_state):
-        # (Giả định đơn giản: chỉ in đường đi từ trạng thái ban đầu đến cuối)
-        # Trong thực tế, cần lưu lịch sử trạng thái và hành động
-        return [tuple(self.goal.flatten()), final_state]  # Cần cải tiến để theo dõi đường đi thực tế
-
-    def test(self):
-        puzzle = EightPuzzle(difficulty=10)
-        state = puzzle.get_state()
-        steps = 0
-        done = False
-
-        print("Initial State:")
-        self._print_board(puzzle.board)
-        while not done and steps < 50:
-            valid_moves = puzzle._get_valid_moves(puzzle.board)
-            action = self.choose_action(state, valid_moves)
-            reward = puzzle.move(action)
-            next_state = puzzle.get_state()
-            done = puzzle.is_goal()
-
-            print(f"Step {steps + 1}, Action: {action}")
-            self._print_board(puzzle.board)
-            if done:
-                print(f"Solved in {steps + 1} steps with reward {reward}")
-            elif reward == -1000:
-                print("Invalid move, stopping.")
+            if self.best_path and len(self.best_path) <= 31:
                 break
 
-            state = next_state
-            steps += 1
+        # Nếu không tìm thấy đường đi, thử xây dựng từ Q-table
+        if not self.best_path:
+            state = getStringRepresentation(inputState)
+            path = [state]
+            for _ in range(max_steps):
+                if goalTest(state):
+                    break
+                valid_moves = [str(i) for i in range(4) if str(i) in getChildren(state)]
+                if not valid_moves:
+                    break
+                action = self.choose_action(state, valid_moves)
+                state = getChildren(state).get(action, state)
+                path.append(state)
+            self.best_path = path
+            self.path = path
+            self.cost = len(path) - 1
+            self.depth = len(path) - 1
 
-        if not done:
-            print("Failed to solve within 50 steps.")
-
-    def _print_board(self, board):
-        for row in board:
-            print(" ".join(map(str, row)))
-        print()
-
-# Chạy thử
-if __name__ == "__main__":
-    ql = QLearning(alpha=0.7, gamma=0.9, epsilon=0.1)
-    path, cost, counter, depth, time_taken = ql.train(episodes=1000, max_steps=200)
-    print(f"Training completed. Path: {path}")
-    print(f"Cost: {cost}, Counter: {counter}, Depth: {depth}, Time taken: {time_taken:.2f} seconds")
-    ql.test()
+        self.time_taken = time.time() - start_time
+        memory_size = len(self.Q_table) * 4  # Ước tính kích thước bộ nhớ
+        return self.best_path, self.cost, self.counter, self.depth, self.time_taken, memory_size

@@ -9,9 +9,11 @@ class AStarAlgorithm:
         self.cost = 0
         self.depth = 0
         self.time_taken = 0
+        self.max_pq_size = 0  
+        self.max_visited_size = 0  
 
     def AStar(self, inputState):
-        start_time = time.time()
+        start_time = time.perf_counter()
         pq = []
         visited = {}
         parent = {}
@@ -27,6 +29,13 @@ class AStarAlgorithm:
 
         while pq:
             counter += 1
+
+            if len(pq) > self.max_pq_size:
+                self.max_pq_size = len(pq)
+            
+            if len(visited) > self.max_visited_size:
+                self.max_visited_size = len(visited)
+
             f_cost, curr_cost, state = heapq.heappop(pq)
 
             if state in visited and curr_cost > visited[state]:
@@ -41,7 +50,8 @@ class AStarAlgorithm:
                 self.cost = g_cost[state]
                 self.depth = len(path) - 1
                 self.time_taken = float(time.time() - start_time)
-                return self.path, self.cost, self.counter, self.depth, self.time_taken
+                total_space = self.max_pq_size + self.max_visited_size
+                return self.path, self.cost, self.counter, self.depth, self.time_taken,total_space
 
             children = getChildren(getStringRepresentation(state))
             for child in children:
@@ -56,4 +66,5 @@ class AStarAlgorithm:
                     g_cost[child_int] = new_g_cost
 
         self.time_taken = float(time.time() - start_time)
-        return [], 0, counter, self.depth, self.time_taken
+        total_space = self.max_pq_size + self.max_visited_size
+        return [], 0, counter, self.depth, self.time_taken,total_space
