@@ -41,21 +41,21 @@
 
 ## 2. Nội dung dự án
 
-Dự án **8-Puzzle Visualizer** triển khai bài toán 8-puzzle, một bài toán cổ điển trong Trí tuệ Nhân tạo, với mục tiêu sắp xếp các ô số từ trạng thái ban đầu về trạng thái mục tiêu thông qua việc di chuyển ô trống. Dự án tích hợp **bảy nhóm thuật toán** tìm kiếm, bao gồm:
+Dự án **8-Puzzle Solver with AI Algorithms** triển khai bài toán 8-puzzle, một bài toán cổ điển trong Trí tuệ Nhân tạo, với mục tiêu sắp xếp các ô số từ trạng thái ban đầu về trạng thái mục tiêu thông qua việc di chuyển ô trống. Dự án tích hợp **sáu nhóm thuật toán** tìm kiếm, bao gồm:
 
-- **Tìm kiếm không thông tin (Uninformed Search)**: Các thuật toán dựa trên khám phá mù, không sử dụng hàm heuristic.
-- **Tìm kiếm có thông tin (Informed Search)**: Các thuật toán sử dụng heuristic để hướng dẫn tìm kiếm một cách hiệu quả hơn.
-- **Tìm kiếm cục bộ (Local Search)**: Các thuật toán cải thiện trạng thái dần dần dựa trên hàm đánh giá.
-- **Tìm kiếm không xác định (Non-deterministic Search)**: Các thuật toán xử lý các tình huống không xác định hoặc có nhiều điều kiện phức tạp.
-- **Tìm kiếm có điều kiện ràng buộc (Constraint Satisfaction Problem)**: Các thuật toán giải bài toán bằng cách gán các giá trị thỏa mãn các ràng buộc.
-- **Học tăng cường (Reinforcement Learning)**: Các thuật toán học từ kinh nghiệm để tìm lời giải tối ưu.
-- **Tìm kiếm trong môi trường phức tạp (Complex Environment Search)**: Các thuật toán xử lý các tình huống không xác định hoặc quan sát không đầy đủ.
+- **Tìm kiếm không thông tin (Uninformed Search)**: Các thuật toán khám phá không dựa trên heuristic như BFS, DFS, UCS, và IDS.
+- **Tìm kiếm có thông tin (Informed Search)**: Các thuật toán sử dụng heuristic như Greedy Best-First Search, A*, và IDA*.
+- **Tìm kiếm cục bộ (Local Search)**: Các phương pháp tối ưu cục bộ như Hill Climbing, Stochastic Hill Climbing, Simulated Annealing, Genetic Search, và Beam Search.
+- **Tìm kiếm trong môi trường phức tạp (Complex Environment Search)**: Các thuật toán xử lý tình huống không xác định như AND-OR Search, Partially Observable Search, và No Observation Search.
+- **Tìm kiếm có điều kiện ràng buộc (Constraint Satisfaction Problem)**: Các phương pháp như Constraint Testing, Backtracking CSP, và Backtracking AC-3.
+- **Học tăng cường (Reinforcement Learning)**: Ứngq dụng Q-Learning để học từ kinh nghiệm.
+- **Tích hợp trực quan hóa**: Sử dụng GUI để hiển thị trạng thái ban đầu, quá trình giải, và trạng thái mục tiêu, cùng với các thông số hiệu suất (thời gian chạy, số bước, số trạng thái duyệt).
 
 Mỗi nhóm được trình bày chi tiết với:
 - **Thành phần chính của bài toán**: Mô tả trạng thái, hành động, kiểm tra mục tiêu, và hàm heuristic (nếu có).
 - **Lời giải**: Chuỗi trạng thái và hành động từ trạng thái ban đầu đến mục tiêu.
 - **GIF minh họa**: Hình ảnh động thể hiện quá trình giải của từng thuật toán.
-- **So sánh hiệu suất**: Bảng so sánh ghi lại thời gian thực thi và số lần mở rộng (expansions) để so sánh (cùng trạng thái ban đầu và mục tiêu).
+- **So sánh hiệu suất**: Bảng so sánh thời gian thực thi, số bước, và số trạng thái duyệt của các thuật toán.
 - **Nhận xét**: Phân tích ưu điểm, nhược điểm và hiệu quả khi áp dụng vào bài toán 8-puzzle.
 
 ## 3. Thuật toán
