@@ -1430,7 +1430,7 @@ class GUI:
     def solveAndOrGraphSearch(self):
         and_or_graph_search_solver = and_or_graph_search.AndOrGraphSearchAlgorithm()
         self.path, self.cost, self.counter, self.depth, self.runtime = and_or_graph_search_solver.AndOrGraphSearch(
-            self.initialState
+            self.initialState,123456780
         )
 
     def solveBeliefStateSearch(self):
@@ -1442,7 +1442,7 @@ class GUI:
     def solveQLearning(self):
         q_learning_solver = q_learning.QLearning()
         self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = q_learning_solver.train(
-            self.initialState
+            self.initialState,123456780
         )
 
     
