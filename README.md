@@ -48,7 +48,7 @@ Dự án **8-Puzzle Solver with AI Algorithms** triển khai bài toán 8-puzzle
 - **Tìm kiếm cục bộ (Local Search)**: Các phương pháp tối ưu cục bộ như Hill Climbing, Stochastic Hill Climbing, Simulated Annealing, Genetic Search, và Beam Search.
 - **Tìm kiếm trong môi trường phức tạp (Complex Environment Search)**: Các thuật toán xử lý tình huống không xác định như AND-OR Search, Partially Observable Search, và No Observation Search.
 - **Tìm kiếm có điều kiện ràng buộc (Constraint Satisfaction Problem)**: Các phương pháp như Constraint Testing, Backtracking CSP, và Backtracking AC-3.
-- **Học tăng cường (Reinforcement Learning)**: Ứngq dụng Q-Learning để học từ kinh nghiệm.
+- **Học tăng cường (Reinforcement Learning)**: Ứng dụng Q-Learning để học từ kinh nghiệm.
 - **Tích hợp trực quan hóa**: Sử dụng GUI để hiển thị trạng thái ban đầu, quá trình giải, và trạng thái mục tiêu, cùng với các thông số hiệu suất (thời gian chạy, số bước, số trạng thái duyệt).
 
 Mỗi nhóm được trình bày chi tiết với:
@@ -60,9 +60,19 @@ Mỗi nhóm được trình bày chi tiết với:
 
 ## 3. Thuật toán
 
-Dự án triển khai một loạt thuật toán AI đa dạng, được phân loại thành bảy nhóm chính:
+Dự án triển khai một loạt thuật toán AI đa dạng, được phân loại thành sáu nhóm chính:
 
 ### 3.1. Tìm kiếm không thông tin (Uninformed Search)
+
+#### Thành phân chính của bài toán
+- **Trạng thái**: Một tuple 9 phần tử được hiển thị dưới dạng 3x3, với các số hợp lệ từ 0 - 8 (0 là ô trống).
+- **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
+- **Kiểm tra mục tiêu**: So sánh trạng thái hiện tại với trạng thái mục tiêu, thường là: (1, 2, 3, 4, 5, 6, 7, 8, 0).
+- **Hàm chi phí**: Mỗi hành động di chuyển có chi phí là 1.
+- **Đặc điểm**: Không sử dụng hàm heuristic, dựa hoàn toàn vàokhông gian trạng thái.
+
+#### Lời giải
+- Lời giải là một danh sách các trạng thái, biểu diễn chuỗi các bước di chuyển hợp lệ từ trạng thái ban đầu đến trạng thái mục tiêu.Trong mỗi thuật toán, nếu tìm thấy trạng thái mục tiêu, kết quả trả về sẽ bao gồm đường đi và số trạng thái đã duyệt qua. Nếu không tìm thấy, kết quả sẽ là danh sách rỗng
 
 #### 3.1.1. Breadth-First Search (BFS)
 - **Mô tả**: BFS (Tìm kiếm theo chiều rộng) khám phá tất cả các trạng thái theo từng cấp độ độ sâu, từ trạng thái ban đầu đến trạng thái mục tiêu, sử dụng hàng đợi (queue).
