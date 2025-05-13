@@ -13,13 +13,15 @@
    3.2. [Tìm kiếm có thông tin (Informed Search)](#32-tìm-kiếm-có-thông-tin-informed-search)  
       3.2.1. [Greedy Best-First Search](#321-greedy-best-first-search)  
       3.2.2. [A* Search](#322-a-search)  
-      3.2.3. [Iterative Deepening A* (IDA*)](#323-iterative-deepening-a-ida)  
+      3.2.3. [Iterative Deepening A* (IDA*)](#323-iterative-deepening-a-ida)
+      3.2.4. [So sánh các thuật toán Informed Search](#324-so-sánh-các-thuật-toán-informed-search)  
    3.3. [Tìm kiếm cục bộ (Local Search)](#33-tìm-kiếm-cục-bộ-local-search)  
       3.3.1. [Simple Hill Climbing](#331-simple-hill-climbing)  
       3.3.2. [Stochastic Hill Climbing](#332-stochastic-hill-climbing)  
       3.3.3. [Simulated Annealing](#333-simulated-annealing)  
       3.3.4. [Genetic Search](#334-genetic-search)  
       3.3.5. [Beam Search](#335-beam-search)  
+      3.3.5. [So sánh các thuật toán Local Search](#336-so-sánh-các-thuật-toán-local-search)  
    3.4. [Tìm kiếm trong môi trường phức tạp (Complex Environment Search)](#34-tìm-kiếm-trong-môi-trường-phức-tạp-complex-environment-search)  
       3.4.1. [Partially Observable Search](#341-partially-observable-search)  
       3.4.2. [No Observation Search](#342-no-observation-search)  
@@ -64,7 +66,7 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 
 ### 3.1. Tìm kiếm không thông tin (Uninformed Search)
 
-#### Thành phân chính của bài toán
+#### Thành phần chính của bài toán
 - **Trạng thái**: Một tuple 9 phần tử được hiển thị dưới dạng 3x3, với các số hợp lệ từ 0 - 8 (0 là ô trống).
 - **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
 - **Kiểm tra mục tiêu**: So sánh trạng thái hiện tại với trạng thái mục tiêu, thường là: (1, 2, 3, 4, 5, 6, 7, 8, 0).
@@ -153,6 +155,19 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 
 ### 3.2. Tìm kiếm có thông tin (Informed Search)
 
+#### Thành phần chính của bài toán
+- **Trạng thái**: Một tuple 9 phần tử được hiển thị dưới dạng 3x3, với các số hợp lệ từ 0 - 8 (0 là ô trống).
+- **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
+- **Kiểm tra mục tiêu**: So sánh trạng thái hiện tại với trạng thái mục tiêu, thường là: (1, 2, 3, 4, 5, 6, 7, 8, 0).
+- **Hàm heuristic**: Sử dụng **Mahattan Distance** để đánh giá, cung cấp thông tin để ước tính "độ gần" từ trạng thái hiện tại đến trạng thái mục tiêu.
+- **Hàm chi phí**: Mỗi hành động di chuyển có chi phí là 1.
+- **Đặc điểm**: Sử dụng hàm heuristic để hướng dẫn tìm kiếm không gian trạng thái.
+
+##### Lời giải
+- Lời giải là một danh sách các trạng thái tối ưu, dựa trên tổng chi phí đường đi g(n) và giá trị heuristic h(n).
+    - Greedy chỉ sử dụng chi phí ước lượng => f(n) = h(n)
+    - A* và IDA* sử dụng chi phí thực sự và chi phí ước lượng => f(n) = g(n) + h(n)
+
 #### 3.2.1. Greedy Best-First Search
 - **Mô tả**: Chọn trạng thái có giá trị heuristic thấp nhất để mở rộng, sử dụng hàng đợi ưu tiên.
 - **Phân tích lý thuyết**:
@@ -205,7 +220,26 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Hình ảnh minh họa**: ![GIF mô tả IDA*](assets/gif_solve/IDAStar.gif)
 - **Liên kết**: [GeeksforGeeks - Iterative Deepening A*](https://www.geeksforgeeks.org/iterative-deepening-a-algorithm-ida-artificial-intelligence/)
 
+#### 3.2.4. So sánh các thuật toán Informed Search
+- **Hình ảnh so sánh hiệu suất**: ![So sánh hiệu suất Informed Search](assets/InformedSearch.jpg)
+
 ### 3.3. Tìm kiếm cục bộ (Local Search)
+
+### Thành phần chính của bài toán
+- **Trạng thái**: Một tuple 9 phần tử được hiển thị dưới dạng 3x3, với các số hợp lệ từ 0 - 8 (0 là ô trống).
+- **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
+- **Kiểm tra mục tiêu**: So sánh trạng thái hiện tại với trạng thái mục tiêu, thường là: (1, 2, 3, 4, 5, 6, 7, 8, 0).
+- **Hàm heuristic**: Sử dụng **Mahattan Distance** để đánh giá, cung cấp thông tin để ước tính "độ gần" từ trạng thái hiện tại đến trạng thái mục tiêu.
+- **Hàm chi phí**: Mỗi hành động di chuyển có chi phí là 1.
+- **Đặc điểm**
+    - Simple Hill Climbing chọn trạng thái lân cận đầu tiên có giá trị heuristic thấp hơn trạng thái hiện tại.
+    - Stochastic Hill Climbing chọn ngẫu nhiên một trạng thái lân cận tốt hơn (heuristic thấp hơn) để mở rộng.
+    - Simulated Annealing chấp nhận trạng thái tệ hơn với xác suất giảm dần theo nhiệt độ, giúp thoát khỏi cực trị cục bộ.
+    - Genetic Algorithm sử dụng quần thể trạng thái, áp dụng lai ghép và đột biến để tạo ra trạng thái tốt hơn qua các thế hệ.
+    - Beam Search giữ lại một số lượng cố định (beam_width) trạng thái tốt nhất ở mỗi bước, thay vì mở rộng toàn bộ trạng thái lân cận (f(n) = g(n) + h(n)).
+
+#### Lời giải
+- Lời giải là một chuỗi các trạng thái, mỗi trạng thái cải thiện giá trị hàm đánh giá so với trạng thái trước, dẫn đến trạng thái mục tiêu.
 
 #### 3.3.1. Simple Hill Climbing
 - **Mô tả**: Chọn trạng thái con có heuristic tốt hơn trạng thái hiện tại.
@@ -219,8 +253,9 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Độ phức tạp**:
   - **Thời gian**: Phụ thuộc vào số lần lặp.
   - **Bộ nhớ**: \( O(1) \).
-- **Hình ảnh minh họa**: ![GIF mô tả Hill Climbing](assets/gif_solve/HillClimbing.gif)
+- **Hình ảnh minh họa**: ![GIF mô tả Hill Climbing](assets/gif_solve/SimpleHillClimbing.gif)
 - **Liên kết**: [GeeksforGeeks - Hill Climbing](https://www.geeksforgeeks.org/introduction-hill-climbing-artificial-intelligence/)
+- **Nhận xét**: Đối với bài toán 8 puzzle không gian trạng thái lớn, thuật toán Simple Hill Climbing dễ bị mắc kẹt, rơi vào cực tiểu. Nên chỉ phù hợp với những bài toán đơn giản và không gian trạng thái nhỏ.
 
 #### 3.3.2. Stochastic Hill Climbing
 - **Mô tả**: Chọn trạng thái con ngẫu nhiên, ưu tiên trạng thái tốt hơn.
@@ -236,6 +271,7 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - **Bộ nhớ**: \( O(1) \).
 - **Hình ảnh minh họa**: ![GIF mô tả Stochastic Hill Climbing](assets/gif_solve/StochasticHillClimbing.gif)
 - **Liên kết**: [Wikipedia - Stochastic Hill Climbing](https://en.wikipedia.org/wiki/Hill_climbing#Variants)
+- **Nhận xét**: Cũng tương tự Simple Hill Climbing, thuật toán Stochastic Hill Climbing dễ bị mắc kẹt, rơi vào cực tiểu. Nên chỉ phù hợp với những bài toán đơn giản và không gian trạng thái nhỏ.
 
 #### 3.3.3. Simulated Annealing
 - **Mô tả**: Chấp nhận trạng thái con tệ hơn với xác suất giảm dần, mô phỏng làm nguội kim loại.
@@ -251,6 +287,7 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - **Bộ nhớ**: \( O(1) \).
 - **Hình ảnh minh họa**: ![GIF mô tả Simulated Annealing](assets/gif_solve/SimulatedAnnealing.gif)
 - **Liên kết**: [Wikipedia - Simulated Annealing](https://en.wikipedia.org/wiki/Simulated_annealing)
+- **Nhận xét**: Thuật toán này rất phù hợp với bài toán 8 Puzzle nhờ khả năng thoát khỏi cực tiểu địa phương.
 
 #### 3.3.4. Genetic Search
 - **Mô tả**: Mô phỏng tiến hóa sinh học, sử dụng quần thể giải pháp, lai ghép, và đột biến.
@@ -267,6 +304,7 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - **Bộ nhớ**: \( O(P.L) \), với \( L \) là độ dài chromosome.
 - **Hình ảnh minh họa**: ![GIF mô tả Genetic Search](assets/gif_solve/GeneticSearch.gif)
 - **Liên kết**: [GeeksforGeeks - Genetic Algorithms](https://www.geeksforgeeks.org/genetic-algorithms/)
+- **Nhận xét**: Thuật toán này rất phù hợp với bài toán 8 Puzzle nhờ khả năng thoát khỏi cực tiểu địa phương.
 
 #### 3.3.5. Beam Search
 - **Mô tả**: Giới hạn số trạng thái giữ lại tại mỗi bước (beam width), chọn \( k \) trạng thái tốt nhất dựa trên heuristic.
@@ -287,7 +325,20 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Liên kết**: [GeeksforGeeks - Beam Search](https://www.geeksforgeeks.org/introduction-to-beam-search-algorithm/)
 - **Nhận xét**: Beam Search phù hợp khi cần cân bằng giữa tốc độ và chất lượng, nhưng không đảm bảo giải pháp tối ưu trong 8-puzzle.
 
+### 3.3.6. So sánh các thuật toán Local Search
+- **Hình ảnh so sánh hiệu suất**: ![So sánh hiệu suất Local Search](assets/LocalSearch.jpg)
+
 ### 3.4. Tìm kiếm trong môi trường phức tạp (Complex Environment Search)
+
+### Thành phần chính của bài toán
+- **Trạng thái**: Một tập hợp các trạng thái (belief state), biểu diễn tất cả trạng thái có thể của bài toán. Ví dụ tập: {(1,2,3,4,5,6,0,7,8); (1,2,3,4,5,6,7,0,8)}
+- **Hành động**: Di chuyển ô trống, áp dụng đồng thời cho tất cả trạng thái trong tập hợp.
+- **Kiểm tra mục tiêu**: Ít nhất một trạng thái trong tập hợp ban đầu khớp với một trạng thái mục tiêu, ví dụ: (1, 2, 3, 4, 5, 6, 7, 8, 0).
+- **Đặc điểm**: Môi trường không xác định hoặc quan sát không đầy đủ, yêu cầu xử lý nhiều trạng thái cùng lúc.
+    - Search with No Observation & Search with Partial Observation cần đầu vào một tập trạng thái.
+    - AND-OR Search đầu vào chỉ cần 1 trạng thái.
+#### Lời giải
+- Lời giải là một chuỗi các hành động dẫn tập hợp trạng thái ban đầu đến tập hợp chứa trạng thái mục tiêu.
 
 #### 3.4.1. AND-OR Search Algorithm
 - **Mô tả**: Xử lý bài toán với nhánh AND/OR, xây dựng cây tìm kiếm thỏa mãn điều kiện phức tạp.

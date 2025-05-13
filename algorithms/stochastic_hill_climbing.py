@@ -9,6 +9,7 @@ class StochasticHillClimbingAlgorithm:
         self.cost = 0
         self.depth = 0
         self.time_taken = 0
+        self.max_visited_size = 0
 
     def StochasticHillClimbing(self, inputState):
         start_time = time.time()
@@ -22,6 +23,8 @@ class StochasticHillClimbingAlgorithm:
         while True:
             counter += 1
             visited.add(current_state)
+            if len(visited) > self.max_visited_size:
+                self.max_visited_size = len(visited)
 
             if goalTest(current_state):
                 path = getPath(parent, integer_state)
@@ -30,7 +33,7 @@ class StochasticHillClimbingAlgorithm:
                 self.cost = len(path) - 1  
                 self.depth = len(path) - 1 
                 self.time_taken = float(time.time() - start_time)
-                return self.path, self.cost, self.counter, self.depth, self.time_taken
+                return self.path, self.cost, self.counter, self.depth, self.time_taken,self.max_visited_size
 
             children = getChildren(getStringRepresentation(current_state))
             better_children = []
@@ -47,7 +50,7 @@ class StochasticHillClimbingAlgorithm:
                 self.counter = counter
                 self.depth = depth
                 self.time_taken = float(time.time() - start_time)
-                return [], 0, self.counter, self.depth, self.time_taken
+                return [], 0, self.counter, self.depth, self.time_taken,self.max_visited_size
 
             next_state = random.choice(better_children)
             parent[next_state] = current_state

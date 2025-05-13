@@ -9,6 +9,7 @@ class BeamSearchAlgorithm:
         self.cost = 0
         self.depth = 0
         self.time_taken = 0
+        self.max_memory = 0
 
     def BeamSearch(self, inputState, beam_width=2):
         start_time = time.time()
@@ -18,6 +19,8 @@ class BeamSearchAlgorithm:
         parent = {}
         parent_depth = {integer_state: 0}
         counter = 0
+
+        self.max_memory = len(pq) + len(visited) + len(parent) + len(parent_depth)
 
         while pq:
             counter += 1
@@ -43,7 +46,8 @@ class BeamSearchAlgorithm:
                     self.cost = len(path) - 1
                     self.depth = len(path) - 1
                     self.time_taken = float(time.time() - start_time)
-                    return self.path, self.cost, self.counter, self.depth, self.time_taken
+                    self.max_memory = max(self.max_memory, len(pq) + len(visited) + len(parent) + len(parent_depth))
+                    return self.path, self.cost, self.counter, self.depth, self.time_taken,self.max_memory
                 
                 children = getChildren(getStringRepresentation(state))
                 next_beam = []
@@ -58,7 +62,10 @@ class BeamSearchAlgorithm:
                 next_beam.sort()
                 for h_cost, new_depth, child_int in next_beam[:beam_width]:
                     heapq.heappush(pq, (h_cost, new_depth, child_int))
+                
+                self.max_memory = max(self.max_memory, len(pq) + len(visited) + len(parent) + len(parent_depth))
 
         self.counter = counter
         self.time_taken = float(time.time() - start_time)
-        return [], 0, self.counter, self.depth, self.time_taken
+        self.max_memory = max(self.max_memory, len(pq) + len(visited) + len(parent) + len(parent_depth))
+        return [], 0, self.counter, self.depth, self.time_taken,self.max_memory

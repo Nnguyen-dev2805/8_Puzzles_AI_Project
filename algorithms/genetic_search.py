@@ -9,6 +9,7 @@ class GeneticAlgorithm:
         self.path = []
         self.cost = 0
         self.depth = 0
+        self.max_memory = 0
 
     @staticmethod
     def is_solvable(state):
@@ -90,7 +91,8 @@ class GeneticAlgorithm:
                 self.path = chromosome_map[self.solution]
                 self.cost = len(self.path) - 1
                 self.depth = self.cost
-                return self.path, self.cost, self.depth, self.counter, self.time_taken
+                self.max_memory = max(self.max_memory, len(chromosome_map) + sum(len(v) for v in chromosome_map.values()))
+                return self.path, self.cost, self.depth, self.counter, self.time_taken,self.max_memory
 
             # Cập nhật fitness tốt nhất
             current_best_fitness = fitness(population[0])
@@ -131,6 +133,9 @@ class GeneticAlgorithm:
                 if child not in chromosome_map:
                     chromosome_map[child] = chromosome_map[parent1] + [child]
 
+                self.max_memory = max(self.max_memory, len(chromosome_map) + sum(len(v) for v in chromosome_map.values()))
+
+
             # loại bỏ trùng lặp và đảm bảo kích thước quần thể
             seen = set()
             population = []
@@ -144,6 +149,7 @@ class GeneticAlgorithm:
                     seen.add(individual)
                     population.append(individual)
                     chromosome_map[individual] = [individual]
+                self.max_memory = max(self.max_memory, len(chromosome_map) + sum(len(v) for v in chromosome_map.values()))
 
         # trả về cá thể tốt nhất nếu không tìm được giải pháp
         self.time_taken = time.perf_counter() - start_time
@@ -152,5 +158,7 @@ class GeneticAlgorithm:
             self.path = chromosome_map[self.solution]
             self.cost = len(self.path) - 1
             self.depth = self.cost
-            return self.path, self.cost, self.depth, self.counter, self.time_taken
-        return [], 0, 0, self.counter, self.time_taken
+            self.max_memory = max(self.max_memory, len(chromosome_map) + sum(len(v) for v in chromosome_map.values()))
+            return self.path, self.cost, self.depth, self.counter, self.time_taken,self.max_memory
+        self.max_memory = max(self.max_memory, len(chromosome_map) + sum(len(v) for v in chromosome_map.values()))
+        return [], 0, 0, self.counter, self.time_taken,self.max_memory

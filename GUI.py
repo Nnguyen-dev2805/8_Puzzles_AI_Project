@@ -166,15 +166,15 @@ class GUI:
                 "Iterative Deepening",
                 "Greed Best First Search",
                 "A*",
-                "IDA*",
-                "Beam Search",
+                "IDA*",    
                 "Simple Hill Climbing",
                 "Stochastic Hill Climbing",
                 "Simulated Annealing",                
                 "Genetic Search",
+                "Beam Search",
                 "AND OR Graph Search",
                 "Belief State Search",
-                "QLearning"
+                "QLearning",
             ),
         )
         self.algorithmbox.place(anchor="center", height=30, width=150, x=910, y=330)
@@ -1381,49 +1381,49 @@ class GUI:
     
     def solveGreedBestFirstSearch(self):
         best_first_solver = greed_best_first_search.GreedBestFirstSearchAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = best_first_solver.BestFirstSearch(
+        self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = best_first_solver.BestFirstSearch(
             self.initialState
         )
     
     def solveAStar(self):
         astar_solver = astar.AStarAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = astar_solver.AStar(
+        self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = astar_solver.AStar(
             self.initialState
         )
     
     def solveIDAStar(self):
         ida_star_solver = idastar.IDAStarAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = ida_star_solver.IDAStar(
+        self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = ida_star_solver.IDAStar(
             self.initialState
         )
     
     def solveSimpleHillClimbing(self):
         simple_hill_climbing_solver = simple_hill_climbing.SimpleHillClimbingAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = simple_hill_climbing_solver.SimpleHillClimbing(
+        self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = simple_hill_climbing_solver.SimpleHillClimbing(
             self.initialState
         )
     
     def solveStochasticHillClimbing(self):
         stochastic_hill_climbing_solver = stochastic_hill_climbing.StochasticHillClimbingAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = stochastic_hill_climbing_solver.StochasticHillClimbing(
+        self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = stochastic_hill_climbing_solver.StochasticHillClimbing(
             self.initialState
         )
 
     def solveSimulatedAnnealing(self):
         simulated_annealing_solver = simulated_annealing.SimulatedAnnealingAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = simulated_annealing_solver.SimulatedAnnealing(
+        self.path, self.cost, self.counter, self.depth, self.runtim,self.memory_size = simulated_annealing_solver.SimulatedAnnealing(
             self.initialState
         )
 
     def solveBeamSearch(self):
         beam_search_solver = beam_search.BeamSearchAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = beam_search_solver.BeamSearch(
+        self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size= beam_search_solver.BeamSearch(
             self.initialState
         )
     
     def solveGeneticSearch(self):
         genetic_search_solver = genetic_search.GeneticAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = genetic_search_solver.GeneticSearch(
+        self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = genetic_search_solver.GeneticSearch(
             self.initialState
         )
     

@@ -85,6 +85,7 @@ class SimulatedAnnealingAlgorithm:
         self.cost = 0
         self.depth = 0
         self.time_taken = 0
+        self.max_memory = 0
 
     def SimulatedAnnealing(self, inputState):
         start_time = time.time()
@@ -108,7 +109,8 @@ class SimulatedAnnealingAlgorithm:
                 self.cost = len(path) - 1
                 self.depth = len(path) - 1
                 self.time_taken = float(time.time() - start_time)
-                return self.path, self.cost, self.counter, self.depth, self.time_taken
+                self.max_memory = max(self.max_memory, len(parent))
+                return self.path, self.cost, self.counter, self.depth, self.time_taken,self.max_memory
             
             children = getChildren(getStringRepresentation(current_state))
             if not children:
@@ -122,8 +124,10 @@ class SimulatedAnnealingAlgorithm:
                 parent[next_state] = current_state
                 current_state = next_state
                 current_heuristic = next_heuristic
+                self.max_memory = max(self.max_memory, len(parent))
 
             temperature *= cooling_rate
         self.counter = counter
         self.time_taken = float(time.time() - start_time)
-        return [], 0, self.counter, self.depth, self.time_taken
+        self.max_memory = max(self.max_memory, len(parent))
+        return [], 0, self.counter, self.depth, self.time_taken,self.max_memory
