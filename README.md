@@ -14,7 +14,7 @@
       3.2.1. [Greedy Best-First Search](#321-greedy-best-first-search)  
       3.2.2. [A* Search](#322-a-search)  
       3.2.3. [Iterative Deepening A* (IDA*)](#323-iterative-deepening-a-ida)
-      3.2.4. [So sánh các thuật toán Informed Search](#324-so-sánh-các-thuật-toán-informed-search)  
+         3.2.4. [So sánh các thuật toán Informed Search](#324-so-sánh-các-thuật-toán-informed-search)  
    3.3. [Tìm kiếm cục bộ (Local Search)](#33-tìm-kiếm-cục-bộ-local-search)  
       3.3.1. [Simple Hill Climbing](#331-simple-hill-climbing)  
       3.3.2. [Stochastic Hill Climbing](#332-stochastic-hill-climbing)  
