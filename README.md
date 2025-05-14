@@ -23,9 +23,9 @@
       3.3.5. [Beam Search](#335-beam-search)  
       3.3.6. [So sánh các thuật toán Local Search](#336-so-sánh-các-thuật-toán-local-search)  
    3.4. [Tìm kiếm trong môi trường phức tạp (Complex Environment Search)](#34-tìm-kiếm-trong-môi-trường-phức-tạp-complex-environment-search)  
-      3.4.1. [Partially Observable Search](#341-partially-observable-search)  
-      3.4.2. [No Observation Search](#342-no-observation-search)  
-      3.4.3. [AND-OR Search Algorithm](#343-and-or-search-algorithm)  
+      3.4.1. [AND-OR Search Algorithm](#341-and-or-search-algorithm)
+      3.4.2. [Partially Observable Search](#342-partially-observable-search) 
+      3.4.3. [No Observation Search](#343-no-observation-search)
    3.5. [Tìm kiếm có điều kiện ràng buộc (Constraint Satisfaction Problem)](#35-tìm-kiếm-có-điều-kiện-ràng-buộc-constraint-satisfaction-problem)  
       3.5.1. [Tìm kiếm kiểm thử (Constraint Testing)](#351-tìm-kiếm-kiểm-thử-constraint-testing)  
       3.5.2. [Backtracking CSP](#352-backtracking-csp)  
@@ -331,9 +331,9 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 ### 3.4. Tìm kiếm trong môi trường phức tạp (Complex Environment Search)
 
 ### Thành phần chính của bài toán
-- **Trạng thái**: Một tập hợp các trạng thái (belief state), biểu diễn tất cả trạng thái có thể của bài toán. Ví dụ tập: {(1,2,3,4,5,6,0,7,8); (1,2,3,4,5,6,7,0,8)}
-- **Hành động**: Di chuyển ô trống, áp dụng đồng thời cho tất cả trạng thái trong tập hợp.
-- **Kiểm tra mục tiêu**: Ít nhất một trạng thái trong tập hợp ban đầu khớp với một trạng thái mục tiêu, ví dụ: (1, 2, 3, 4, 5, 6, 7, 8, 0).
+- **Trạng thái**: Một tuple 9 phần tử được hiển thị dưới dạng 3x3, với các số hợp lệ từ 0 - 8 (0 là ô trống).Với bài toán không quan sát (No Observation) hoặc bài toán xác suất (Partially Observable), không gian trạng thái được mở rộng thành tập hợp các belief states (phân phối xác suất trên các trạng thái vật lý).
+- **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
+- **Kiểm tra mục tiêu**: So sánh trạng thái hiện tại với trạng thái mục tiêu, thường là: (1, 2, 3, 4, 5, 6, 7, 8, 0).Trong No Observation/Partially Observable, trạng thái mục tiêu là tập hợp trạng thái với xác suất cao nhất nằm trong các trạng thái mục tiêu.
 - **Đặc điểm**: Môi trường không xác định hoặc quan sát không đầy đủ, yêu cầu xử lý nhiều trạng thái cùng lúc.
     - Search with No Observation & Search with Partial Observation cần đầu vào một tập trạng thái.
     - AND-OR Search đầu vào chỉ cần 1 trạng thái.
@@ -353,7 +353,7 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Độ phức tạp**:
   - **Thời gian**: \( O(b^d) \).
   - **Bộ nhớ**: \( O(b^d) \).
-- **Hình ảnh minh họa**: ![GIF mô tả AND-OR Search](assets/gif_solve/ANDORSearch.gif)
+- **Hình ảnh minh họa**: ![GIF mô tả AND-OR Search](assets/gif_solve/AndOrSearch.gif)
 - **Liên kết**: [Wikipedia - AND-OR Search](https://en.wikipedia.org/wiki/AND%E2%80%93OR_search_algorithm)
 - **Nhận xét**: AND-OR Search phù hợp cho các bài toán phức tạp, nhưng ít hiệu quả trong 8-puzzle do tính chất xác định của bài toán.
 
@@ -395,6 +395,9 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Nhận xét**: No Observation Search không thực tế cho 8-puzzle, chỉ mang tính lý thuyết.
 
 ### 3.5. Tìm kiếm có điều kiện ràng buộc (Constraint Satisfaction Problem)
+
+
+CHƯA CÓ PHẦN THÀNH PHẦN CHÍNH CỦA BÀI TOÁN
 
 #### 3.5.1. Tìm kiếm kiểm thử (Constraint Testing)
 - **Mô tả**: Kiểm tra các trạng thái của 8-puzzle để đảm bảo thỏa mãn các ràng buộc, như mỗi ô chỉ chứa một số duy nhất và ô trống có thể di chuyển hợp lệ.

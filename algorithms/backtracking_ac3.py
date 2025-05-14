@@ -1,5 +1,6 @@
 import random
 
+# đảm bảo tính nhất quán cung giữa các biến CSP
 def ac3(csp):
     """
     Thuật toán AC-3 để đảm bảo tính nhất quán cung.
@@ -12,6 +13,7 @@ def ac3(csp):
         - (True, domains, ac3_log): Nếu đạt nhất quán cung, trả về True, miền giá trị đã thu hẹp, và log của AC-3.
         - (False, None, ac3_log): Nếu không thể đạt nhất quán cung (miền rỗng), trả về False, None, và log.
     """
+    # khởi tạo hàng đợi tạo danh sách các cung (var1,var2) mà tồn tại ràng buộc giữa chúng
     queue = [(var1, var2) for var1 in csp['variables'] for var2 in csp['variables'] if var1 != var2 and (var1, var2) in csp['constraints']]
     ac3_log = []
     domains = {var: values[:] for var, values in csp['domains'].items()}  # Sao chép miền
@@ -19,6 +21,9 @@ def ac3(csp):
     while queue:
         (xi, xj) = queue.pop(0)
         if revise(csp, xi, xj, domains, ac3_log):
+            # nếu miền xi bị thay đổi (có giá trị bị loại)
+            # nếu miền rỗng => không thể giải được 
+            # ngược lại thêm các cung vào hàng đợi để kiểm tra tính nhất quán 
             if not domains[xi]:
                 ac3_log.append(f"Domain of {xi} became empty, CSP is unsolvable.")
                 return False, None, ac3_log
@@ -26,7 +31,9 @@ def ac3(csp):
                 queue.append((xk, xi))
     
     return True, domains, ac3_log
+    # khi hàng đợi rỗng tất cả các cung đã đạt ARC => tính nhất quán
 
+# kiểm tra xem và sửa miền của biến xi sao cho mọi giá trị x trong miền xi có ít nhất một giá trị y trong miền xj thỏa mãn ràng buộc (xi,xj)
 def revise(csp, xi, xj, domains, ac3_log):
     """
     Hàm REVISE trong AC-3: Sửa miền giá trị của xi dựa trên ràng buộc với xj.
@@ -47,6 +54,11 @@ def revise(csp, xi, xj, domains, ac3_log):
             revised = True
     return revised
 
+# ràng buộc quan hệ x!= y (ALL different) (x==0) cho ô trống tại vị trí nhất định trong goal_state
+# tập hợp tất cả cặp biến có ràng buộc giữa chúng
+# lặp qua từng cung (xi,xj) xem miền của xi có cần thu hẹp để đảm bảo mỗi giá trị trong đó hợp lệ với miền của xj hay không
+# nếu miền xi thay đổi kiểm tra xem các hàng xóm của xi vì  có thể các ràng buộc sẽ bị thay đổi
+# quá trình lặp đến khi không còn gì để sửa
 def backtracking_with_ac3(initial_state, goal_state):
     """
     Hàm Backtracking sử dụng AC-3 để giải bài toán 8-Puzzle.

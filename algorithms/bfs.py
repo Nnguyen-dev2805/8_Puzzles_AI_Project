@@ -47,6 +47,7 @@ class BFSAlgorithm:
                 self.depth = parent_cost[state]
                 self.time_taken = time.perf_counter() - start_time
                 total_space = self.max_queue_size + self.max_visited_size
+                print(self.path)
                 return (self.path, self.cost, self.counter, self.depth, self.time_taken,
                         total_space)
             

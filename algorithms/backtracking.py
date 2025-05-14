@@ -1,63 +1,3 @@
-# import random
-# import time
-
-# class Backtracking8Puzzle:
-#     def __init__(self, update_callback=None):
-#         self.board = [None] * 9  # Bảng 8-puzzle (9 ô, ban đầu là None)
-#         self.used_values = set()  # Tập hợp các giá trị đã được sử dụng
-#         self.steps = 0  # Đếm số bước thực hiện
-#         self.update_callback = update_callback  # Hàm callback để cập nhật giao diện
-
-#     def is_valid(self, value):
-#         """Kiểm tra ràng buộc: Giá trị chưa được sử dụng."""
-#         return value not in self.used_values
-
-#     def backtrack(self, position=0):
-#         """Thuật toán Backtracking để gán giá trị cho từng ô."""
-#         if position == 9:  # Nếu đã gán giá trị cho tất cả các ô
-#             if self.update_callback:
-#                 self.update_callback(self.board, "success")
-#             return True
-
-#         values = list(range(9))
-#         random.shuffle(values)
-
-#         for value in values:
-#             if self.is_valid(value):
-#                 # Gán giá trị cho ô hiện tại
-#                 self.board[position] = value
-#                 self.used_values.add(value)
-#                 self.steps += 1
-
-#                 # Cập nhật giao diện
-#                 if self.update_callback:
-#                     self.update_callback(self.board, "assign")
-#                 time.sleep(0.5)  # Delay để quan sát
-
-#                 # Tiếp tục gán giá trị cho ô tiếp theo
-#                 if self.backtrack(position + 1):
-#                     return True
-
-#                 # Backtrack: Hủy gán giá trị và thử giá trị khác
-#                 self.board[position] = None
-#                 self.used_values.remove(value)
-
-#                 # Cập nhật giao diện khi backtrack
-#                 if self.update_callback:
-#                     self.update_callback(self.board, "backtrack")
-#                 time.sleep(0.5)  # Delay để quan sát
-
-#         return False
-
-#     def solve(self):
-#         """Giải bài toán 8-puzzle bằng Backtracking."""
-#         if self.update_callback:
-#             self.update_callback(self.board, "start")
-#         if self.backtrack():
-#             print("Thuật toán hoàn tất.")
-#         else:
-#             print("Không tìm thấy giải pháp.")
-
 import random
 
 def backtracking_with_steps(initial_state, goal_state):
@@ -69,6 +9,7 @@ def backtracking_with_steps(initial_state, goal_state):
     Returns:
         (steps, visited_count): Các bước giải (danh sách các trạng thái), số trạng thái đã thăm.
     """
+    # chuyển đổi state thành danh sách 9 phần tử để xử lý
     def flatten_state(state):
         if isinstance(state, (list, tuple)) and len(state) == 3 and all(isinstance(row, (list, tuple)) and len(row) == 3 for row in state):
             return [state[i][j] for i in range(3) for j in range(3)]
@@ -77,6 +18,10 @@ def backtracking_with_steps(initial_state, goal_state):
         else:
             raise ValueError("State must be a 3x3 grid or a flat list/tuple with 9 elements")
 
+    # hàm ràng buộc điều kiện CSP
+    # Với mỗi vị trí pos từ 0 đến 8 kiểm tra nếu là pos = 0 thì luôn đúng 
+    # nếu là số 8 thì số tiếp theo phải là 0 
+    # còn nếu không thì phải điền số hiện tại bằng max_num + 1
     def is_continuous_sequence(board, pos):
         if pos == 0:
             return True
@@ -98,6 +43,10 @@ def backtracking_with_steps(initial_state, goal_state):
     steps = []
     visited_count = 0
 
+    # remaining_numbers danh sách các số chưa sử dụng
+    # duyệt tất cả các số chưa sử dụng
+    # gán vào vị trí pos kiểm tra ràng buộc nếu hợp lệ thì gọi điền tiếp
+    # nếu sai thì xóa backtrack
     def backtrack(pos, remaining_numbers):
         nonlocal visited_count
         i, j = divmod(pos, 3)

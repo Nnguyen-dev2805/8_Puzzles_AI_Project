@@ -1429,7 +1429,7 @@ class GUI:
     
     def solveAndOrGraphSearch(self):
         and_or_graph_search_solver = and_or_graph_search.AndOrGraphSearchAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = and_or_graph_search_solver.AndOrGraphSearch(
+        self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = and_or_graph_search_solver.AndOrGraphSearch(
             self.initialState,123456780
         )
 

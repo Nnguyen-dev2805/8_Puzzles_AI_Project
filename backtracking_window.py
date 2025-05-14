@@ -537,7 +537,3 @@ class BacktrackingWindow:
             self.step_info_label.config(text="Backtracking: Không tìm thấy giải pháp!")
             self.step_count_label.config(text="Tổng số bước: 0")
             messagebox.showinfo("Thông báo", "Backtracking: Không tìm thấy giải pháp!")
-
-
-            
-    
