@@ -539,7 +539,7 @@ Tổng thể, dự án không chỉ là một công cụ học tập hữu ích 
 
 ## 5. Video demo
 
-[![Xem Video Demo]](https://www.youtube.com/watch?v=sj3jgI3YAgc)
+Xem video demo tại đây: [YouTube Demo](https://www.youtube.com/watch?v=sj3jgI3YAgc)
 
 ---
 
