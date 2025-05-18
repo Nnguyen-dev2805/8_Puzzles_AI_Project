@@ -1,4 +1,4 @@
-<p align="center">
+<div align="center">
 
 # 8-Puzzle Visualizer with AI Algorithms  
 ## Đồ án cá nhân Trí tuệ nhân tạo
@@ -8,7 +8,7 @@
 **MSSV:** 23110273  
 **Giảng viên hướng dẫn:** TS. Phan Thị Huyền Trang
 
-</p>
+</div>
 
 
 
