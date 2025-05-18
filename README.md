@@ -1,4 +1,14 @@
-# ﻿8-Puzzle Solver with AI Algorithms
+<div align="center">
+
+# 8-Puzzle Visualizer with AI Algorithms
+ ## Đồ án cá nhân Trí tuệ nhân tạo
+
+ ### Sinh viên thực hiện
+ **Họ và tên:** Trương Nhất Nguyên 
+ **MSSV:** 23110273
+
+</div>
+
 
 ## Mục lục
 
