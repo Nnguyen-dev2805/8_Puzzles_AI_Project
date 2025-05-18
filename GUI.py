@@ -9,6 +9,8 @@ from PIL import Image, ImageTk
 import seaborn as sns
 
 from backtracking_window import BacktrackingWindow
+from partially_obs_belief_window import PartiallyObsBeliefWindow
+from no_obs_belief_window import NoObsBeliefWindow
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
@@ -173,7 +175,6 @@ class GUI:
                 "Genetic Search",
                 "Beam Search",
                 "AND OR Graph Search",
-                "Belief State Search",
                 "QLearning",
             ),
         )
@@ -217,10 +218,16 @@ class GUI:
         self.backtracking_button.place(anchor="n", height=40, width=150, x=120, y=600)
         self.backtracking_button.bind("<ButtonPress>", self.openBacktrackingWindow)
 
+        # Thêm nút Partially obs Belief vào giao diện chính
+        self.backtracking_button = ttk.Button(self.appFrame)
+        self.backtracking_button.configure(cursor="hand2", text="Partially Obs Belief")
+        self.backtracking_button.place(anchor="n", height=40, width=150, x=120, y=650)
+        self.backtracking_button.bind("<ButtonPress>", self.PartiallyObsBeliefWindow)
+
         # Thêm nút No obs Belief vào giao diện chính
         self.backtracking_button = ttk.Button(self.appFrame)
         self.backtracking_button.configure(cursor="hand2", text="No Obs Belief")
-        self.backtracking_button.place(anchor="n", height=40, width=150, x=120, y=650)
+        self.backtracking_button.place(anchor="n", height=40, width=150, x=120, y=700)
         self.backtracking_button.bind("<ButtonPress>", self.NoObsBeliefWindow)
 
 
@@ -629,104 +636,14 @@ class GUI:
             self.algorithm = algorithm
             self.reset()
 
+    def PartiallyObsBeliefWindow(self, event=None):
+        PartiallyObsBeliefWindow(self.master)
+    
     def NoObsBeliefWindow(self, event=None):
-        # Tạo cửa sổ phụ mới
-        win = tk.Toplevel()
-        win.title("No Observation Belief State Viewer")
-        win.geometry("800x600")
-        
-        algo = no_observation_belief_state_search.NoObservationBeliefStateSearchAlgorithm()
-        
-        # Tạo belief ban đầu
-        initial_belief = [[[1,2,3], [4,0,5], [6,7,8]]]
-        goal_belief = [[[1,2,3], [4,5,6], [7,8,0]]]
-        # initial_belief = [self.init_state]  # giả sử bạn có self.init_state dạng 2D
-        # goal_belief = [self.goal_state]     # giả sử bạn có self.goal_state dạng 2D
-
-        # Chạy thuật toán
-        path, cost, nodes_expanded, depth, time_taken, space = algo.NoObsBeliefStateSearch(
-            initial_belief, goal_belief, time_limit=10
-        )
-
-        print(path)
-        
-        # Biến theo dõi bước hiện tại
-        current_step = tk.IntVar(value=0)
-
-        def draw_belief_state(step):
-            for widget in belief_frame.winfo_children():
-                widget.destroy()
-            if step < 0 or step >= len(path):
-                return
-            belief = path[step]
-            cols = min(4, len(belief))  # tối đa 4 trạng thái một hàng
-            for idx, state in enumerate(belief):
-                frame = tk.Frame(belief_frame, borderwidth=2, relief="solid")
-                frame.grid(row=idx // cols, column=idx % cols, padx=10, pady=10)
-                for i in range(3):
-                    for j in range(3):
-                        val = state[i][j]
-                        label = tk.Label(frame, text=str(val) if val != 0 else ' ', width=2, height=1, font=("Arial", 14))
-                        label.grid(row=i, column=j, padx=1, pady=1)
-
-        # Khung hiển thị belief state
-        belief_frame = tk.Frame(win)
-        belief_frame.pack(pady=20)
-        draw_belief_state(0)
-
-        # Nút điều khiển
-        control_frame = tk.Frame(win)
-        control_frame.pack()
-
-        def next_step():
-            if current_step.get() < len(path) - 1:
-                current_step.set(current_step.get() + 1)
-                draw_belief_state(current_step.get())
-
-        def prev_step():
-            if current_step.get() > 0:
-                current_step.set(current_step.get() - 1)
-                draw_belief_state(current_step.get())
-
-        ttk.Button(control_frame, text="<< Trước", command=prev_step).grid(row=0, column=0, padx=10)
-        ttk.Label(control_frame, textvariable=current_step).grid(row=0, column=1)
-        ttk.Button(control_frame, text="Sau >>", command=next_step).grid(row=0, column=2, padx=10)
-
-        # Hiển thị thống kê
-        info = f"Cost: {cost} | Depth: {depth} | Nodes: {nodes_expanded} | Time: {time_taken:.3f}s | Space: {space}"
-        ttk.Label(win, text=info, font=("Arial", 10)).pack(pady=10)
+        NoObsBeliefWindow(self.master)
 
     def openBacktrackingWindow(self, event=None):
         BacktrackingWindow(self.master)
-        # # Tạo cửa sổ mới cho backtracking
-        # backtracking_window = tk.Toplevel(self.master)
-        # backtracking_window.title("Backtracking 8-Puzzle")
-        # backtracking_window.geometry("600x700")
-        
-        # # Tạo bảng 3x3
-        # self.create_backtracking_board(backtracking_window)
-        
-        # # Nút điều khiển
-        # control_frame = ttk.Frame(backtracking_window)
-        # control_frame.pack(pady=10)
-        
-        # self.start_button = ttk.Button(control_frame, text="Bắt đầu", 
-        #                             command=lambda: self.start_backtracking(backtracking_window))
-        # self.start_button.pack(side=tk.LEFT, padx=5)
-        
-        # self.step_button = ttk.Button(control_frame, text="Từng bước", 
-        #                             command=self.next_backtracking_step, state=tk.DISABLED)
-        # self.step_button.pack(side=tk.LEFT, padx=5)
-        
-        # self.auto_button = ttk.Button(control_frame, text="Tự động", 
-        #                             command=self.auto_backtracking, state=tk.DISABLED)
-        # self.auto_button.pack(side=tk.LEFT, padx=5)
-        
-        # # Khởi tạo biến cho backtracking
-        # self.backtracking_steps = []
-        # self.current_step = 0
-        # self.backtracking_solution = []
-        # self.backtracking_running = False
 
     def create_backtracking_board(self, window):
         # Tạo frame chính cho bảng
@@ -1431,12 +1348,6 @@ class GUI:
         and_or_graph_search_solver = and_or_graph_search.AndOrGraphSearchAlgorithm()
         self.path, self.cost, self.counter, self.depth, self.runtime,self.memory_size = and_or_graph_search_solver.AndOrGraphSearch(
             self.initialState,123456780
-        )
-
-    def solveBeliefStateSearch(self):
-        belief_state_search_solver = belief_state_search.BeliefStateSearchAlgorithm()
-        self.path, self.cost, self.counter, self.depth, self.runtime = belief_state_search_solver.BeliefStateSearch(
-            self.initialState
         )
     
     def solveQLearning(self):

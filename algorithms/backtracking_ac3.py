@@ -166,4 +166,6 @@ def backtracking_with_ac3(initial_state, goal_state):
         ac3_log.append("Backtracking failed to find a solution after AC-3.")
         return [], visited_count, ac3_log
     
+    # print(steps)
+    
     return steps, visited_count, ac3_log
