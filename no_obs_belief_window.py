@@ -233,7 +233,6 @@ class NoObsBeliefWindow:
                 messagebox.showerror("Lỗi", f"Đầu vào không hợp lệ: {e}")
                 return None
         return states if states else None
-
     def start_algorithm(self):
         """Chạy thuật toán và chuẩn bị hiển thị kết quả."""
         self.result_text.delete(1.0, tk.END)

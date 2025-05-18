@@ -13,7 +13,6 @@ from partially_obs_belief_window import PartiallyObsBeliefWindow
 from no_obs_belief_window import NoObsBeliefWindow
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-
 import AI_algorithm
 
 from algorithms import (

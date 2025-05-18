@@ -665,7 +665,6 @@ def BeamSearch(inputState,beam_width = 2):
             next_beam.sort()
             for h_cost, new_depth, child_int in next_beam[:beam_width]:
                 heapq.heappush(pq, (h_cost, new_depth, child_int))
-
     beam_path = []
     beam_cost = 0
     time_beam = float(time.time() - start_time)

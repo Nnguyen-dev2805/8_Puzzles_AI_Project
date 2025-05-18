@@ -190,7 +190,6 @@ class PartiallyObsBeliefWindow:
             for j in range(3):
                 value = state[i][j] if state[i][j] != 0 else ""
                 self.tiles[i][j].config(text=str(value), bg="white")
-
         # So sánh với trạng thái mục tiêu (sẽ được cập nhật từ path)
         if hasattr(self, 'goal_state_2d') and self.goal_state_2d is not None:
             for i in range(3):

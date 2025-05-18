@@ -317,7 +317,6 @@ class BacktrackingWindow:
         else:
             self.step_info_label.config(text=f"TEST: Không tìm thấy mục tiêu sau {step_count} bước!")
             messagebox.showinfo("Kết quả kiểm tra", f"Không tìm thấy mục tiêu sau {step_count} bước!")
-
     def solve(self, initial_state):
         nodes_expanded = [0]
         max_depth = [0]
