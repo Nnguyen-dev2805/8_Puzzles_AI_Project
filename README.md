@@ -407,7 +407,6 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
   - **Thời gian**: \( O(b^d) \), nhưng thường không tìm được giải pháp.
   - **Bộ nhớ**: \( O(1) \).
 - **Hình ảnh minh họa**: ![GIF mô tả No Observation Search](assets/gif_solve/NoObservationSearch.gif)
-- **Liên kết**: [Wikipedia - Open-Loop Controller](https://en.wikipedia.org/wiki/Open-loop_controller)
 - **Nhận xét**: No Observation Search không thực tế cho 8-puzzle, chỉ mang tính lý thuyết.
 
 ### 3.5. Tìm kiếm có điều kiện ràng buộc (Constraint Satisfaction Problem)
@@ -503,8 +502,8 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
      - max(Q[s'][a']): Giá trị Q lớn nhất có thể đạt được từ trạng thái tiếp theo. 
   - **Chính Sách Hành Động (Policy):**  
    - Sử dụng chiến lược **epsilon-greedy**:  
-     - Với xác suất \( \epsilon \), chọn hành động ngẫu nhiên (khám phá).  
-     - Với xác suất \( 1 - \epsilon \), chọn hành động có Q-value lớn nhất (khai thác).  
+     - Với xác suất \( Ɛ \), chọn hành động ngẫu nhiên (khám phá).  
+     - Với xác suất \( 1 - Ɛ \), chọn hành động có Q-value lớn nhất (khai thác).  
   - **Hàm Heuristic (Heuristic Function):**  
    - Sử dụng **khoảng cách Manhattan** để đánh giá mức độ gần giữa trạng thái hiện tại và trạng thái mục tiêu, hỗ trợ tính toán thưởng/phạt.
   - **Lời giải**:
@@ -520,7 +519,7 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - Có thể thích nghi với các trạng thái mới.
 - **Nhược điểm**:
 - Chậm để hội tụ trong không gian trạng thái lớn (8-puzzle có \( 9! = 362,880 \) trạng thái).
-- Phụ thuộc vào tham số (\( \alpha \), \( \gamma \), \( \epsilon \)).
+- Phụ thuộc vào tham số (\( α\), \( γ \), \( Ɛ \)).
 - **Độ phức tạp**:
 - **Thời gian**: Phụ thuộc vào số lần lặp và kích thước không gian trạng thái.
 - **Bộ nhớ**: \( O(|S|.|A|) \), với \( S \) là số trạng thái, \( A \) là số hành động.
