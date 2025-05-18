@@ -49,7 +49,7 @@ class AStarAlgorithm:
                 self.path = path
                 self.cost = g_cost[state]
                 self.depth = len(path) - 1
-                self.time_taken = float(time.time() - start_time)
+                self.time_taken = time.perf_counter() - start_time
                 total_space = self.max_pq_size + self.max_visited_size
                 return self.path, self.cost, self.counter, self.depth, self.time_taken,total_space
 
@@ -65,6 +65,6 @@ class AStarAlgorithm:
                     parent[child_int] = state
                     g_cost[child_int] = new_g_cost
 
-        self.time_taken = float(time.time() - start_time)
+        self.time_taken = time.perf_counter() - start_time
         total_space = self.max_pq_size + self.max_visited_size
         return [], 0, counter, self.depth, self.time_taken,total_space
