@@ -4,8 +4,9 @@
  ## Đồ án cá nhân Trí tuệ nhân tạo
 
  ### Sinh viên thực hiện
- **Họ và tên:** Trương Nhất Nguyên 
+ **Họ và tên:** Trương Nhất Nguyên
  **MSSV:** 23110273
+ **Giảng viên hướng dẫn**: TS. Phan Thị Huyền Trang
 
 </div>
 
@@ -44,7 +45,6 @@
    - 3.6. [Học tăng cường (Reinforcement Learning)](#36-học-tăng-cường-reinforcement-learning)  
      - 3.6.1. [Q-Learning](#361-q-learning)  
 4. [Kết luận](#4-kết-luận)  
-5. [Tác giả](#5-tác-giả)   
 
 ## 1. Mục tiêu
 
@@ -495,12 +495,6 @@ Một điểm sáng của dự án là việc phát triển giao diện trực q
 
 Với giao diện trực quan và mã nguồn dễ hiểu, dự án trở thành một công cụ hỗ trợ học tập mạnh mẽ. Nó giúp người học hiểu rõ cách các thuật toán hoạt động thông qua sự kết hợp giữa lý thuyết và thực hành. Đồng thời, dự án cũng cung cấp dữ liệu thực nghiệm quý giá để phân tích và kiểm tra hiệu quả của các thuật toán trong các môi trường khác nhau.
 
-## 5. Tác giả
-
-- **Giảng viên hướng dẫn**: TS. Phan Thị Huyền Trang
-- **Sinh viên thực hiện**: Trương Nhất Nguyên  
-- **Mã số sinh viên**: 23110273  
-- **Mã lớp học**: ARIN330585_04 
 ---
 
 > © 2025 – Trương Nhất Nguyên – HCMUTE
