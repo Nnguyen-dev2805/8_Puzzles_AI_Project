@@ -11,17 +11,6 @@ def goalTest(state):
     return state == 123456780
 
 
-# def getPath(parentMap, inputState):
-#     path = []
-#     temp = 123456780
-#     while temp != inputState:
-#         path.append(temp)
-#         temp = parentMap[temp]
-#     path.append(inputState)
-#     path.reverse()
-#     return path
-
-
 def getPath(parentMap, start_state):
     """Hàm lấy đường đi từ trạng thái ban đầu đến trạng thái đích"""
     path = []
