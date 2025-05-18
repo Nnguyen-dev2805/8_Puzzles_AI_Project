@@ -49,7 +49,8 @@
    - 3.6. [Học tăng cường (Reinforcement Learning)](#36-học-tăng-cường-reinforcement-learning)  
      - 3.6.1. [Thành phần chính của bài toán và lời giải](#361-thành-phần-chính-của-bài-toán-và-lời-giải)  
      - 3.6.2. [Q-Learning](#362-q-learning)  
-4. [Kết luận](#4-kết-luận)  
+4. [Kết luận](#4-kết-luận)
+5. [Video demo](#5-video-demo)  
 
 ## 1. Mục tiêu
 
@@ -535,6 +536,10 @@ Một điểm nổi bật của dự án là giao diện trực quan hóa bằng
 Kết quả thực nghiệm cho thấy mỗi thuật toán đều có ưu, nhược điểm riêng: các thuật toán tìm kiếm không thông tin đảm bảo tính tối ưu nhưng tốn bộ nhớ, các thuật toán heuristic giúp tăng tốc độ tìm kiếm, trong khi các phương pháp học tăng cường như Q-Learning lại phù hợp với các bài toán cần khả năng thích nghi và học hỏi từ kinh nghiệm. Ngoài ra, việc tích hợp các thuật toán cho môi trường phức tạp và ràng buộc càng làm tăng tính ứng dụng thực tiễn của dự án.
 
 Tổng thể, dự án không chỉ là một công cụ học tập hữu ích cho sinh viên và người nghiên cứu AI mà còn là nền tảng để mở rộng, phát triển các thuật toán mới hoặc áp dụng cho các bài toán tương tự trong lĩnh vực trí tuệ nhân tạo. Việc kết hợp giữa lý thuyết, thực nghiệm và trực quan hóa đã tạo nên một sản phẩm hoàn chỉnh, góp phần nâng cao hiệu quả học tập và nghiên cứu về AI.
+
+## 5. Video demo
+
+[![Xem Video Demo]](https://www.youtube.com/watch?v=sj3jgI3YAgc)
 
 ---
 
