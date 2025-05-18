@@ -10,8 +10,6 @@
 
 </div>
 
-
-
 ## Mục lục
 
 1. [Mục tiêu](#1-mục-tiêu)  
@@ -342,7 +340,7 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 
 ### 3.4. Tìm kiếm trong môi trường phức tạp (Complex Environment Search)
 
-### Thành phần chính của bài toán
+#### Thành phần chính của bài toán
 - **Trạng thái**: Một tuple 9 phần tử được hiển thị dưới dạng 3x3, với các số hợp lệ từ 0 - 8 (0 là ô trống).Với bài toán không quan sát (No Observation) hoặc bài toán xác suất (Partially Observable), không gian trạng thái được mở rộng thành tập hợp các belief states (phân phối xác suất trên các trạng thái vật lý).
 - **Hành động**: Di chuyển ô trống theo 4 hướng: lên, xuống, trái, phải để tạo ra các trạng thái tiếp theo.
 - **Kiểm tra mục tiêu**: So sánh trạng thái hiện tại với trạng thái mục tiêu, thường là: (1, 2, 3, 4, 5, 6, 7, 8, 0).Trong No Observation/Partially Observable, trạng thái mục tiêu là tập hợp trạng thái với xác suất cao nhất nằm trong các trạng thái mục tiêu.
@@ -408,8 +406,18 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 
 ### 3.5. Tìm kiếm có điều kiện ràng buộc (Constraint Satisfaction Problem)
 
-
-CHƯA CÓ PHẦN THÀNH PHẦN CHÍNH CỦA BÀI TOÁN
+#### Thành phần chính của bài toán
+- **Trạng thái (State):**:**
+    - Gồm 9 biến từ X1 đến X9, tương ứng với 9 ô trong ma trận 3x3 (đọc từ trái qua phải, từ trên xuống dưới).
+- **Miền giá trị (Domains):**
+    - Mỗi biến có thể nhận một giá trị trong khoảng từ 0 đến 8, đại diện cho các ô số trong trò chơi. Tại mỗi thời điểm, mỗi số xuất hiện đúng một lần — không có sự trùng lặp giá trị giữa các ô.
+- **Ràng buộc (Constraints):**
+    - Ràng buộc không trùng lặp giá trị: Mỗi số từ 0 đến 8 chỉ xuất hiện đúng một lần.
+    - Ràng buộc hàng ngang: Với hai ô liền kề trong cùng một hàng (như X1 và X2), nếu ô bên trái không chứa số 0, thì ô bên phải phải mang giá trị lớn hơn ô bên trái đúng 1 đơn vị.
+    - Ràng buộc hàng dọc: Với hai ô nằm thẳng hàng theo chiều dọc (ví dụ X1 và X4), nếu ô phía trên không phải là 0, thì ô phía dưới phải lớn hơn ô phía trên đúng 3 đơn vị.
+    - Những ràng buộc này giúp đảm bảo trạng thái ban đầu là hợp lệ và có thể giải được bằng các thuật toán tìm kiếm.
+#### Lời giải
+- Lời giải là một chuỗi các hành động (di chuyển hợp lệ của ô trống) dẫn tập hợp trạng thái ban đầu đến tập hợp chứa trạng thái mục tiêu, thỏa mãn tất cả các ràng buộc.
 
 #### 3.5.1. Tìm kiếm kiểm thử (Constraint Testing)
 - **Mô tả**: Kiểm tra các trạng thái của 8-puzzle để đảm bảo thỏa mãn các ràng buộc, như mỗi ô chỉ chứa một số duy nhất và ô trống có thể di chuyển hợp lệ.
@@ -490,11 +498,13 @@ CHƯA CÓ PHẦN THÀNH PHẦN CHÍNH CỦA BÀI TOÁN
 - **Nhận xét**: Q-Learning phù hợp cho các bài toán cần học dài hạn, nhưng không hiệu quả trong 8-puzzle do không gian trạng thái lớn và yêu cầu tính tối ưu nhanh.
 
 ## 4. Kết luận
-Dự án đã triển khai một loạt các thuật toán mạnh mẽ để giải bài toán 8-Puzzle. Các thuật toán bao gồm nhóm tìm kiếm truyền thống, nhóm học tăng cường, cũng như các thuật toán xử lý bài toán trong môi trường phức tạp và môi trường có ràng buộc. Kết quả thu được cho thấy các thuật toán này không chỉ giải quyết được bài toán mà còn cho phép so sánh hiệu suất của chúng dựa trên các tiêu chí như thời gian chạy, số bước cần thực hiện và tổng số trạng thái duyệt. Điều này cung cấp cái nhìn sâu sắc về ưu, nhược điểm của từng thuật toán trong các điều kiện cụ thể.
+Dự án 8-Puzzle Visualizer with AI Algorithms đã xây dựng thành công một hệ thống giải bài toán 8-Puzzle bằng nhiều thuật toán trí tuệ nhân tạo hiện đại, từ các phương pháp tìm kiếm truyền thống (BFS, DFS, UCS, IDS, A*, IDA*, v.v.) đến các thuật toán học tăng cường như Q-Learning, cũng như các kỹ thuật giải quyết bài toán trong môi trường phức tạp và có ràng buộc. Việc triển khai đa dạng này không chỉ giúp giải quyết hiệu quả bài toán 8-Puzzle mà còn tạo điều kiện thuận lợi để so sánh, đánh giá hiệu suất của từng thuật toán dựa trên các tiêu chí như thời gian chạy, số bước di chuyển, số trạng thái duyệt và bộ nhớ sử dụng.
 
-Một điểm sáng của dự án là việc phát triển giao diện trực quan hóa bằng Tkinter, cho phép người dùng quan sát trực tiếp cách các thuật toán giải bài toán. Visualizer hiển thị trạng thái ban đầu, các bước di chuyển trong quá trình thực hiện thuật toán, và trạng thái mục tiêu cuối cùng. Công cụ này không chỉ giúp minh họa rõ ràng cách hoạt động của các thuật toán mà còn mang lại trải nghiệm tương tác, cho phép người dùng nhập trạng thái ban đầu và trạng thái mục tiêu để kiểm tra.
+Một điểm nổi bật của dự án là giao diện trực quan hóa bằng Tkinter, cho phép người dùng dễ dàng nhập trạng thái ban đầu, lựa chọn thuật toán và quan sát trực tiếp từng bước giải của thuật toán thông qua hình ảnh động và bảng trạng thái. Công cụ này không chỉ giúp minh họa rõ ràng cách hoạt động của từng thuật toán mà còn tăng tính tương tác, hỗ trợ người học và người dùng hiểu sâu hơn về bản chất của các phương pháp AI.
 
-Với giao diện trực quan và mã nguồn dễ hiểu, dự án trở thành một công cụ hỗ trợ học tập mạnh mẽ. Nó giúp người học hiểu rõ cách các thuật toán hoạt động thông qua sự kết hợp giữa lý thuyết và thực hành. Đồng thời, dự án cũng cung cấp dữ liệu thực nghiệm quý giá để phân tích và kiểm tra hiệu quả của các thuật toán trong các môi trường khác nhau.
+Kết quả thực nghiệm cho thấy mỗi thuật toán đều có ưu, nhược điểm riêng: các thuật toán tìm kiếm không thông tin đảm bảo tính tối ưu nhưng tốn bộ nhớ, các thuật toán heuristic giúp tăng tốc độ tìm kiếm, trong khi các phương pháp học tăng cường như Q-Learning lại phù hợp với các bài toán cần khả năng thích nghi và học hỏi từ kinh nghiệm. Ngoài ra, việc tích hợp các thuật toán cho môi trường phức tạp và ràng buộc càng làm tăng tính ứng dụng thực tiễn của dự án.
+
+Tổng thể, dự án không chỉ là một công cụ học tập hữu ích cho sinh viên và người nghiên cứu AI mà còn là nền tảng để mở rộng, phát triển các thuật toán mới hoặc áp dụng cho các bài toán tương tự trong lĩnh vực trí tuệ nhân tạo. Việc kết hợp giữa lý thuyết, thực nghiệm và trực quan hóa đã tạo nên một sản phẩm hoàn chỉnh, góp phần nâng cao hiệu quả học tập và nghiên cứu về AI.
 
 ---
 
