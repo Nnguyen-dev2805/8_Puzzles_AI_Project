@@ -1,14 +1,15 @@
-<div align="center">
+<p align="center">
 
-# 8-Puzzle Visualizer with AI Algorithms
- ## Đồ án cá nhân Trí tuệ nhân tạo
+# 8-Puzzle Visualizer with AI Algorithms  
+## Đồ án cá nhân Trí tuệ nhân tạo
 
- ### Sinh viên thực hiện
- **Họ và tên:** Trương Nhất Nguyên
- **MSSV:** 23110273
- **Giảng viên hướng dẫn**: TS. Phan Thị Huyền Trang
+### Sinh viên thực hiện  
+**Họ và tên:** Trương Nhất Nguyên  
+**MSSV:** 23110273  
+**Giảng viên hướng dẫn:** TS. Phan Thị Huyền Trang
 
-</div>
+</p>
+
 
 
 ## Mục lục
