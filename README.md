@@ -407,7 +407,7 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 ### 3.5. Tìm kiếm có điều kiện ràng buộc (Constraint Satisfaction Problem)
 
 #### Thành phần chính của bài toán
-- **Trạng thái (State):**:**
+- **Trạng thái (State):**
     - Gồm 9 biến từ X1 đến X9, tương ứng với 9 ô trong ma trận 3x3 (đọc từ trái qua phải, từ trên xuống dưới).
 - **Miền giá trị (Domains):**
     - Mỗi biến có thể nhận một giá trị trong khoảng từ 0 đến 8, đại diện cho các ô số trong trò chơi. Tại mỗi thời điểm, mỗi số xuất hiện đúng một lần — không có sự trùng lặp giá trị giữa các ô.
@@ -477,6 +477,51 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Nhận xét**: Backtracking AC-3 cải thiện hiệu suất so với Backtracking CSP, nhưng vẫn không lý tưởng cho 8-puzzle do không tối ưu đường đi.
 
 ### 3.6. Học tăng cường (Reinforcement Learning)
+
+#### Thành Phần Chính của Bài Toán
+
+1. **Trạng Thái Ban Đầu (Initial State):**  
+   - Puzzle 3x3 với các số từ 0 đến 8 (0 là ô trống), do người dùng nhập vào, đảm bảo thỏa mãn các ràng buộc hợp lệ.  
+
+2. **Trạng Thái Mục Tiêu (Goal State):**  
+   - Trạng thái cuối cùng mà bài toán yêu cầu tìm ra, do người dùng nhập vào (ví dụ: `(1, 2, 3, 4, 5, 6, 7, 8, 0)`).  
+
+3. **Không Gian Trạng Thái (State Space):**  
+   - Bao gồm tất cả các trạng thái có thể từ trạng thái ban đầu đến trạng thái mục tiêu, được sinh ra bằng cách thực hiện các hành động hợp lệ (di chuyển ô trống).  
+
+4. **Tập Hợp Các Hành Động (Actions):**  
+   - Các hành động hợp lệ bao gồm di chuyển ô trống: `UP`, `DOWN`, `LEFT`, `RIGHT`.  
+
+5. **Hàm Chuyển Đổi (Transition Function):**  
+   - Được triển khai thông qua hàm `take_action`, thực hiện di chuyển ô trống và trả về trạng thái mới.  
+
+6. **Hàm Thưởng (Reward Function):**  
+   - Đánh giá hành động dựa trên:  
+     - **Thưởng:** +100 nếu trạng thái mới trùng với trạng thái mục tiêu.  
+     - **Phạt/Thưởng Tương Đối:** Dựa trên khoảng cách Manhattan giữa trạng thái hiện tại và trạng thái mục tiêu, thưởng cao hơn nếu khoảng cách giảm, phạt nếu tăng.  
+
+7. **Hàm Q-Value (Q-Function):**  
+   - Lưu trữ giá trị kỳ vọng của việc thực hiện một hành động trong một trạng thái nhất định.  
+   - Cập nhật Q-value theo công thức:  
+     \[
+     Q[s][a] \gets Q[s][a] + \alpha \cdot (r + \gamma \cdot \max(Q[s'][a']) - Q[s][a])
+     \]  
+     Trong đó:  
+     - \( \alpha \): Tốc độ học (learning rate).  
+     - \( \gamma \): Hệ số chiết khấu (discount factor).  
+     - \( r \): Giá trị thưởng/phạt.  
+     - \( \max(Q[s'][a']) \): Giá trị Q lớn nhất từ trạng thái tiếp theo.  
+
+8. **Chính Sách Hành Động (Policy):**  
+   - Sử dụng chiến lược **epsilon-greedy**:  
+     - Với xác suất \( \epsilon \), chọn hành động ngẫu nhiên (khám phá).  
+     - Với xác suất \( 1 - \epsilon \), chọn hành động có Q-value lớn nhất (khai thác).  
+
+9. **Hàm Heuristic (Heuristic Function):**  
+   - Sử dụng **khoảng cách Manhattan** để đánh giá mức độ gần giữa trạng thái hiện tại và trạng thái mục tiêu, hỗ trợ tính toán thưởng/phạt.  
+
+#### Lời Giải  
+- Lời giải là một chuỗi các hành động tối ưu (di chuyển ô trống) được học thông qua Q-Learning, dẫn từ trạng thái ban đầu đến trạng thái mục tiêu, tối ưu hóa tổng giá trị thưởng tích lũy.
 
 #### 3.6.1. Q-Learning
 - **Mô tả**: Q-Learning là một thuật toán học tăng cường, học cách chọn hành động tối ưu thông qua thử-và-sai, dựa trên bảng Q lưu trữ giá trị hành động-trạng thái.
