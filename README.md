@@ -526,7 +526,7 @@ Dự án triển khai một loạt thuật toán AI đa dạng, được phân l
 - **Hình ảnh minh họa**: ![GIF mô tả Q-Learning](assets/gif_solve/QLearning.gif)
 - **Liên kết**: [GeeksforGeeks - Q-Learning](https://www.geeksforgeeks.org/q-learning-in-python/)
 - **Nhận xét**: Q-Learning phù hợp cho các bài toán cần học dài hạn, nhưng không hiệu quả trong 8-puzzle do không gian trạng thái lớn và yêu cầu tính tối ưu nhanh.
-- **Hình ảnh hiệu suất Q-learning**: [Hình ảnh hiệu suất Q-Learning](assets/Q-Learning.png)
+- **Hình ảnh hiệu suất Q-learning**: [Hình ảnh hiệu suất Q-Learning](assets/Q_Learning.jpg)
 ## 4. Kết luận
 Dự án 8-Puzzle Visualizer with AI Algorithms đã xây dựng thành công một hệ thống giải bài toán 8-Puzzle bằng nhiều thuật toán trí tuệ nhân tạo hiện đại, từ các phương pháp tìm kiếm truyền thống (BFS, DFS, UCS, IDS, A*, IDA*, v.v.) đến các thuật toán học tăng cường như Q-Learning, cũng như các kỹ thuật giải quyết bài toán trong môi trường phức tạp và có ràng buộc. Việc triển khai đa dạng này không chỉ giúp giải quyết hiệu quả bài toán 8-Puzzle mà còn tạo điều kiện thuận lợi để so sánh, đánh giá hiệu suất của từng thuật toán dựa trên các tiêu chí như thời gian chạy, số bước di chuyển, số trạng thái duyệt và bộ nhớ sử dụng.
 
